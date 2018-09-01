@@ -1,0 +1,93 @@
+body {
+  background-color: #333;
+  padding: 0px;
+  margin: 0px;
+  color: #fff;
+  height: 100vh;
+}
+#loading {
+  text-align: center;
+  height: 100vh;
+  line-height: 100vh;
+  position: absolute;
+  width: 100vw;
+  vertical-align: middle;
+}
+.loaded #loading {
+  display: none;
+}
+#movies {
+  display: none;
+}
+.loaded>#movies {
+  display: block;
+  height: 100vh;
+  line-height: 100vh;
+  position: absolute;
+  width: 100vw;
+  margin-bottom: 40px;
+}
+.loaded>div#movies div {
+  display: block;
+  height: auto;
+  line-height: normal;
+  position: static;
+  width: auto;
+}
+.loaded>div#movies div.img {
+  text-align: center;
+}
+.loaded>div#movies #navigation {
+  position: fixed;
+  bottom: 0px;
+  height: 40px;
+  width: 100%;
+  background-color: rgba(0, 128, 128, 0.8);
+}
+.loaded>div#movies #next, .loaded>div#movies #back {
+  width: 40px;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: 1px solid transparent;
+}
+.loaded>div#movies #back {
+  left: 0px;
+  width: 50%;
+  border-right: 1px solid #fff;
+  position: absolute;
+}
+.loaded>div#movies #next {
+  right: 0px;
+  width: 50%;
+  position: absolute;
+}
+#filmCardHolder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+#filmCard {
+  resize: both;
+  overflow: auto;
+  width: calc(100% - 80px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: center;
+}
+#filmCard .meta {
+  padding: 20px;
+}
+#filmCard h1 {
+  margin-top: 0px;
+}
+

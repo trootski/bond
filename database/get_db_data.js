@@ -16,7 +16,7 @@ const getMovieDetails = (title) => new Promise(resolve => {
             console.error(err);
             return;
         }
-        resolve(resp.body);
+        resolve(JSON.parse(resp.body));
     });
 });
 
@@ -24,6 +24,7 @@ console.log(filmTitles);
 Promise.all(
     filmTitles.titles.map(getMovieDetails)
 ).then(v => {
+    console.log(v);
     fs.writeFileSync('bond-movie-data.json', JSON.stringify(v));
 });
 

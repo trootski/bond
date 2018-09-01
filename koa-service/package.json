@@ -1,0 +1,20 @@
+{
+  "name": "koa-service",
+  "version": "0.1.0",
+  "description": "This is a movie database koa service",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "jest"
+  },
+  "author": "John Byrne",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.5.2",
+    "koa-static": "^5.0.0",
+    "nodemon": "^1.18.3"
+  },
+  "devDependencies": {
+    "livereload": "^0.7.0"
+  }
+}
