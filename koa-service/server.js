@@ -1,11 +1,16 @@
 const Koa = require('koa');
 const KoaStatic = require('koa-static');
+const cors = require('@koa/cors');
 const app = new Koa();
 
 const db = require('../database/bond-movie-data.json');
 var livereload = require('livereload');
 var server = livereload.createServer();
 server.watch('../vanilla/public');
+
+app.use(cors({
+  origin: '*',
+}));
 
 app.use(KoaStatic('../vanilla/public', {}));
 

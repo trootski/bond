@@ -30,7 +30,11 @@ document.addEventListener("DOMContentLoaded", async function(e) {
       plotEl.innerHTML = `<h4>Synopsis</h4>${plot}`;
       return plotEl;
     };
-    const op = await fetch('/films');
+    const op = await fetch('//localhost:3000/films', {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }
+    });
     if (op.status !== 200) {
       loader.innerText = 'error loading film data';
     } else {

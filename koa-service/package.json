@@ -15,6 +15,7 @@
     "nodemon": "^1.18.3"
   },
   "devDependencies": {
+    "@koa/cors": "^2.2.2",
     "livereload": "^0.7.0"
   }
 }
