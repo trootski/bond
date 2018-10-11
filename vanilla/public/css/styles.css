@@ -83,6 +83,7 @@ body {
   justify-content: space-around;
   align-items: stretch;
   align-content: center;
+  padding-bottom: 70px;
 }
 #filmCard .meta {
   padding: 20px;
