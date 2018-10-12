@@ -1,0 +1,1 @@
+I can't recognise this. The opening scene involves a secret agent randomly driving down the road and randomly encountering the daughter of a crime lord attempting suicide by walking into the sea (??). Once this attempt is thwarted Fry is assaulted for... reasons. An attempt was made, I doff my cap, it did not work. Ms Rigg should have been Bond.
