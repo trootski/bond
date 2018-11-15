@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "livereload": "^0.7.0",
+    "loaders.css": "^0.1.2",
     "serve-static": "^1.13.2"
   },
   "scripts": {

@@ -19,7 +19,15 @@ document.addEventListener("DOMContentLoaded", async function(e) {
     return yearEm;
   };
   const renderPoster = (poster, el) => {
-    const posterEl = el.querySelector('div.img img')
+    const imgLoadedHandler = () => {
+        console.log('img has been loaded');
+      posterEl.classList.remove('loadingImg');
+    }
+    const posterHolderEl = el.querySelector('div.img');
+    posterHolderEl.classList.add('loadingImg');
+    const posterEl = posterHolderEl.querySelector('img')
+    posterEl.removeEventListener('load', imgLoadedHandler );
+    posterEl.addEventListener('load', imgLoadedHandler, false)
     posterEl.src = poster;
     return posterEl;
   };

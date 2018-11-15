@@ -19,6 +19,9 @@ body {
 #movies {
   display: none;
 }
+.loaded .loader {
+  display: none;
+}
 .loaded>#movies {
   display: block;
   height: 100vh;
@@ -27,7 +30,7 @@ body {
   width: 100vw;
   margin-bottom: 40px;
 }
-.loaded>div#movies div {
+.loaded>div#movies>div>div {
   display: block;
   height: auto;
   line-height: normal;
