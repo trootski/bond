@@ -10,12 +10,14 @@
   "author": "John Byrne",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.355.0",
     "koa": "^2.5.2",
     "koa-static": "^5.0.0",
     "nodemon": "^1.18.3"
   },
   "devDependencies": {
     "@koa/cors": "^2.2.2",
+    "koa-router": "^7.4.0",
     "livereload": "^0.7.0"
   }
 }

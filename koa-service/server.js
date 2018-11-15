@@ -1,30 +1,34 @@
 const Koa = require('koa');
 const KoaStatic = require('koa-static');
+const KoaRouter = require('koa-router');
 const cors = require('@koa/cors');
-const app = new Koa();
+const {
+  getJSONDBFilms,
+  getJSONDBIndex,
+} = require('./api/jsondb');
+const {
+  getDynamoDBFilms,
+} = require('./api/dynamodb');
 
-const db = require('../database/bond-movie-data.json');
+const app = new Koa();
+const router = new KoaRouter();
+
 var livereload = require('livereload');
 var server = livereload.createServer();
+
+// Serve the vanilla version of the application
 server.watch('../vanilla/public');
 
 app.use(cors({
   origin: '*',
 }));
 
-app.use(KoaStatic('../vanilla/public', {}));
+router.get('/jsondb/', getJSONDBIndex);
+router.get('/jsondb/films', getJSONDBFilms);
 
-app.use(async (ctx, next) => {
-  const start = Date.now();
-  await next();
-  const ms = Date.now() - start;
-  console.log(`${ctx.method} ${ctx.url} - ${ms}`);
-});
+router.get('/dynamodb/films', getDynamoDBFilms);
 
-app.use(async ctx => {
-  if (ctx.request.path === '/films' && ctx.request.method === 'GET') {
-    ctx.body = {'ok':true,'data':db};
-  }
-});
+app.use(router.routes());
 
 app.listen(3000);
+
