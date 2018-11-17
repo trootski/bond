@@ -1,1 +1,5 @@
 **/node_modules/**
+.DS_Store
+
+koa-service/cache/*
+!koa-service/cache/.keep
