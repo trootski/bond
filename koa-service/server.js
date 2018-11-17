@@ -5,9 +5,12 @@ const cors = require('@koa/cors');
 const {
   getJSONDBFilms,
   getJSONDBIndex,
+  importFilmsToJSON,
 } = require('./api/jsondb');
 const {
   getDynamoDBFilms,
+  importFilmsToDynamoDB,
+  resetDynamoDB,
 } = require('./api/dynamodb');
 
 const app = new Koa();
@@ -25,8 +28,11 @@ app.use(cors({
 
 router.get('/jsondb/', getJSONDBIndex);
 router.get('/jsondb/films', getJSONDBFilms);
+router.get('/jsondb/import-films', importFilmsToJSON);
 
 router.get('/dynamodb/films', getDynamoDBFilms);
+router.get('/dynamodb/import-films', importFilmsToDynamoDB);
+router.get('/dynamodb/reset', resetDynamoDB);
 
 app.use(router.routes());
 
