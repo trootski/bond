@@ -64,22 +64,30 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   nextBtn.addEventListener('click', (e) => {
     m.set('currentIndex', m.get('currentIndex') + 1);
   });
-  try {
-    const op = await fetch('//localhost:3000/films', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
+  const dataSourceSelect = document.querySelector('#db_source');
+  console.log(dataSourceSelect);
+  const render = async () => {
+    console.log('rendering: ', dataSourceSelect.value);
+    document.body.classList.remove('loaded');
+    try {
+      const op = await fetch(`//localhost:3000/${dataSourceSelect.value}/films`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        }
+      });
+      if (op.status !== 200) {
+        loader.innerText = 'error loading film data';
+      } else {
+        document.body.classList.add('loaded');
+        const filmRes = await op.json();
+        m.set('filmDB', filmRes.data);
+        m.set('currentIndex', 0);
       }
-    });
-    if (op.status !== 200) {
-      loader.innerText = 'error loading film data';
-    } else {
-      document.body.classList.add('loaded');
-      const filmRes = await op.json();
-      m.set('filmDB', filmRes.data);
-      m.set('currentIndex', 0);
+    } catch (e) {
+        console.error(e);
     }
-  } catch (e) {
-      console.error(e);
-  }
+  };
+  dataSourceSelect.addEventListener('change', render)
+  render();
 });
 
