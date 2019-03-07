@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 
 const request = require('request');
+const fs = require('fs');
 const { getMovieDetails } = require('../utils/omdb-api.js');
 const filmMeta = require('../../film-data/film-meta.json');
 
@@ -53,21 +54,38 @@ const getDynamoDBFilms = async (ctx, next) => {
   const dynamodb = await new AWS.DynamoDB.DocumentClient(dynamoDbParams);
   const res = await dynamodb.get({
     ConsistentRead: false,
-    Key: {
-      Director: 'Broccoli',
-      MovieTitle: 'Dr. No',
-    },
     TableName: 'BondMovies',
   }).promise();
   ctx.body = { 'ok': true, data: JSON.stringify(res) };
 };
 
 const importFilmsToDynamoDB = async (ctx, next) => {
-  const res = await Promise.all(
+  const { Title, ...res } = await Promise.all(
     filmMeta.data
       .map(v => v.title)
-      .map(getMovieDetails));
-  console.log(res);
+      .map(getMovieDetails)
+  );
+  const resRemapped = Object.values(res).map(v => {
+    const { Title, ...o } = v;
+    return Object.assign(o, { MovieTitle: Title });
+  });
+
+  const dynamodb = await new AWS.DynamoDB.DocumentClient(dynamoDbParams);
+  const putRes = await dynamodb.put({
+    Item: resRemapped,
+    TableName: 'BondMovies',
+  });
+  try {
+    fs.writeFileSync(
+      './cache/film-data-import.json',
+      JSON.stringify(res)
+    );
+  } catch (e) {
+    console.error('Error writing cache, ', e);
+    ctx.body = { 'ok':false };
+    return;
+  }
+
   ctx.body = { 'ok': true };
 };
 
