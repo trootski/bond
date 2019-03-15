@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV TARGET="10.15.3"
+ENV TARGET="v10.15.3"
 
 RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
@@ -10,4 +10,11 @@ RUN wget --no-verbose http://nodejs.org/dist/"${TARGET}"/node-"${TARGET}"-linux-
     && ln -s /usr/local/node-"${TARGET}"-linux-x64/bin/node /usr/local/bin \
     && ln -s /usr/local/node-"${TARGET}"-linux-x64/bin/npm /usr/local/bin
 
-CMD [ "node" ];
+RUN mkdir -p /opt/bondmoviesdb
+
+COPY package.json /opt/bondmoviesdb
+COPY scripts /opt/bondmoviesdb/scripts
+
+WORKDIR /opt/bondmoviesdb
+
+CMD [ "./scripts/startup.sh" ];

@@ -1,10 +1,24 @@
 version: '3'
-services:
 
+services:
   redis:
     build:
       context: ./redis
       dockerfile: Dockerfile
     ports:
       - 6379:6379
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
+
+  dynamodb_setup:
+    build:
+      context: ./dynamodb
+      dockerfile: Dockerfile
+    links:
+      - "dynamodb:db"
+    depends_on:
+      - dynamodb
 
