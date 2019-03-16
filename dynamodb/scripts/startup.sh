@@ -2,6 +2,6 @@
 
 set -x
 
-npm install
+npm ci
 
 npm start
