@@ -10,6 +10,7 @@ services:
 
   dynamodb:
     image: amazon/dynamodb-local
+    container_name: dynamodb
     ports:
       - 8000:8000
 
@@ -17,8 +18,6 @@ services:
     build:
       context: ./dynamodb
       dockerfile: Dockerfile
-    links:
-      - "dynamodb:db"
     depends_on:
       - dynamodb
 

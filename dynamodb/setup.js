@@ -2,28 +2,37 @@
 
 'use strict'
 
+const logger = require('pino')();
 const AWS = require('aws-sdk');
+const config = require('nconf');
+
+config.file('./config.json');
+
+logger.info(config.get());
 
 const main = async () => {
   const dynamoDbParams = {
-    apiVersion: '2012-08-10',
+    apiVersion: config.get('apiVersion'),
     convertEmptyValues: true,
-    region: 'eu-west-1',
-    endpoint: 'http://db:8000'
+    accessKeyId: config.get('accessKeyId'),
+    secretAccessKey: config.get('secretAccessKey'),
+    endpoint: config.get('dynamoDBEndpoint'),
+    logger,
+    region: config.get('region'),
   };
 
-  console.log('Connecting to DynamoDB...');
+  logger.info('Connecting to DynamoDB...');
   const dynamodb = await new AWS.DynamoDB(dynamoDbParams);
 
-  console.log('Listing Tables...');
+  logger.info('Listing Tables...');
   const { TableNames: allTables  } = await dynamodb.listTables({}).promise();
 
   if (allTables.includes('BondMovies')) {
-    console.log('Dropping old tables...');
+    logger.info('Dropping old tables...');
     await dynamodb.deleteTable({ TableName: 'BondMovies' }).promise();
   }
 
-  console.log('Creating BondMovies tables...');
+  logger.info('Creating BondMovies tables...');
   return await dynamodb.createTable({
     TableName: 'BondMovies',
     AttributeDefinitions: [

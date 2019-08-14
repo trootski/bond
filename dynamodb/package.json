@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.422.0"
+    "aws-sdk": "^2.422.0",
+    "nconf": "^0.10.0",
+    "pino": "^5.13.2"
   }
 }

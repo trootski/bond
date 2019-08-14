@@ -12,10 +12,13 @@ RUN wget --no-verbose http://nodejs.org/dist/"${TARGET}"/node-"${TARGET}"-linux-
 
 RUN mkdir -p /opt/bondmoviesdb
 
-COPY package.json /opt/bondmoviesdb
-COPY package-lock.json /opt/bondmoviesdb
-COPY scripts /opt/bondmoviesdb/scripts
-
 WORKDIR /opt/bondmoviesdb
 
-CMD [ "./scripts/startup.sh" ];
+COPY package.json /opt/bondmoviesdb
+COPY package-lock.json /opt/bondmoviesdb
+COPY config.json /opt/bondmoviesdb
+COPY setup.js /opt/bondmoviesdb
+
+RUN npm ci
+
+CMD [ "node", "setup.js" ];
