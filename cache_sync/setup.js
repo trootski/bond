@@ -21,24 +21,24 @@ const getMovieDetails = (title) => {
 };
 
 client.on("error", function (err) {
-    info.error("Redis Error:  " + err);
+    logger.error("Redis Error:  " + err);
 });
 
 (async () => {
   try {
-    const res = await Promise.all(
-      filmMeta.data
-        .map(v => v.title)
-        .map(getMovieDetails)
-
-    );
+    // Fetch movie details from OMDB for each movie title
+    const res = await Promise.all(filmMeta.data
+      .map(v => v.title)
+      .map(getMovieDetails));
+    // Resolve the json for each movie if possible as the promise value
     const movieData = await Promise.all(
-      res.map(v => (v.status === 200) ? v.json() : Promise.resolve(null))
-    );
+      res.map(v => (v.status === 200) ? v.json() : Promise.resolve(null)));
+    // Create a hash map of the movies to sync with redis
     const movieDetailsToCache = await movieData.reduce((acc, cur) => {
       acc[cur.Title] = cur;
       return acc;
     }, {});
+    // Perform redis sync
     const redisRes = await Promise.all(
       Object.keys(movieDetailsToCache)
         .map(
