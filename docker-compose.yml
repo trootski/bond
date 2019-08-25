@@ -8,6 +8,11 @@ services:
     ports:
       - 6379:6379
 
+  cache_sync:
+    build:
+      context: ./cache_sync
+      dockerfile: Dockerfile
+
   dynamodb:
     image: amazon/dynamodb-local
     container_name: dynamodb
@@ -20,4 +25,14 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - dynamodb
+
+  koa:
+    depends_on:
+      - dynamodb
+    image: node:10
+    ports:
+      - 3000:3000
+    volumes:
+      - ./koa-service:/opt/koa-service
+    command: ["node", "/opt/koa-service/server.js"]
 
