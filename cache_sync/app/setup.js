@@ -4,17 +4,22 @@ const logger = require('pino')();
 const { promisify } = require('util');
 const config = require('nconf');
 const fetch = require('node-fetch');
-const filmMeta = require('../storage/film-meta.json');
-const redis = require("redis"),
-      client = redis.createClient({
-        host: config.get('app:redis_server_url'),
-        port: config.get('app:redis_server_port'),
-      });
-const setexAsync = promisify(client.setex).bind(client);
-
+const redis = require("redis");
 logger.info('Starting up...');
 
-config.file('./config.json');
+config.file('./config/config.json');
+if (process.env.CACHE_ENV) {
+  config.file(`./config/config.${process.env.CACHE_ENV}.json`);
+}
+logger.info(`Settings: ${JSON.stringify(config.get())}`);
+
+const filmMeta = require(config.get('app:film_meta_path'));
+
+const client = redis.createClient({
+  host: config.get('app:redis_server_url'),
+  port: config.get('app:redis_server_port'),
+});
+const setexAsync = promisify(client.setex).bind(client);
 
 const getMovieDetails = (title) => {
   const apiKey = config.get('app:omdb_key');

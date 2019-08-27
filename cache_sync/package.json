@@ -2,7 +2,7 @@
   "name": "cache-sync",
   "version": "0.0.1",
   "description": "Sync OMDB movie data to redis",
-  "main": "setup.js",
+  "main": "./app/setup.js",
   "scripts": {
     "start": "setup.js",
     "test": "echo \"Error: no test specified\" && exit 1"

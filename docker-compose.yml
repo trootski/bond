@@ -9,6 +9,8 @@ services:
       - 6379:6379
 
   cache_sync:
+    environment:
+      CACHE_ENV: "docker"
     build:
       context: ./cache_sync
       dockerfile: Dockerfile
