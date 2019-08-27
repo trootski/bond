@@ -19,6 +19,6 @@
   "devDependencies": {
     "@koa/cors": "^2.2.2",
     "koa-router": "^7.4.0",
-    "livereload": "^0.7.0"
+    "livereload": "^0.8.0"
   }
 }
