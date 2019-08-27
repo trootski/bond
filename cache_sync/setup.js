@@ -12,6 +12,8 @@ const redis = require("redis"),
       });
 const setexAsync = promisify(client.setex).bind(client);
 
+logger.info('Starting up...');
+
 config.file('./config.json');
 
 const getMovieDetails = (title) => {

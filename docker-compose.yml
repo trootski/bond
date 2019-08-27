@@ -12,6 +12,10 @@ services:
     build:
       context: ./cache_sync
       dockerfile: Dockerfile
+    depends_on:
+      - redis
+    volumes:
+      - ./storage:/opt/cache_sync/storage
 
   dynamodb:
     image: amazon/dynamodb-local
