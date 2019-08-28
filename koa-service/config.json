@@ -1,0 +1,6 @@
+{
+  "dynamodb": {
+    "dynamoDBEndpoint": "http://localhost:8000"
+  }
+}
+

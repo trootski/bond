@@ -64,13 +64,10 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   nextBtn.addEventListener('click', (e) => {
     m.set('currentIndex', m.get('currentIndex') + 1);
   });
-  const dataSourceSelect = document.querySelector('#db_source');
-  console.log(dataSourceSelect);
   const render = async () => {
-    console.log('rendering: ', dataSourceSelect.value);
     document.body.classList.remove('loaded');
     try {
-      const op = await fetch(`//localhost:3000/${dataSourceSelect.value}/films`, {
+      const op = await fetch(`//localhost:3000/films`, {
         headers: {
           'Access-Control-Allow-Origin': '*',
         }
@@ -87,7 +84,6 @@ document.addEventListener("DOMContentLoaded", async function(e) {
         console.error(e);
     }
   };
-  dataSourceSelect.addEventListener('change', render)
   render();
 });
 

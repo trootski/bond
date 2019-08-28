@@ -13,7 +13,9 @@
     "aws-sdk": "^2.355.0",
     "koa": "^2.5.2",
     "koa-static": "^5.0.0",
+    "nconf": "^0.10.0",
     "nodemon": "^1.18.3",
+    "pino": "^5.13.2",
     "request": "^2.88.0"
   },
   "devDependencies": {

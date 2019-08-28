@@ -5,6 +5,7 @@ const cors = require('@koa/cors');
 const {
   getDynamoDBFilms,
 } = require('./api/dynamodb');
+const logger = require('pino')();
 
 const app = new Koa();
 const router = new KoaRouter();
@@ -19,7 +20,12 @@ app.use(cors({
   origin: '*',
 }));
 
-router.get('/dynamodb/films', getDynamoDBFilms);
+app.use(async (ctx, next) => {
+  ctx.logger = logger;
+  await next();
+});
+
+router.get('*', getDynamoDBFilms);
 
 app.use(router.routes());
 

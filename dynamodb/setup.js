@@ -12,13 +12,13 @@ logger.info(config.get());
 
 const main = async () => {
   const dynamoDbParams = {
-    apiVersion: config.get('apiVersion'),
+    apiVersion: config.get('dynamodb:apiVersion'),
     convertEmptyValues: true,
-    accessKeyId: config.get('accessKeyId'),
-    secretAccessKey: config.get('secretAccessKey'),
-    endpoint: config.get('dynamoDBEndpoint'),
+    accessKeyId: config.get('dynamodb:accessKeyId'),
+    secretAccessKey: config.get('dynamodb:secretAccessKey'),
+    endpoint: config.get('dynamodb:dynamoDBEndpoint'),
     logger,
-    region: config.get('region'),
+    region: config.get('dynamodb:region'),
   };
 
   logger.info('Connecting to DynamoDB...');
@@ -33,7 +33,7 @@ const main = async () => {
   }
 
   logger.info('Creating BondMovies tables...');
-  return await dynamodb.createTable({
+  const createTabelRes = await dynamodb.createTable({
     TableName: 'BondMovies',
     AttributeDefinitions: [
       {
@@ -60,10 +60,14 @@ const main = async () => {
       WriteCapacityUnits: 1,
     },
   }).promise();
+
+  const p = await dynamodb.listTables({}).promise();
+  logger.info(p);
+
+  return 0;
 };
 
-main().then(
-  val => console.log,
-  err => console.error
-);
+main()
+  .then(val => logger.info)
+  .catch(err => logger.error);
 
