@@ -32,6 +32,21 @@ services:
     depends_on:
       - dynamodb
 
+  kafka:
+    image: spotify/kafka
+    ports:
+      - 2181:2181
+      - 9092:9092
+
+  kafka_setup:
+    environment:
+      CACHE_ENV: "docker"
+    build:
+      context: ./kafka
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+
   koa:
     depends_on:
       - dynamodb
@@ -41,4 +56,5 @@ services:
     volumes:
       - ./koa-service:/opt/koa-service
     command: ["node", "/opt/koa-service/server.js"]
+
 
