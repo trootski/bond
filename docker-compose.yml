@@ -39,6 +39,7 @@ services:
       - 9092:9092
     volumes:
       - ./kafka/kafka-logs:/tmp/kafka-logs
+      - ./kafka/zookeeper:/var/lib/zookeeper
 
   kafka_setup:
     environment:

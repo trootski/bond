@@ -28,6 +28,7 @@ const listTopics = async () => {
   try {
     const topicList = await listTopicsAsync();
     logger.info({ code: 'KAFKA_LIST_TOPICS', data: topicList });
+    return topicList;
   } catch (e) {
     logger.error({ error: e, code: 'KAFKA_LIST_TOPICS'});
     process.exit(0);
@@ -46,17 +47,24 @@ const createTopic = async topic => {
     const topicMetadata = await createTopicsAsync(topicsToCreate);
     logger.info({ data: topicMetadata, code: 'KAFKA_CREATE_TOPIC' });
   } catch (e) {
-    logger.error({ error, code: 'KAFKA_CREATE_TOPIC' });
+    logger.error({ error: e, code: 'KAFKA_CREATE_TOPIC' });
     process.exit(0);
   }
 };
 
 (async () => {
-  await listTopics();
+  const topics = await listTopics();
+  const topicName = 'BondMoviesToBeProcessed';
+  const matches = topics
+    .filter(v => v.metadata !== undefined)
+    .map(v => v.metadata)
+    .filter(v => v[topicName] !== undefined);
+  logger.info({ code: 'KAFKA_CREATE_TOPIC', msg: 'Topic already exists' });
 
-  await createTopic('BondMoviesToBeProcessed');
-
-  await listTopics();
+  if (matches.length === 0) {
+    await createTopic(topicName);
+    await listTopics();
+  }
 
   process.exit(0);
 })();

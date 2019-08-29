@@ -1,2 +1,5 @@
 kafka-logs/*
 !kafka-logs/.keep
+
+zookeeper/*
+!zookeeper/.keep
