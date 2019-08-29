@@ -1,0 +1,2 @@
+kafka-logs/*
+!kafka-logs/.keep
