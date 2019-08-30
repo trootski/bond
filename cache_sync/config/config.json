@@ -2,7 +2,7 @@
   "app": {
     "omdb_key": "78ab6537",
     "redis_server_url": "localhost",
-    "redis_server_port": "6379",
+    "redis_server_port": "6375",
     "film_meta_path": "../../storage/film-meta.json"
   }
 }

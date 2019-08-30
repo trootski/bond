@@ -6,7 +6,7 @@ services:
       context: ./redis
       dockerfile: Dockerfile
     ports:
-      - 6379:6379
+      - 6375:6375
 
   cache_sync:
     environment:
@@ -59,8 +59,4 @@ services:
     volumes:
       - ./koa-service:/opt/koa-service
     command: ["node", "/opt/koa-service/server.js"]
-
-networks:
-    default:
-        name: mybondnetwork
 
