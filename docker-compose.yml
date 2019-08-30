@@ -45,7 +45,7 @@ services:
     environment:
       CACHE_ENV: "docker"
     build:
-      context: ./kafka
+      context: ./queue_setup
       dockerfile: Dockerfile
     depends_on:
       - kafka
