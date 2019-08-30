@@ -60,4 +60,7 @@ services:
       - ./koa-service:/opt/koa-service
     command: ["node", "/opt/koa-service/server.js"]
 
+networks:
+    default:
+        name: mybondnetwork
 
