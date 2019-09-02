@@ -5,6 +5,26 @@ const config = require('nconf');
 const { promisify } = require('util');
 const kafka = require('kafka-node');
 const { Producer, KeyedMessage } = kafka;
+const watch = require('glob-watcher');
+const fg = require('fast-glob');
+
+// Raw chokidar instance
+const watcher = watch(['./**/*'], { ignoreInitial: false });
+
+// Listen for the 'change' event to get `path`/`stat`
+// No async completion available because this is the raw chokidar instance
+watcher.on('change', function(path, stat) {
+  logger.info({ code: 'PRODUCER_FILE_CHANGE', data: { path, stat } });
+  // `path` is the path of the changed file
+  // `stat` is an `fs.Stat` object (not always available)
+});
+
+// Listen for other events
+// No async completion available because this is the raw chokidar instance
+watcher.on('add', function(path, stat) {
+  // `path` is the path of the changed file
+  // `stat` is an `fs.Stat` object (not always available)
+});
 
 logger.info('Starting up...');
 logger.info(`CACHE_ENV: ${process.env.CACHE_ENV}`);
@@ -19,6 +39,9 @@ logger.info(`Settings: ${JSON.stringify(config.get())}`);
 
 
 (async () => {
+  const entries = await fg(['/opt/watch_reviews/storage/**/*']);
+  logger.info({ code: 'HERE', entries });
+
   const client = new kafka.KafkaClient({
     kafkaHost: config.get('app:kafka_url'),
   });
