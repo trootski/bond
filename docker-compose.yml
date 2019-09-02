@@ -19,6 +19,17 @@ services:
     volumes:
       - ./storage:/opt/cache_sync/storage
 
+  watch_reviews:
+    environment:
+      CACHE_ENV: "docker"
+    build:
+      context: ./watch-reviews
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    volumes:
+      - ./storage:/opt/watch_reviews/storage
+
   dynamodb:
     image: amazon/dynamodb-local
     container_name: dynamodb
