@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
+      - kafka_setup
+      - dynamodb_setup
     volumes:
       - ./storage:/opt/watch_reviews/storage
 
@@ -48,6 +50,9 @@ services:
     ports:
       - 2181:2181
       - 9092:9092
+    environment:
+      ADVERTISED_HOST: "kafka"
+      ADVERTISED_PORT: 9092
     volumes:
       - ./kafka/kafka-logs:/tmp/kafka-logs
       - ./kafka/zookeeper:/var/lib/zookeeper
