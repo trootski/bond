@@ -32,6 +32,17 @@ services:
     volumes:
       - ./storage:/opt/watch_reviews/storage
 
+  process_queue:
+    build:
+      context: ./process-queue
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - kafka_setup
+      - dynamodb_setup
+    volumes:
+      - ./storage:/opt/process_queue/storage
+
   dynamodb:
     image: amazon/dynamodb-local
     container_name: dynamodb
