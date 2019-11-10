@@ -2,7 +2,7 @@ FROM node:10-alpine
 
 # Copy script which should be run
 RUN mkdir -p /opt/cache_sync/app
-COPY ./config/ /opt/cache_sync/config
+COPY ./config /opt/cache_sync/config
 COPY ./app/setup.js /opt/cache_sync/app
 COPY ./package.json /opt/cache_sync
 COPY ./package-lock.json /opt/cache_sync

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict'
-
 const logger = require('pino')();
 const AWS = require('aws-sdk');
 const config = require('nconf');

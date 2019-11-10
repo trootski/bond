@@ -8,6 +8,7 @@ RUN apk add --update bash && rm -rf /var/cache/apk/*
 RUN mkdir -p /opt/process_queue/app
 COPY ./config/ /opt/process_queue/config
 COPY ./app/setup.js /opt/process_queue/app
+COPY ./app/test-getItem.js /opt/process_queue/app
 COPY ./package.json /opt/process_queue
 COPY ./package-lock.json /opt/process_queue
 RUN chmod +x /opt/process_queue/app/setup.js

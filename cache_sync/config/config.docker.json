@@ -1,6 +1,0 @@
-{
-  "app": {
-    "redis_server_url": "redis",
-    "film_meta_path": "../storage/film-meta.json"
-  }
-}

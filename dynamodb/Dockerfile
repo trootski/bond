@@ -18,6 +18,8 @@ COPY package.json /opt/bondmoviesdb
 COPY package-lock.json /opt/bondmoviesdb
 COPY config.json /opt/bondmoviesdb
 COPY setup.js /opt/bondmoviesdb
+COPY list-tables.js /opt/bondmoviesdb
+COPY show-bond-movies-content.js /opt/bondmoviesdb
 
 RUN npm ci
 

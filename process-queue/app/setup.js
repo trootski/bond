@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
-const logger = require('pino')();
+const AWS = require('aws-sdk');
 const config = require('nconf');
-const { promisify } = require('util');
-const kafka = require('kafka-node');
-const showdown = require('showdown');
-const { Consumer, Offset } = kafka;
 const fs = require('fs');
+const kafka = require('kafka-node');
+const logger = require('pino')();
+const redis = require("redis");
+const showdown = require('showdown');
+const { promisify } = require('util');
+
+const { Consumer, Offset } = kafka;
 const filmData = require('/opt/process_queue/storage/film-meta.json');
 
 config.file(`./config/config.json`);
@@ -16,9 +19,9 @@ const converter = new showdown.Converter();
 (async () => {
   logger.info({
     code: 'PROCESS_QUEUE_START',
-    msg: `Starting up...\n\nkafkaHost: ${config.get('app:kafka_url')}` });
+    msg: `Starting up...\n\nkafkaHost: ${config.get('kafka:url')}` });
   const client = new kafka.KafkaClient({
-    kafkaHost: config.get('app:kafka_url'),
+    kafkaHost: config.get('kafka:url'),
   });
   const offset = new Offset(client);
   const consumer = new Consumer(client, [
@@ -34,11 +37,55 @@ const converter = new showdown.Converter();
       const html = converter.makeHtml(markdown);
       const filmEntry = filmData.data.find(v => v.review === fname);
       logger.info({ code: 'CONSUMER_INFO', filmEntry });
+
+      const client = redis.createClient({
+        host: config.get('redis:url'),
+        port: config.get('redis:port'),
+      });
+      const getAsync = promisify(client.get).bind(client);
+      const OMDBData = await getAsync(filmEntry.title);
+
       const dataToPersist = {
         ...filmEntry,
-        ...{ html, markdown },
+        ...(JSON.parse(OMDBData)),
+        html,
       };
       logger.info({ code: 'CONSUMER_INFO', dataToPersist });
+
+
+      const dynamoDbParams = {
+        apiVersion: config.get('dynamodb:apiVersion'),
+        convertEmptyValues: true,
+        accessKeyId: config.get('dynamodb:accessKeyId'),
+        secretAccessKey: config.get('dynamodb:secretAccessKey'),
+        endpoint: config.get('dynamodb:dynamoDBEndpoint'),
+        logger,
+        region: config.get('dynamodb:region'),
+      };
+
+      logger.info('Connecting to DynamoDB...');
+      const dynamodb = await new AWS.DynamoDB(dynamoDbParams);
+
+      const checkItem = await dynamodb.getItem({
+        TableName: 'BondMovies',
+        Key: {
+          "Director": {
+            S: "Martin Campbell",
+           },
+          "MovieTitle": {
+            S: "Casino Royale",
+           }
+        },
+      }).promise();
+      logger.info({ code: 'CONSUMER_INFO', msg: `Results: ${JSON.stringify(checkItem)}` });
+
+      // logger.info({ code: 'CONSUMER_INFO', msg: `Setting new entry ${dataToPersist.title}` });
+      // const createRecord = await dynamodb.putItem({
+      //   TableName: 'BondMovies',
+      //   Item: dataToPersist,
+      // }).promise();
+
+      // logger.info({ code: 'CONSUMER_INFO', createRecord });
     } catch (e) {
       logger.error({ code: 'CONSUMER_ERROR', error: e });
     }

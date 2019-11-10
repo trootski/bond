@@ -5,12 +5,11 @@ const { promisify } = require('util');
 const config = require('nconf');
 const fetch = require('node-fetch');
 const redis = require("redis");
-logger.info('Starting up...');
 
-config.file('./config/config.json');
-if (process.env.CACHE_ENV) {
-  config.file(`./config/config.${process.env.CACHE_ENV}.json`);
-}
+logger.info(`Starting up... ${process.env.CACHE_ENV}`);
+
+config.file('/opt/cache_sync/config/config.json');
+
 logger.info(`Settings: ${JSON.stringify(config.get())}`);
 
 const filmMeta = require(config.get('app:film_meta_path'));
