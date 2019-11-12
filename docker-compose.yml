@@ -53,7 +53,7 @@ services:
 
   dynamodb_setup:
     build:
-      context: ./dynamodb
+      context: ./dynamodb_setup
       dockerfile: Dockerfile
     depends_on:
       - dynamodb
