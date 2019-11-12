@@ -1,6 +1,0 @@
-{
-  "app": {
-    "kafka_url": "kafka:9092",
-    "zookeeper_port": "2181"
-  }
-}

@@ -1,20 +1,19 @@
-FROM node:10-alpine
+FROM node:12-alpine
+
+RUN mkdir -p /opt/queue_setup/app
+WORKDIR /opt/queue_setup
 
 RUN apk add --update python && rm -rf /var/cache/apk/*
 
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
-# Copy script which should be run
-RUN mkdir -p /opt/kafka_setup/app
-COPY ./config/ /opt/kafka_setup/config
-COPY ./app/setup.js /opt/kafka_setup/app
-COPY ./package.json /opt/kafka_setup
-COPY ./package-lock.json /opt/kafka_setup
-RUN chmod +x /opt/kafka_setup/app/setup.js
-
-WORKDIR /opt/kafka_setup
-
+COPY ./package.json /opt/queue_setup
+COPY ./package-lock.json /opt/queue_setup
 RUN npm ci
 
-CMD ["node", "/opt/kafka_setup/app/setup.js"]
+COPY ./config/ /opt/queue_setup/config
+COPY ./app/setup.js /opt/queue_setup/app
+RUN chmod +x /opt/queue_setup/app/setup.js
+
+CMD ["node", "/opt/queue_setup/app/setup.js"]
 

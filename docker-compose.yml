@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
-      - kafka_setup
+      - queue_setup
       - dynamodb_setup
     volumes:
       - ./storage:/opt/watch_reviews/storage
@@ -40,7 +40,7 @@ services:
       - "9229:9229"
     depends_on:
       - redis
-      - kafka_setup
+      - queue_setup
       - dynamodb_setup
     volumes:
       - ./storage:/opt/process_queue/storage
@@ -70,7 +70,7 @@ services:
       - ./kafka/kafka-logs:/tmp/kafka-logs
       - ./kafka/zookeeper:/var/lib/zookeeper
 
-  kafka_setup:
+  queue_setup:
     environment:
       CACHE_ENV: "docker"
     build:

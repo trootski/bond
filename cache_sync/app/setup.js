@@ -25,6 +25,16 @@ const getMovieDetails = (title) => {
   return fetch(omdbURL);
 };
 
+process.on('uncaughtException', function (err) {
+  logger.error({ code: 'CACHE_ERROR', error: err.message });
+  process.exit(0);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error({ code: 'CACHE_ERROR', error: (reason.stack || reason) });
+  process.exit(0);
+});
+
 client.on("error", function (err) {
     logger.error({ code: 'CACHE_ERROR', error: err.message });
 });

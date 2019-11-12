@@ -19,13 +19,13 @@ const converter = new showdown.Converter();
 const setTimeoutAsync = promisify(setTimeout);
 
 process.on('uncaughtException', function (err) {
-  logger.info(err);
+  logger.error({ code: 'CONSUMER_ERROR', error: err.message });
+  process.exit(0);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.info('Unhandled Rejection at:', reason.stack || reason)
-  // Recommended: send the information to sentry.io
-  // or whatever crash reporting service you use
+  logger.error({ code: 'CONSUMER_ERROR', error: (reason.stack || reason) });
+  process.exit(0);
 });
 
 const handleErr = rej => err => {
