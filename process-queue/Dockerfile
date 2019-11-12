@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:12-alpine
 
 RUN apk add --update python && rm -rf /var/cache/apk/*
 RUN apk add --update bash && rm -rf /var/cache/apk/*
@@ -15,4 +15,7 @@ RUN npm ci
 COPY ./config/ /opt/process_queue/config
 COPY ./app/*.js /opt/process_queue/app/
 
+# Uncomment the following if you would like to debug
+# EXPOSE 9229
+# CMD ["node", "--inspect-brk=0.0.0.0", "/opt/process_queue/app/setup.js"]
 CMD ["node", "/opt/process_queue/app/setup.js"]

@@ -16,7 +16,55 @@ config.file(`./config/config.json`);
 
 const converter = new showdown.Converter();
 
+const setTimeoutAsync = promisify(setTimeout);
+
+process.on('uncaughtException', function (err) {
+  logger.info(err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.info('Unhandled Rejection at:', reason.stack || reason)
+  // Recommended: send the information to sentry.io
+  // or whatever crash reporting service you use
+});
+
+const handleErr = rej => err => {
+  logger.error({ code: 'ADMIN_ERROR', error: err.message });
+  rej(err);
+};
+
 (async () => {
+  const checkTopicAvailable = () => new Promise(async (rslv, rej) => {
+    try {
+      const handleRejection = handleErr(rej); 
+      const client = new kafka.KafkaClient({
+        kafkaHost: config.get('kafka:url'),
+      });
+      const admin = new kafka.Admin(client);
+      admin.on('error', handleRejection);
+      admin.listTopics((err, data) => {
+        if (err) handleRejection(err);
+        rslv(data);
+      });
+    } catch (err) {
+      handleRejection(err);
+    }
+  });
+  const waitForHostAndTopic = async () => {
+    do {
+      try {
+        const rslt = await checkTopicAvailable();
+        if (rslt && rslt[1] && rslt[1].metadata && rslt[1].metadata['BondMoviesToBeProcessed']) {
+          return rslt;
+        }
+        logger.info({ code: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...', rslt });
+        await setTimeoutAsync(1000);
+      } catch (e) {
+        logger.error({ code: 'HOST_WAIT_ERROR', error: e.message });
+      }
+    } while(true);
+  }
+  await waitForHostAndTopic();
   const client = new kafka.KafkaClient({
     kafkaHost: config.get('kafka:url'),
   });
@@ -94,7 +142,7 @@ const converter = new showdown.Converter();
   });
 
   consumer.on('error', err => {
-    logger.error({ code: 'CONSUMER_ERROR', error: err });
+    logger.error({ code: 'CONSUMER_ERROR', error: err.message, msg: 'HERE' });
   });
 
   /*
