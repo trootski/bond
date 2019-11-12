@@ -1,23 +1,27 @@
 const AWS = require('aws-sdk');
 const request = require('request');
 const fs = require('fs');
-const config = require('../../config.js');
 
 const getDynamoDBFilms = async (ctx, next) => {
   const { logger } = ctx;
   const getDynamoDocumentClient = async () => {
     const dynamoDbParams = {
-      apiVersion: config.get('dynamodb:apiVersion'),
+      apiVersion: ctx.config.get('dynamodb:apiVersion'),
       convertEmptyValues: true,
-      accessKeyId: config.get('dynamodb:accessKeyId'),
-      secretAccessKey: config.get('dynamodb:secretAccessKey'),
-      endpoint: config.get('dynamodb:dynamoDBEndpoint'),
+      accessKeyId: ctx.config.get('dynamodb:accessKeyId'),
+      secretAccessKey: ctx.config.get('dynamodb:secretAccessKey'),
+      endpoint: ctx.config.get('dynamodb:dynamoDBEndpoint'),
       logger,
-      region: config.get('dynamodb:region'),
+      region: ctx.config.get('dynamodb:region'),
     };
     try {
-      const documentClient = await new AWS.DynamoDB.DocumentClient(dynamoDbParams)
-      return documentClient;
+      const client = await new AWS.DynamoDB(dynamoDbParams);
+      const dynamodb = await new AWS.DynamoDB.DocumentClient({
+        params: dynamoDbParams,
+        service: client,
+        convertEmptyValues: true,
+      });
+      return dynamodb;
     } catch (e) {
       logger.error({ code: 'FETCH_ERROR', error: e });
       ctx.response.status = 500;

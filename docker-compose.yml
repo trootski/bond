@@ -80,12 +80,25 @@ services:
       - kafka
 
   koa:
+    command: ["node", "/opt/koa-service/app/server.js"]
     depends_on:
-      - dynamodb
-    image: node:10
+      - cache_sync
+      - watch_reviews
+      - process_queue
+      - vanilla
+    image: node:12
     ports:
       - 3000:3000
     volumes:
       - ./koa-service:/opt/koa-service
-    command: ["node", "/opt/koa-service/server.js"]
+    working_dir: /opt/koa-service
+  
+  vanilla:
+    command: ["node", "/opt/vanilla/app/server.js"]
+    image: node:12
+    ports:
+      - 3001:3001
+    volumes:
+      - ./fe/vanilla:/opt/vanilla
+    working_dir: /opt/vanilla
 
