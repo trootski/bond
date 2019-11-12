@@ -67,8 +67,8 @@ services:
       ADVERTISED_HOST: "kafka"
       ADVERTISED_PORT: 9092
     volumes:
-      - ./kafka/kafka-logs:/tmp/kafka-logs
-      - ./kafka/zookeeper:/var/lib/zookeeper
+      - ../storage/kafka/kafka-logs:/tmp/kafka-logs
+      - ../storage/kafka/zookeeper:/var/lib/zookeeper
 
   queue_setup:
     environment:

@@ -71,6 +71,21 @@ const handleErr = rej => err => {
         }
       } while(true);
     }
+    const createTopic = async topic => {
+      const topicsToCreate = [{
+        topic,
+        partitions: 1,
+        replicationFactor: 1
+      }];
+       
+      try {
+        const topicMetadata = await createTopicsAsync(topicsToCreate);
+        logger.info({ code: 'QUEUE_SETUP_INFO', data: topicMetadata  });
+      } catch (err) {
+        logger.error({ code: 'QUEUE_SETUP_ERROR', error: err  });
+        process.exit(0);
+      }
+    };
     const topics = await waitForHost();
     const matches = topics
       .filter(v => v.metadata !== undefined)
@@ -78,7 +93,7 @@ const handleErr = rej => err => {
       .filter(v => v[topicName] !== undefined);
 
     if (matches.length === 0) {
-      logger.info({ code: 'QUEUE_SETUP_INFO', msg: 'Creating Topic' });
+      logger.info({ code: 'QUEUE_SETUP_INFO', msg: `Creating topic: ${topicName}` });
       await createTopic(topicName);
     } else {
       logger.info({ code: 'QUEUE_SETUP_INFO', msg: 'Topic already exists' });

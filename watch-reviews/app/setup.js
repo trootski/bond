@@ -1,29 +1,37 @@
 #!/usr/bin/env node
 
-const logger = require('pino')();
 const config = require('nconf');
-const { promisify } = require('util');
-const kafka = require('kafka-node');
-const { Producer, KeyedMessage } = kafka;
-const watch = require('glob-watcher');
 const fg = require('fast-glob');
+const kafka = require('kafka-node');
+const logger = require('pino')();
+const { promisify } = require('util');
+const watch = require('glob-watcher');
+
+const { Producer, KeyedMessage } = kafka;
 
 // Raw chokidar instance
 const watcher = watch(['./storage/**/*'], { ignoreInitial: false });
 
-logger.info({ code: 'WATCH_REVIEW_START', msg: `Starting up...\n\nCACHE_ENV: ${process.env.CACHE_ENV}\n\nDIR: ${__dirname}\n\nSettings: ${JSON.stringify(config.get())}` });
+config.file(`/opt/watch_reviews/config/config.json`);
 
-config.file(`./config/config.json`);
-
-if (process.env.CACHE_ENV) {
-  config.file(`./config/config.${process.env.CACHE_ENV}.json`);
-}
+logger.info({ code: 'WATCH_REVIEW_START', msg: `Starting up...\n\n
+Settings: ${JSON.stringify(config.get())}` });
 
 const client = new kafka.KafkaClient({
-  kafkaHost: config.get('app:kafka_url'),
+  kafkaHost: config.get('kafka:url'),
 });
 
 const producer = new Producer(client);
+
+process.on('uncaughtException', function (err) {
+  logger.error({ code: 'WATCH_REVIEW_ERROR', error: err.message });
+  process.exit(0);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error({ code: 'WATCH_REVIEW_ERROR', error: (reason.stack || reason) });
+  process.exit(0);
+});
 
 (async () => {
   const entries = await fg(['/opt/watch_reviews/storage/**/*']);
