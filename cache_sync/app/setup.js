@@ -6,17 +6,16 @@ const config = require('nconf');
 const fetch = require('node-fetch');
 const redis = require("redis");
 
-logger.info(`Starting up... ${process.env.CACHE_ENV}`);
-
 config.file('/opt/cache_sync/config/config.json');
 
-logger.info(`Settings: ${JSON.stringify(config.get())}`);
+logger.info({ code: 'CACHE_START', msg: `Starting up...
+Settings: ${JSON.stringify(config.get())}` });
 
 const filmMeta = require(config.get('app:film_meta_path'));
 
 const client = redis.createClient({
-  host: config.get('app:redis_server_url'),
-  port: config.get('app:redis_server_port'),
+  host: config.get('redis:url'),
+  port: config.get('redis:port'),
 });
 const setexAsync = promisify(client.setex).bind(client);
 
@@ -27,7 +26,7 @@ const getMovieDetails = (title) => {
 };
 
 client.on("error", function (err) {
-    logger.error("Redis Error:  " + err);
+    logger.error({ code: 'CACHE_ERROR', error: err.message });
 });
 
 (async () => {
@@ -49,7 +48,7 @@ client.on("error", function (err) {
       Object.keys(movieDetailsToCache)
         .map(
           title => {
-            logger.info(`Setting cache key ${title}`);
+            logger.info({ code: 'CACHE_INFO', msg: `Setting cache key ${title}` });
             return setexAsync(
               title,
               7200,
@@ -60,6 +59,6 @@ client.on("error", function (err) {
     );
     process.exit(0);
   } catch (e) {
-    logger.error(e);
+    logger.error({ code: 'CACHE_ERROR', error: err.message });
   }
 })();

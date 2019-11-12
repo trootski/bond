@@ -1,8 +1,10 @@
 {
   "app": {
     "film_meta_path": "../storage/film-meta.json",
-    "omdb_key": "78ab6537",
-    "redis_server_port": "6375",
-    "redis_server_url": "redis"
+    "omdb_key": "78ab6537"
+  },
+  "redis": {
+    "port": "6375",
+    "url": "redis"
   }
 }
