@@ -2,8 +2,6 @@ version: '3'
 
 services:
   redis:
-    environment:
-      CACHE_ENV: "docker"
     build:
       context: ./redis
       dockerfile: Dockerfile
@@ -20,8 +18,6 @@ services:
       - ./storage:/opt/cache_sync/storage
 
   watch_reviews:
-    environment:
-      CACHE_ENV: "docker"
     build:
       context: ./watch-reviews
       dockerfile: Dockerfile
@@ -44,10 +40,11 @@ services:
       - dynamodb_setup
     volumes:
       - ./storage:/opt/process_queue/storage
+      - ./utils:/opt/process_queue/app/utils
 
   dynamodb:
-    image: amazon/dynamodb-local
     container_name: dynamodb
+    image: amazon/dynamodb-local
     ports:
       - 8000:8000
 
@@ -59,20 +56,18 @@ services:
       - dynamodb
 
   kafka:
+    environment:
+      ADVERTISED_HOST: "kafka"
+      ADVERTISED_PORT: 9092
     image: spotify/kafka
     ports:
       - 2181:2181
       - 9092:9092
-    environment:
-      ADVERTISED_HOST: "kafka"
-      ADVERTISED_PORT: 9092
     volumes:
       - ../storage/kafka/kafka-logs:/tmp/kafka-logs
       - ../storage/kafka/zookeeper:/var/lib/zookeeper
 
   queue_setup:
-    environment:
-      CACHE_ENV: "docker"
     build:
       context: ./queue_setup
       dockerfile: Dockerfile
