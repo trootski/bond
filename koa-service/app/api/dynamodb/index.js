@@ -22,8 +22,8 @@ const getDynamoDBFilms = async (ctx, next) => {
         convertEmptyValues: true,
       });
       return dynamodb;
-    } catch (e) {
-      logger.error({ code: 'FETCH_ERROR', error: e });
+    } catch (err) {
+      logger.error({ code: 'FETCH_ERROR', err });
       ctx.response.status = 500;
       ctx.response.body = { code: 'FETCH_ERROR', message: 'Connection error' };
       return null;
@@ -43,8 +43,8 @@ const getDynamoDBFilms = async (ctx, next) => {
       const { Items } = res;
       ctx.response.status = 200;
       ctx.response.body = { ok: true, data: Items };
-    } catch (e) {
-      logger.error({ code: 'FETCH_ERROR', error: e });
+    } catch (err) {
+      logger.error({ code: 'FETCH_ERROR', err });
       switch (e.code) {
         case 'ResourceNotFoundException':
           ctx.response.status = 404;

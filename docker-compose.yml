@@ -74,6 +74,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - kafka
+    ports:
+      - 9229:9229
+    volumes:
+      - ./utils:/opt/queue_setup/app/utils
 
   koa:
     command: ["node", "/opt/koa-service/app/server.js"]
@@ -88,7 +92,7 @@ services:
     volumes:
       - ./koa-service:/opt/koa-service
     working_dir: /opt/koa-service
-  
+
   vanilla:
     command: ["node", "/opt/vanilla/app/server.js"]
     image: node:12

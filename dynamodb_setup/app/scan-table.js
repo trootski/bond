@@ -33,6 +33,6 @@ Settings: ${JSON.stringify(config.get())}` });
 
     process.exit(0);
   } catch (e) {
-    logger.error({ code: 'DYNAMO_SCAN_ERROR', error: err.message });
+    logger.error({ code: 'DYNAMO_SCAN_ERROR', err });
   }
 })();

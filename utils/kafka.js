@@ -6,12 +6,12 @@ const { Consumer, Offset, Producer } = kafka;
 const setTimeoutAsync = promisify(setTimeout);
 
 const handleErr = logger => rej => err => {
-  logger.error({ code: 'ADMIN_ERROR', error: err.message });
+  logger.error({ code: 'ADMIN_ERROR', err });
   rej(err);
 };
 
 const checkTopicAvailable = ({ config, logger }) => new Promise(async (rslv, rej) => {
-  const handleRejection = handleErr(logger)(rej); 
+  const handleRejection = handleErr(logger)(rej);
   try {
     const client = new kafka.KafkaClient({
       kafkaHost: config.get('kafka:url'),
@@ -26,23 +26,45 @@ const checkTopicAvailable = ({ config, logger }) => new Promise(async (rslv, rej
     handleRejection(err);
   }
 });
-const waitForHost = async ({ config, logger }) => waitForHostAndTopic({ config, logger, isWaitForTopic: false })
-  
-const waitForHostAndTopic = async ({ config, logger, waitForTopic = true }) => {
+
+const waitForHostAndTopic = async ({ config, logger }) => {
   do {
     try {
       const rslt = await checkTopicAvailable({ config, logger });
-      if (rslt && rslt[1] && rslt[1].metadata && ) {
-if (isWaitForTopic && rslt[1].metadata['BondMoviesToBeProcessed'])
-        return rslt;
+      if (rslt && rslt[1] && rslt[1].metadata) {
+        if (rslt[1].metadata['BondMoviesToBeProcessed']) {
+          return true;
+        } else {
+          return false;
+        }
       }
       logger.info({ code: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...', rslt });
       await setTimeoutAsync(1000);
-    } catch (e) {
-      logger.error({ code: 'HOST_WAIT_ERROR', error: e.message });
+    } catch (err) {
+      logger.error({ code: 'HOST_WAIT_ERROR', err });
     }
   } while(true);
 };
+
+const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, rej) => {
+  try {
+    const client = new kafka.KafkaClient({
+      kafkaHost: config.get('kafka:url'),
+    });
+    const topicsToCreate = [{
+      topic: topicName,
+      partitions: 1,
+      replicationFactor: 1
+    }];
+    client.createTopics(topicsToCreate, (err, data) => {
+      if (err) { logger.error({ err }); rej(err); }
+      rslv(data);
+    });
+  } catch (err) {
+    logger.error({ err });
+    rej(err);
+  }
+});
 
 const getConsumer = async ({ config }) => {
   const client = new kafka.KafkaClient({
@@ -59,14 +81,14 @@ const getProducer = async ({ config }) => {
   const client = new kafka.KafkaClient({
     kafkaHost: config.get('kafka:url'),
   });
-  
+
   return new Producer(client);
 };
 
 module.exports = {
   checkTopicAvailable,
+  createTopic,
   getConsumer,
   getProducer,
-  waitForHost,
   waitForHostAndTopic,
 };

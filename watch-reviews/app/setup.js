@@ -51,6 +51,6 @@ registerUncaughtErrors({ logger: logger.child({ code: 'WATCH_REVIEW_ERROR' }) })
   });
 
   producer.on('error', err => {
-    logger.error({ code: 'PRODUCER_ERROR', error: err });
+    logger.error({ code: 'PRODUCER_ERROR', err });
   });
 })();

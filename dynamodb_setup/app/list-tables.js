@@ -31,6 +31,6 @@ Settings: ${JSON.stringify(config.get())}` });
 
     process.exit(0);
   } catch (e) {
-    logger.error({ code: 'DYNAMO_LIST_ERROR', error: err.message });
+    logger.error({ code: 'DYNAMO_LIST_ERROR', err });
   }
 })();

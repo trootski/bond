@@ -61,7 +61,7 @@ Settings: ${JSON.stringify(config.get())}` });
 
     process.exit(0);
   } catch (err) {
-    logger.error({ code: 'DYNAMO_SETUP_ERROR', error: err.message });
+    logger.error({ code: 'DYNAMO_SETUP_ERROR', err });
   }
 })();
 

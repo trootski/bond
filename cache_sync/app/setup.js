@@ -26,7 +26,7 @@ const getMovieDetails = (title) => {
 };
 
 process.on('uncaughtException', function (err) {
-  logger.error({ code: 'CACHE_ERROR', error: err.message });
+  logger.error({ code: 'CACHE_ERROR', err });
   process.exit(0);
 });
 
@@ -36,7 +36,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 client.on("error", function (err) {
-    logger.error({ code: 'CACHE_ERROR', error: err.message });
+    logger.error({ code: 'CACHE_ERROR', err });
 });
 
 (async () => {
@@ -69,6 +69,6 @@ client.on("error", function (err) {
     );
     process.exit(0);
   } catch (e) {
-    logger.error({ code: 'CACHE_ERROR', error: err.message });
+    logger.error({ code: 'CACHE_ERROR', err });
   }
 })();

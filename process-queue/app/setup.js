@@ -20,7 +20,7 @@ registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
 (async () => {
   logger.info({ code: 'CONSUMER_START', msg: 'starting' });
   await waitForHostAndTopic({ logger, config });
-  consumer = await getConsumer({ logger, config });
+  const consumer = await getConsumer({ logger, config });
   consumer.on('message', async m => {
     const fname = (m.value.match(/storage\/reviews\/(.+)$/) || [])[1];
     const stub = (m.value.match(/(.+)\/(.+)(\.md)$/) || [])[2];
@@ -36,7 +36,7 @@ registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
 
       if (OMDBData) {
         const dynamodb = await getDocumentClient({ config, logger });
-        
+
         const checkItem = await dynamodb.get({
           TableName: 'BondMovies',
           Key: {
@@ -64,13 +64,13 @@ registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
 
         logger.info({ code: 'CONSUMER_INFO', createRecord, dataToPersist });
       }
-    } catch (e) {
-      logger.error({ code: 'CONSUMER_MESSAGE_ERROR', error: e });
+    } catch (err) {
+      logger.error({ code: 'CONSUMER_MESSAGE_ERROR', err });
     }
   });
 
   consumer.on('error', err => {
-    logger.error({ code: 'CONSUMER_ERROR', error: err.message, msg: 'HERE' });
+    logger.error({ code: 'CONSUMER_ERROR', err });
   });
 
   /*
