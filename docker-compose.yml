@@ -27,6 +27,7 @@ services:
       - dynamodb_setup
     volumes:
       - ./storage:/opt/watch_reviews/storage
+      - ./utils:/opt/watch_reviews/app/utils
 
   process_queue:
     build:

@@ -1,7 +1,7 @@
 const kafka = require('kafka-node');
 const { promisify } = require('util');
 
-const { Consumer, Offset } = kafka;
+const { Consumer, Offset, Producer } = kafka;
 
 const setTimeoutAsync = promisify(setTimeout);
 
@@ -26,11 +26,14 @@ const checkTopicAvailable = ({ config, logger }) => new Promise(async (rslv, rej
     handleRejection(err);
   }
 });
-const waitForHostAndTopic = async ({ config, logger }) => {
+const waitForHost = async ({ config, logger }) => waitForHostAndTopic({ config, logger, isWaitForTopic: false })
+  
+const waitForHostAndTopic = async ({ config, logger, waitForTopic = true }) => {
   do {
     try {
       const rslt = await checkTopicAvailable({ config, logger });
-      if (rslt && rslt[1] && rslt[1].metadata && rslt[1].metadata['BondMoviesToBeProcessed']) {
+      if (rslt && rslt[1] && rslt[1].metadata && ) {
+if (isWaitForTopic && rslt[1].metadata['BondMoviesToBeProcessed'])
         return rslt;
       }
       logger.info({ code: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...', rslt });
@@ -40,6 +43,7 @@ const waitForHostAndTopic = async ({ config, logger }) => {
     }
   } while(true);
 };
+
 const getConsumer = async ({ config }) => {
   const client = new kafka.KafkaClient({
     kafkaHost: config.get('kafka:url'),
@@ -51,8 +55,18 @@ const getConsumer = async ({ config }) => {
   return consumer;
 };
 
+const getProducer = async ({ config }) => {
+  const client = new kafka.KafkaClient({
+    kafkaHost: config.get('kafka:url'),
+  });
+  
+  return new Producer(client);
+};
+
 module.exports = {
   checkTopicAvailable,
   getConsumer,
+  getProducer,
+  waitForHost,
   waitForHostAndTopic,
 };

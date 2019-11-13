@@ -4,6 +4,8 @@ const logger = require('pino')();
 const config = require('nconf');
 const { promisify } = require('util');
 const kafka = require('kafka-node');
+const { getConsumer, waitForHostAndTopic } = require('./utils/kafka.js');
+const registerUncaughtErrors = require('./utils/uncaught-errors.js');
 
 const setTimeoutAsync = promisify(setTimeout);
 
@@ -14,15 +16,7 @@ const topicName = 'BondMoviesToBeProcessed';
 logger.info({ code: 'QUEUE_SETUP_START', msg: `Connecting to Kafka
 Settings: ${JSON.stringify(config.get())}` });
 
-process.on('uncaughtException', function (err) {
-  logger.error({ code: 'QUEUE_SETUP_ERROR', error: err.message });
-  process.exit(0);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error({ code: 'QUEUE_SETUP_ERROR', error: (reason.stack || reason) });
-  process.exit(0);
-});
+registerUncaughtErrors({ logger: logger.child({ code: 'QUEUE_SETUP_ERROR' }) });
 
 const handleErr = rej => err => {
   logger.error({ code: 'ADMIN_ERROR', error: err.message });
@@ -31,6 +25,7 @@ const handleErr = rej => err => {
 
 (async () => {
   try {
+    await waitForHost({ logger, config });
     const client = new kafka.KafkaClient({
       kafkaHost: config.get('kafka:url'),
       connectTimeout: 2000,

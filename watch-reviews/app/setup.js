@@ -4,10 +4,11 @@ const config = require('nconf');
 const fg = require('fast-glob');
 const kafka = require('kafka-node');
 const logger = require('pino')();
-const { promisify } = require('util');
 const watch = require('glob-watcher');
+const { getProducer, waitForHostAndTopic } = require('./utils/kafka.js');
+const registerUncaughtErrors = require('./utils/uncaught-errors.js');
 
-const { Producer, KeyedMessage } = kafka;
+const { KeyedMessage } = kafka;
 
 // Raw chokidar instance
 const watcher = watch(['./storage/**/*'], { ignoreInitial: false });
@@ -17,23 +18,11 @@ config.file(`/opt/watch_reviews/config/config.json`);
 logger.info({ code: 'WATCH_REVIEW_START', msg: `Starting up...\n\n
 Settings: ${JSON.stringify(config.get())}` });
 
-const client = new kafka.KafkaClient({
-  kafkaHost: config.get('kafka:url'),
-});
-
-const producer = new Producer(client);
-
-process.on('uncaughtException', function (err) {
-  logger.error({ code: 'WATCH_REVIEW_ERROR', error: err.message });
-  process.exit(0);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error({ code: 'WATCH_REVIEW_ERROR', error: (reason.stack || reason) });
-  process.exit(0);
-});
+registerUncaughtErrors({ logger: logger.child({ code: 'WATCH_REVIEW_ERROR' }) });
 
 (async () => {
+  await waitForHostAndTopic({ logger, config });
+  producer = await getProducer({ config });
   const entries = await fg(['/opt/watch_reviews/storage/**/*']);
 
   const postMovieToProcess = reviewFileName => {
