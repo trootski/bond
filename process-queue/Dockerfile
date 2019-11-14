@@ -12,7 +12,6 @@ COPY ./package-lock.json /opt/process_queue/
 
 RUN npm ci
 
-COPY ./config/ /opt/process_queue/config
 COPY ./app/*.js /opt/process_queue/app/
 
 # Uncomment the following if you would like to debug

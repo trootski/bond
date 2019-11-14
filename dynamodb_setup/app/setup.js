@@ -1,37 +1,29 @@
 #!/usr/bin/env node
 
-const logger = require('pino')();
-const AWS = require('aws-sdk');
 const config = require('nconf');
+const logger = require('pino')().child({ app: 'DYNAMODB_SETUP' });
+const { getDynamoDBClient } = require('./utils/dynamo.js');
 
 config.file('./config.json');
 
-logger.info({ code: 'DYNAMO_SETUP_START', msg: `Connecting to DynamoDB
-Settings: ${JSON.stringify(config.get())}` });
+logger.info({
+  type: 'START',
+  msg: `Connecting to DynamoDB\n\nSettings: ${JSON.stringify(config.get())}`,
+});
 
 (async () => {
   try {
-    const dynamoDbParams = {
-      apiVersion: config.get('dynamodb:apiVersion'),
-      convertEmptyValues: true,
-      accessKeyId: config.get('dynamodb:accessKeyId'),
-      secretAccessKey: config.get('dynamodb:secretAccessKey'),
-      endpoint: config.get('dynamodb:dynamoDBEndpoint'),
-      logger,
-      region: config.get('dynamodb:region'),
-    };
-
-    const dynamodb = await new AWS.DynamoDB(dynamoDbParams);
+    const dynamodb = await getDynamoDBClient({ config, logger, waitForTable: false });
 
     const { TableNames: allTables  } = await dynamodb.listTables({}).promise();
 
     if (allTables.includes('BondMovies')) {
-      logger.info({ code: 'DYNAMO_SETUP_INFO', msg: 'Dropping old table' });
+      logger.info({ msg: 'Dropping old table' });
       await dynamodb.deleteTable({ TableName: 'BondMovies' }).promise();
     }
 
-    logger.info({ code: 'DYNAMO_SETUP_INFO', msg: 'Creating table' });
-    const createTabelRes = await dynamodb.createTable({
+    logger.info({ msg: 'Creating table' });
+    await dynamodb.createTable({
       TableName: 'BondMovies',
       AttributeDefinitions: [
         {
@@ -61,7 +53,7 @@ Settings: ${JSON.stringify(config.get())}` });
 
     process.exit(0);
   } catch (err) {
-    logger.error({ code: 'DYNAMO_SETUP_ERROR', err });
+    logger.error({ msg: 'OUTER', err });
   }
 })();
 

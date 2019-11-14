@@ -10,7 +10,6 @@ COPY ./package.json /opt/watch_reviews
 COPY ./package-lock.json /opt/watch_reviews
 RUN npm ci
 
-COPY ./config/ /opt/watch_reviews/config
 COPY ./app/setup.js /opt/watch_reviews/app
 RUN chmod +x /opt/watch_reviews/app/setup.js
 

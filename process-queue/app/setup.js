@@ -2,37 +2,51 @@
 
 const config = require('nconf');
 const fs = require('fs');
-const logger = require('pino')();
+const logger = require('pino')().child({ app: 'PROCESS_QUEUE' });
 const showdown = require('showdown');
 const { getDocumentClient } = require('./utils/dynamo.js');
 const { getConsumer, waitForHostAndTopic } = require('./utils/kafka.js');
 const { getAsync } = require('./utils/redis.js');
 const registerUncaughtErrors = require('./utils/uncaught-errors.js');
 
-const filmData = require('/opt/process_queue/storage/film-meta.json');
-
 config.file(`./config/config.json`);
 
 const converter = new showdown.Converter();
 
-registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
+registerUncaughtErrors({ logger });
+
+const getReviewHTML = async (fname) => {
+  const markdown = fs.readFileSync(`/opt/process_queue/storage/reviews/${fname}`, 'utf8');
+  return converter.makeHtml(markdown);
+}
+
+const getOMDBData = async ({ config, fname, logger }) => {
+  logger.info({ type: 'getOMDBData', msg: fname });
+  const filmData = require('/opt/process_queue/storage/film-meta.json');
+  const filmEntry = filmData.data.find(v => v.review === fname);
+  const redisGet = getAsync({ config, logger });
+  if (filmEntry) {
+    return JSON.parse((await redisGet(filmEntry.title)));
+  } else {
+    return null;
+  }
+};
 
 (async () => {
-  logger.info({ code: 'CONSUMER_START', msg: 'starting' });
+  logger.info({ type: 'START', msg: 'starting' });
+
   await waitForHostAndTopic({ logger, config });
+
   const consumer = await getConsumer({ logger, config });
   consumer.on('message', async m => {
+    logger.info({ type: 'CONSUMER_MESSAGE_RECEIVED', msg: m });
     const fname = (m.value.match(/storage\/reviews\/(.+)$/) || [])[1];
     const stub = (m.value.match(/(.+)\/(.+)(\.md)$/) || [])[2];
     if (!fname || !stub) return;
-    logger.info({ code: 'CONSUMER_MESSAGE_RECEIVED', fname, stub });
     try {
-      const markdown = fs.readFileSync(`/opt/process_queue/storage/reviews/${fname}`, 'utf8');
-      const html = converter.makeHtml(markdown);
-      const filmEntry = filmData.data.find(v => v.review === fname);
+      const movieReviewHTML = getReviewHTML(fname);
 
-      const redisGet = getAsync({ config, logger });
-      const OMDBData = JSON.parse((await redisGet(filmEntry.title)));
+      const OMDBData = await getOMDBData({ config, fname, logger });
 
       if (OMDBData) {
         const dynamodb = await getDocumentClient({ config, logger });
@@ -49,7 +63,7 @@ registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
         const dataToPersist = {
           ...filmEntry,
           ...OMDBData,
-          html,
+          movieReviewHTML,
           ...{
            "Director": OMDBData.Director,
            "MovieTitle": OMDBData.Title,
@@ -62,10 +76,12 @@ registerUncaughtErrors({ logger: logger.child({ code: 'CONSUMER_ERROR' }) });
           TableName: 'BondMovies',
         }).promise();
 
-        logger.info({ code: 'CONSUMER_INFO', createRecord, dataToPersist });
+        logger.info({ msg: 'DynamoDB item created', createRecord, dataToPersist });
+      } else {
+        logger.info({ type: 'OMDB_DATA_MISSING', msg: OMDBData });
       }
     } catch (err) {
-      logger.error({ code: 'CONSUMER_MESSAGE_ERROR', err });
+      logger.error({ err });
     }
   });
 

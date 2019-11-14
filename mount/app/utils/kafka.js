@@ -6,7 +6,7 @@ const { Consumer, Offset, Producer } = kafka;
 const setTimeoutAsync = promisify(setTimeout);
 
 const handleErr = logger => rej => err => {
-  logger.error({ code: 'ADMIN_ERROR', err });
+  logger.error({ err });
   rej(err);
 };
 
@@ -33,15 +33,17 @@ const waitForHostAndTopic = async ({ config, logger }) => {
       const rslt = await checkTopicAvailable({ config, logger });
       if (rslt && rslt[1] && rslt[1].metadata) {
         if (rslt[1].metadata['BondMoviesToBeProcessed']) {
+          logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka and topic found' });
           return true;
         } else {
+          logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka found' });
           return false;
         }
       }
-      logger.info({ code: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...', rslt });
+      logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...' });
       await setTimeoutAsync(1000);
     } catch (err) {
-      logger.error({ code: 'HOST_WAIT_ERROR', err });
+      logger.error({ type: 'HOST_WAIT_ERROR', err });
     }
   } while(true);
 };

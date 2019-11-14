@@ -9,7 +9,6 @@ COPY ./package.json /opt/cache_sync
 COPY ./package-lock.json /opt/cache_sync
 RUN npm ci
 
-COPY ./config /opt/cache_sync/config
 COPY ./app/setup.js /opt/cache_sync/app
 RUN chmod +x /opt/cache_sync/app/setup.js
 

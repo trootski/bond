@@ -11,7 +11,6 @@ COPY ./package.json /opt/queue_setup
 COPY ./package-lock.json /opt/queue_setup
 RUN npm ci
 
-COPY ./config/ /opt/queue_setup/config
 COPY ./app/setup.js /opt/queue_setup/app
 RUN chmod +x /opt/queue_setup/app/setup.js
 

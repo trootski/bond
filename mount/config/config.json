@@ -1,0 +1,21 @@
+{
+  "app": {
+    "film_meta_path": "../storage/film-meta.json",
+    "omdb_key": "78ab6537",
+    "cache_tick": 300000
+  },
+  "dynamodb": {
+    "accessKeyId": "2012-08-10",
+    "apiVersion": "somevalue",
+    "secretAccessKey": "somevalue",
+    "dynamoDBEndpoint": "http://dynamodb:8000",
+    "region": "eu-west-1"
+  },
+  "kafka": {
+    "url": "kafka:9092"
+  },
+  "redis": {
+    "port": "6375",
+    "url": "redis"
+  }
+}

@@ -1,15 +1,13 @@
 FROM node:12-alpine
 
-WORKDIR /opt/bondmoviesdb
+RUN mkdir -p /opt/dynamodb_setup/app
 
-# Copy script which should be run
-RUN mkdir -p /opt/bondmoviesdb/app
+WORKDIR /opt/dynamodb_setup
 
-COPY package.json /opt/bondmoviesdb
-COPY package-lock.json /opt/bondmoviesdb
+COPY package.json /opt/dynamodb_setup
+COPY package-lock.json /opt/dynamodb_setup
 RUN npm ci
 
-COPY config/config.json /opt/bondmoviesdb
-COPY app/*.js /opt/bondmoviesdb/app/
+COPY app/*.js /opt/dynamodb_setup/app/
 
 CMD [ "node", "app/setup.js" ];

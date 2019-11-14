@@ -3,27 +3,29 @@
 const config = require('nconf');
 const fg = require('fast-glob');
 const kafka = require('kafka-node');
-const logger = require('pino')();
+const logger = require('pino')().child({ app: 'WATCH_REVIEWS' });
 const watch = require('glob-watcher');
 const { getProducer, waitForHostAndTopic } = require('./utils/kafka.js');
 const registerUncaughtErrors = require('./utils/uncaught-errors.js');
 
 const { KeyedMessage } = kafka;
 
-// Raw chokidar instance
-const watcher = watch(['./storage/**/*'], { ignoreInitial: false });
-
 config.file(`/opt/watch_reviews/config/config.json`);
 
-logger.info({ code: 'WATCH_REVIEW_START', msg: `Starting up...\n\n
-Settings: ${JSON.stringify(config.get())}` });
+logger.info({
+  type: 'START',
+  msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
+});
 
-registerUncaughtErrors({ logger: logger.child({ code: 'WATCH_REVIEW_ERROR' }) });
+registerUncaughtErrors({ logger });
 
 (async () => {
+  // Raw chokidar instance
+  const watcher = watch(['./storage/**/*'], { ignoreInitial: false });
+
   await waitForHostAndTopic({ logger, config });
+
   producer = await getProducer({ config });
-  const entries = await fg(['/opt/watch_reviews/storage/**/*']);
 
   const postMovieToProcess = reviewFileName => {
     const km = new KeyedMessage('reviewFileName', reviewFileName);
@@ -39,6 +41,7 @@ registerUncaughtErrors({ logger: logger.child({ code: 'WATCH_REVIEW_ERROR' }) })
   };
 
   producer.on('ready', () => {
+    logger.info({ msg: 'Kafka ready to receive messages' })
     watcher.on('change', path => {
       logger.info({ code: 'PRODUCER_FILE_CHANGE', data: { path } });
       postMovieToProcess(path);
@@ -51,6 +54,6 @@ registerUncaughtErrors({ logger: logger.child({ code: 'WATCH_REVIEW_ERROR' }) })
   });
 
   producer.on('error', err => {
-    logger.error({ code: 'PRODUCER_ERROR', err });
+    logger.error({ err });
   });
 })();
