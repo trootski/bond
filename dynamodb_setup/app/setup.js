@@ -4,7 +4,7 @@ const config = require('nconf');
 const logger = require('pino')().child({ app: 'DYNAMODB_SETUP' });
 const { getDynamoDBClient } = require('./utils/dynamo.js');
 
-config.file('./config.json');
+config.file('/opt/dynamodb_setup/config/config.json');
 
 logger.info({
   type: 'START',
