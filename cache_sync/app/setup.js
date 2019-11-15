@@ -9,39 +9,32 @@ const registerUncaughtErrors = require('./utils/uncaught-errors.js');
 
 config.file('/opt/cache_sync/config/config.json');
 
+config.set('app:film_meta_path', `/opt/cache_sync/${config.get('app:film_meta_path')}`);
+
 logger.info({
   type: 'CACHE_START',
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
 });
 
+const setex = setexAsync({ config, logger });
 registerUncaughtErrors({ logger });
-
-client.on("error", function (err) {
-  logger.error({ err });
-  process.exit(0);
-});
 
 (async () => {
   try {
     // Get the movie data
-    const movieDetailsToCache = await getMovieDetailsToCache();
+    const movieDetailsToCache = await getMovieDetailsToCache({ config, logger });
 
     // Perform redis sync
-    await Promise.all(
-      Object.keys(movieDetailsToCache)
-        .map(
-          title => {
-            logger.info({ msg: `Setting cache key ${title}` });
-            return setexAsync(
-              title,
-              config.get('app:cache_tick'),
-              JSON.stringify(movieDetailsToCache[title])
-            );
-          }
-        )
-    );
+    await Promise.all(Object.keys(movieDetailsToCache).map(title => {
+      logger.info({ msg: `Setting cache key ${title}` });
+      return setex(
+        title,
+        config.get('app:cache_tick'),
+        JSON.stringify(movieDetailsToCache[title])
+      );
+    }));
     process.exit(0);
-  } catch (e) {
+  } catch (err) {
     logger.error({ err });
   }
 })();

@@ -6,18 +6,27 @@ const getAsync = ({ config, logger }) => {
     host: config.get('redis:url'),
     port: config.get('redis:port'),
   });
+  client.on("error", function (err) {
+    logger.error({ err });
+    process.exit(0);
+  });
+
   return promisify(client.get).bind(client);
 }
 
-const setAsync =  ({ config, logger }) => {
+const setexAsync = ({ config, logger }) => {
   const client = redis.createClient({
     host: config.get('redis:url'),
     port: config.get('redis:port'),
+  });
+  client.on("error", function (err) {
+    logger.error({ err });
+    process.exit(0);
   });
   return promisify(client.setex).bind(client);
 };
 
 module.exports = {
     getAsync,
-    setAsync,
+    setexAsync,
 };

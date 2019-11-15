@@ -1,6 +1,6 @@
 {
   "app": {
-    "film_meta_path": "../storage/film-meta.json",
+    "film_meta_path": "storage/film-meta.json",
     "omdb_key": "78ab6537",
     "cache_tick": 300000
   },
