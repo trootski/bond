@@ -1,13 +1,6 @@
 version: '3'
 
 services:
-  redis:
-    build:
-      context: ./redis
-      dockerfile: Dockerfile
-    ports:
-      - 6375:6375
-
   cache_sync:
     build:
       context: ./cache_sync
@@ -18,32 +11,6 @@ services:
       - ./storage:/opt/cache_sync/storage
       - ./mount/app/utils:/opt/cache_sync/app/utils
       - ./mount/config:/opt/cache_sync/config
-
-  watch_reviews:
-    build:
-      context: ./watch-reviews
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-      - queue_setup
-      - dynamodb_setup
-    volumes:
-      - ./storage:/opt/watch_reviews/storage
-      - ./mount/app/utils:/opt/watch_reviews/app/utils
-      - ./mount/config:/opt/watch_reviews/config
-
-  process_queue:
-    build:
-      context: ./process-queue
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-      - queue_setup
-      - dynamodb_setup
-    volumes:
-      - ./storage:/opt/process_queue/storage
-      - ./mount/app/utils:/opt/process_queue/app/utils
-      - ./mount/config:/opt/process_queue/config
 
   dynamodb:
     container_name: dynamodb
@@ -73,6 +40,35 @@ services:
       - ../storage/kafka/kafka-logs:/tmp/kafka-logs
       - ../storage/kafka/zookeeper:/var/lib/zookeeper
 
+  koa:
+    build:
+      context: ./koa-service
+      dockerfile: Dockerfile
+    depends_on:
+      - cache_sync
+      - watch_reviews
+      - process_queue
+      - vanilla
+    ports:
+      - 3000:3000
+    volumes:
+      - ./mount/app/utils:/opt/koa-service/app/utils
+      - ./mount/config:/opt/koa-service/config
+    working_dir: /opt/koa-service
+
+  process_queue:
+    build:
+      context: ./process-queue
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - queue_setup
+      - dynamodb_setup
+    volumes:
+      - ./storage:/opt/process_queue/storage
+      - ./mount/app/utils:/opt/process_queue/app/utils
+      - ./mount/config:/opt/process_queue/config
+
   queue_setup:
     build:
       context: ./queue_setup
@@ -83,19 +79,12 @@ services:
       - ./mount/app/utils:/opt/queue_setup/app/utils
       - ./mount/config:/opt/queue_setup/config
 
-  koa:
-    command: ["node", "/opt/koa-service/app/server.js"]
-    depends_on:
-      - cache_sync
-      - watch_reviews
-      - process_queue
-      - vanilla
-    image: node:12
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
-    volumes:
-      - ./koa-service:/opt/koa-service
-    working_dir: /opt/koa-service
+      - 6375:6375
 
   vanilla:
     command: ["node", "/opt/vanilla/app/server.js"]
@@ -105,4 +94,17 @@ services:
     volumes:
       - ./fe/vanilla:/opt/vanilla
     working_dir: /opt/vanilla
+
+  watch_reviews:
+    build:
+      context: ./watch-reviews
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - queue_setup
+      - dynamodb_setup
+    volumes:
+      - ./storage:/opt/watch_reviews/storage
+      - ./mount/app/utils:/opt/watch_reviews/app/utils
+      - ./mount/config:/opt/watch_reviews/config
 

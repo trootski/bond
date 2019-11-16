@@ -34,21 +34,22 @@ registerUncaughtErrors({ logger });
     ];
     producer.send(payloads, (err, data) => {
       if (err) {
-        logger.info({ code: 'PRODUCER_SEND_ERROR', err });
+        logger.info({ err });
       }
-      logger.info({ code: 'PRODUCER_SEND', data });
+      logger.info({ type: 'PRODUCER_SEND', data });
     });
   };
 
+  producer = await getProducer({ config });
   producer.on('ready', () => {
     logger.info({ msg: 'Kafka ready to receive messages' })
     watcher.on('change', path => {
-      logger.info({ code: 'PRODUCER_FILE_CHANGE', data: { path } });
+      logger.info({ type: 'PRODUCER_FILE_CHANGE', data: { path } });
       postMovieToProcess(path);
     });
 
     watcher.on('add', path => {
-      logger.info({ code: 'PRODUCER_FILE_ADD', data: { path } });
+      logger.info({ type: 'PRODUCER_FILE_ADD', data: { path } });
       postMovieToProcess(path);
     });
   });

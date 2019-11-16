@@ -4,7 +4,7 @@
   "description": "This is a movie database koa service",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "docker-compose -f ../docker-compose.yml up --build --no-deps -d koa",
     "test": "jest"
   },
   "author": "John Byrne",

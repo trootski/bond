@@ -14,7 +14,7 @@ const getAsync = ({ config, logger }) => {
   return promisify(client.get).bind(client);
 }
 
-const setexAsync = ({ config, logger }) => {
+const getsetAsync = ({ config, logger }) => {
   const client = redis.createClient({
     host: config.get('redis:url'),
     port: config.get('redis:port'),
@@ -23,10 +23,10 @@ const setexAsync = ({ config, logger }) => {
     logger.error({ err });
     process.exit(0);
   });
-  return promisify(client.setex).bind(client);
+  return promisify(client.getset).bind(client);
 };
 
 module.exports = {
     getAsync,
-    setexAsync,
+    getsetAsync,
 };

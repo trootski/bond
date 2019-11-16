@@ -3,14 +3,17 @@ const cors = require('@koa/cors');
 const Koa = require('koa');
 const KoaRouter = require('koa-router');
 const KoaStatic = require('koa-static');
-const logger = require('pino')();
+const logger = require('pino')().child({ app: 'KOA' });
 
 const {
   getDynamoDBFilms,
 } = require('./api/dynamodb');
 
-config.file('./config/config.json');
-console.log('settings: ', config.get())
+config.file('/opt/koa-service/config/config.json');
+
+logger.info({
+  msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
+})
 
 const app = new Koa();
 const router = new KoaRouter();

@@ -5,7 +5,6 @@ const setTimeoutAsync = promisify(setTimeout);
 
 const checkDescribeTable = async ({ dynamodb, logger }) => {
   const movieTable = await dynamodb.describeTable({ TableName: 'BondMovies' }).promise();
-  logger.info({ msg: 'Movie Data', data: movieTable });
   return movieTable;
 };
 

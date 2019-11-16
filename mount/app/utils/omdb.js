@@ -1,10 +1,14 @@
 const fetch = require('node-fetch');
 
-
 const getMovieDetails = config => title => {
   const apiKey = config.get('app:omdb_key');
   const omdbURL = `http://www.omdbapi.com/?apikey=${apiKey}&t=${title}`;
   return fetch(omdbURL);
+};
+
+const searchMovieMetaObject = config => prop => value => {
+  const filmMeta = require(config.get('app:film_meta_path'));
+  return filmMeta.data.find(v => value === v[prop])
 };
 
 const getMovieDetailsToCache = async ({ config, logger }) => {
@@ -27,4 +31,5 @@ const getMovieDetailsToCache = async ({ config, logger }) => {
 
 module.exports = {
   getMovieDetailsToCache,
+  searchMovieMetaObject,
 };
