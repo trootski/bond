@@ -8,7 +8,8 @@
     "apiVersion": "somevalue",
     "secretAccessKey": "somevalue",
     "dynamoDBEndpoint": "http://dynamodb:8000",
-    "region": "eu-west-1"
+    "region": "eu-west-1",
+    "tableName": "BondMovies"
   },
   "kafka": {
     "url": "kafka:9092"

@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  bond-movies-api:
+    build:
+      context: ./bond-movies-api
+      dockerfile: Dockerfile
+    depends_on:
+      - cache_sync
+      - watch_reviews
+      - process_queue
+      - vanilla
+    ports:
+      - 3000:3000
+    volumes:
+      - ./mount/app/utils:/opt/bond-movies-api/app/utils
+      - ./mount/config:/opt/bond-movies-api/config
+    working_dir: /opt/bond-movies-api
+
   cache_sync:
     build:
       context: ./cache_sync
@@ -39,22 +55,6 @@ services:
     volumes:
       - ../storage/kafka/kafka-logs:/tmp/kafka-logs
       - ../storage/kafka/zookeeper:/var/lib/zookeeper
-
-  koa:
-    build:
-      context: ./koa-service
-      dockerfile: Dockerfile
-    depends_on:
-      - cache_sync
-      - watch_reviews
-      - process_queue
-      - vanilla
-    ports:
-      - 3000:3000
-    volumes:
-      - ./mount/app/utils:/opt/koa-service/app/utils
-      - ./mount/config:/opt/koa-service/config
-    working_dir: /opt/koa-service
 
   process_queue:
     build:

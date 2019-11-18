@@ -17,19 +17,15 @@ logger.info({
 
     const { TableNames: allTables  } = await dynamodb.listTables({}).promise();
 
-    if (allTables.includes('BondMovies')) {
+    if (allTables.includes(config.get('dynamodb:tableName'))) {
       logger.info({ msg: 'Dropping old table' });
-      await dynamodb.deleteTable({ TableName: 'BondMovies' }).promise();
+      await dynamodb.deleteTable({ TableName: config.get('dynamodb:tableName') }).promise();
     }
 
     logger.info({ msg: 'Creating table' });
     await dynamodb.createTable({
-      TableName: 'BondMovies',
+      TableName: config.get('dynamodb:tableName'),
       AttributeDefinitions: [
-        {
-          AttributeName: 'Director',
-          AttributeType: 'S',
-        },
         {
           AttributeName: 'MovieTitle',
           AttributeType: 'S',
@@ -37,13 +33,27 @@ logger.info({
       ],
       KeySchema: [
         {
-          AttributeName: 'Director',
+          AttributeName: 'MovieTitle',
           KeyType: 'HASH',
         },
+      ],
+      GlobalSecondaryIndexes: [
         {
-          AttributeName: 'MovieTitle',
-          KeyType: 'RANGE',
-        },
+          IndexName: 'DateCreatedIndex',
+          KeySchema: [
+            {
+              AttributeName: 'MovieTitle',
+              KeyType: 'HASH'
+            },
+            {
+              AttributeName: 'dateCreated',
+              KeyType: 'RANGE'
+            }
+          ],
+          Projection: {
+            ProjectionType: 'KEYS_ONLY'
+          },
+        }
       ],
       ProvisionedThroughput: {
         ReadCapacityUnits: 1,
