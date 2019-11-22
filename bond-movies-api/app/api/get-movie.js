@@ -2,14 +2,13 @@ const { getDocumentClient } = require('../utils/dynamo.js');
 
 const getMovie = async (ctx, next) => {
   const { config, logger } = ctx;
-  const movieTitle = ctx.query.title;
+  const movieTitle = ctx.params.title;
 
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
 
-  logger.info({ msg: 'GET /v1/bond-movies/:title' });
+  logger.info({ msg: 'GET /v1/bond-movies/:title', movieTitle });
 
   try {
-    logger.info({ msg: `Searching for: ${movieTitle} in table ${config.get('dynamodb:tableName')}` });
     const results = await dynamodb.get({
       TableName: config.get('dynamodb:tableName'),
       Key: {
