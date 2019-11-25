@@ -1,5 +1,8 @@
-const config = require('nconf');
+const { config } = require('bond-common');
 const cors = require('@koa/cors');
+const {
+  errorHandling,
+} = require('./middleware');
 const Koa = require('koa');
 const KoaBodyParser = require('koa-bodyparser');
 const KoaRouter = require('koa-router');
@@ -10,19 +13,14 @@ const {
   getAllMovies,
   getMovie,
   putMovie,
+  setup,
 } = require('./api/index.js');
-
-config.file('/opt/bond-movies-api/config/config.json');
 
 logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
 })
 
 const app = new Koa();
-const router = new KoaRouter();
-
-var livereload = require('livereload');
-var server = livereload.createServer();
 
 app.use(cors({
   origin: '*',
@@ -36,11 +34,17 @@ app.use(async (ctx, next) => {
   await next();
 });
 
+const router = new KoaRouter();
+router.get('/v1/bond-movies', getAllMovies);
 router.get('/v1/bond-movies/:title', getMovie);
-// router.get('/v1/bond-movies', getAllMovies);
 router.put('/v1/bond-movies', putMovie);
-
+router.get('/v1/setup', setup);
 app.use(router.routes());
 
 app.listen(3000);
+
+// Hacky setup method...
+setTimeout(() => {
+  setup({ config, logger }, () => Promise.resolve(true));
+}, 1000);
 

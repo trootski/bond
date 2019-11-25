@@ -4,13 +4,14 @@
   "description": "This is a bond movie service",
   "main": "server.js",
   "scripts": {
-    "start": "docker-compose -f ../docker-compose.yml up --build --no-deps -d koa",
+    "start": "nodemon app/server.js",
     "test": "jest"
   },
   "author": "John Byrne",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.355.0",
+    "bond-common": "../packages",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-static": "^5.0.0",

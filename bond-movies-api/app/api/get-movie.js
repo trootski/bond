@@ -1,4 +1,4 @@
-const { getDocumentClient } = require('../utils/dynamo.js');
+const { getDocumentClient } = require('../db/dynamo.js');
 
 const getMovie = async (ctx, next) => {
   const { config, logger } = ctx;
@@ -16,9 +16,8 @@ const getMovie = async (ctx, next) => {
       },
     }).promise();
     ctx.response.status = 200;
-    // const { Items } =
-    ctx.response.body = { ok: true, data: Items };
-    logger.info({ msg: 'get results', results });
+    const { Item } = results;
+    ctx.response.body = { ok: true, data: Item };
   } catch (err) {
     logger.error({ err });
     ctx.response.status = 500;

@@ -3,18 +3,12 @@ version: '3'
 services:
   bond-movies-api:
     build:
-      context: ./bond-movies-api
-      dockerfile: Dockerfile
-    depends_on:
-      - cache_sync
-      - watch_reviews
-      - process_queue
-      - vanilla
+      context: ./
+      dockerfile: ./bond-movies-api/Dockerfile
     ports:
       - 3000:3000
     volumes:
-      - ./mount/app/utils:/opt/bond-movies-api/app/utils
-      - ./mount/config:/opt/bond-movies-api/config
+      - ./packages:/opt/packages
     working_dir: /opt/bond-movies-api
 
   cache_sync:
@@ -33,16 +27,6 @@ services:
     image: amazon/dynamodb-local
     ports:
       - 8000:8000
-
-  dynamodb_setup:
-    build:
-      context: ./dynamodb_setup
-      dockerfile: Dockerfile
-    depends_on:
-      - dynamodb
-    volumes:
-      - ./mount/app/utils:/opt/dynamodb_setup/app/utils
-      - ./mount/config:/opt/dynamodb_setup/config
 
   kafka:
     environment:
@@ -63,7 +47,6 @@ services:
     depends_on:
       - redis
       - queue_setup
-      - dynamodb_setup
     volumes:
       - ./storage:/opt/process_queue/storage
       - ./mount/app/utils:/opt/process_queue/app/utils
@@ -102,7 +85,6 @@ services:
     depends_on:
       - redis
       - queue_setup
-      - dynamodb_setup
     volumes:
       - ./storage:/opt/watch_reviews/storage
       - ./mount/app/utils:/opt/watch_reviews/app/utils
