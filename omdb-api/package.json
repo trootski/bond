@@ -1,5 +1,5 @@
 {
-  "name": "cache-sync",
+  "name": "omdb-api",
   "version": "0.0.1",
   "description": "Sync OMDB movie data to redis",
   "main": "./app/setup.js",
@@ -10,7 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "kafka-node": "^5.0.0",
+    "@koa/cors": "^2.2.2",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "nconf": "^0.10.0",
     "node-fetch": "^2.6.0",
     "pino": "^5.13.2",

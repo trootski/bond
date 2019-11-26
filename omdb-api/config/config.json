@@ -1,0 +1,12 @@
+{
+  "app": {
+    "cache_expiry_timeout": 3000
+  },
+  "omdb": {
+    "key": "78ab6537"
+  },
+  "redis": {
+    "port": "6375",
+    "url": "redis"
+  }
+}

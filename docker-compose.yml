@@ -9,12 +9,14 @@ services:
       - 3000:3000
     working_dir: /opt/bond-movies-api
 
-  cache_sync:
+  omdb-api:
     build:
-      context: ./cache_sync
+      context: ./omdb-api
       dockerfile: Dockerfile
     depends_on:
       - redis
+    ports:
+      - 3001:3001
     volumes:
       - ./storage:/opt/cache_sync/storage
       - ./mount/app/utils:/opt/cache_sync/app/utils
