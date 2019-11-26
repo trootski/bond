@@ -38,7 +38,7 @@ const getDocumentClient = async ({ config, logger, waitForTable = true }) => {
       return documentClient;
     } catch (err) {
       logger.error({ msg: 'HOST_WAIT_INFO', err });
-      await setTimeoutAsync(1000);
+      await setTimeoutAsync(config.get('app:dbCheckTimeout'));
     }
   } while (true);
 };

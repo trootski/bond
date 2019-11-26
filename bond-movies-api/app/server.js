@@ -1,4 +1,4 @@
-const { config } = require('bond-common');
+const config = require('nconf');
 const cors = require('@koa/cors');
 const {
   errorHandling,
@@ -8,6 +8,7 @@ const KoaBodyParser = require('koa-bodyparser');
 const KoaRouter = require('koa-router');
 const KoaStatic = require('koa-static');
 const logger = require('pino')().child({ app: 'BOND-API' });
+const path = require('path');
 
 const {
   getAllMovies,
@@ -15,6 +16,9 @@ const {
   putMovie,
   setup,
 } = require('./api/index.js');
+
+const docRoot = __dirname.split(path.sep).slice(0, -1).join(path.sep);
+config.file(`${docRoot}/config/config.json`);
 
 logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,

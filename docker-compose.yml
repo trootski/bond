@@ -3,12 +3,10 @@ version: '3'
 services:
   bond-movies-api:
     build:
-      context: ./
-      dockerfile: ./bond-movies-api/Dockerfile
+      context: ./bond-movies-api
+      dockerfile: ./Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - ./packages:/opt/packages
     working_dir: /opt/bond-movies-api
 
   cache_sync:

@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.355.0",
-    "bond-common": "../packages",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-static": "^5.0.0",
