@@ -4,18 +4,24 @@
   "description": "Watch queue for updates to movie reviews which need to be merged with other metadata",
   "main": "./app/setup.js",
   "scripts": {
-    "start": "app/setup.js",
+    "start": "nodemon app/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^3.0.0",
     "aws-sdk": "^2.568.0",
     "fast-glob": "^3.0.4",
     "glob-watcher": "^5.0.3",
     "kafka-node": "^4.1.3",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "nconf": "^0.10.0",
     "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.1",
     "pino": "^5.13.2",
     "redis": "^2.8.0",
     "showdown": "^1.9.1"

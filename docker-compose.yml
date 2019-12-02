@@ -45,12 +45,7 @@ services:
       context: ./process-queue
       dockerfile: Dockerfile
     depends_on:
-      - redis
       - queue_setup
-    volumes:
-      - ./storage:/opt/process_queue/storage
-      - ./mount/app/utils:/opt/process_queue/app/utils
-      - ./mount/config:/opt/process_queue/config
 
   queue_setup:
     build:

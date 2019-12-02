@@ -1,0 +1,6 @@
+{
+  "kafka": {
+    "url": "kafka:9092",
+    "bond_topic": "BondMoviesToBeProcessed"
+  }
+}

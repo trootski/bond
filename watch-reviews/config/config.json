@@ -1,0 +1,7 @@
+{
+  "app": {
+    "queue_service_url": "http://process-queue",
+    "film_meta_path": "storage/film-meta.json",
+    "omdb_key": "78ab6537"
+  }
+}
