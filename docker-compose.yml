@@ -47,17 +47,9 @@ services:
       context: ./process-queue
       dockerfile: Dockerfile
     depends_on:
-      - queue_setup
-
-  queue_setup:
-    build:
-      context: ./queue_setup
-      dockerfile: Dockerfile
-    depends_on:
       - kafka
-    volumes:
-      - ./mount/app/utils:/opt/queue_setup/app/utils
-      - ./mount/config:/opt/queue_setup/config
+    ports:
+      - 3002:3002
 
   redis:
     build:
@@ -81,7 +73,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
-      - queue_setup
     volumes:
       - ./storage:/opt/watch_reviews/storage
       - ./mount/app/utils:/opt/watch_reviews/app/utils

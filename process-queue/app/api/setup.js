@@ -14,8 +14,6 @@ const setup = async (ctx, next) => {
       logger.info({ msg: `Creating topic: ${topicName}` });
       await createTopic({ config, logger, topicName });
     }
-
-    process.exit(0);
   } catch (err) {
     logger.error({ err });
   }

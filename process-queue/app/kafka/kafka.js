@@ -32,7 +32,7 @@ const waitForHostAndTopic = async ({ config, logger }) => {
     try {
       const rslt = await checkTopicAvailable({ config, logger });
       if (rslt && rslt[1] && rslt[1].metadata) {
-        if (rslt[1].metadata['BondMoviesToBeProcessed']) {
+        if (rslt[1].metadata[config.get('kafka:bond_topic')]) {
           logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka and topic found' });
           return true;
         } else {
@@ -74,7 +74,7 @@ const getConsumer = async ({ config }) => {
   });
   const offset = new Offset(client);
   const consumer = new Consumer(client, [
-    { topic: 'BondMoviesToBeProcessed', partitions: 0 },
+    { topic: config.get('kafka:bond_topic'), partitions: 0 },
   ], { autoCommit: false, fetchMaxWaitMs: 1000, fetchMaxBytes: 1024 * 1024 });
   return consumer;
 };

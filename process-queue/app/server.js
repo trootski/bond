@@ -41,7 +41,8 @@ router.put('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate)
 router.get('/v1/setup', setup);
 app.use(router.routes());
 
-app.listen(3000);
+logger.info({ msg: 'Listening on 3002' });
+app.listen(3002);
 
 // Hacky setup method...
 setTimeout(() => {

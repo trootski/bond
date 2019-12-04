@@ -1,6 +1,6 @@
 {
   "kafka": {
-    "url": "kafka:9092",
-    "bond_topic": "BondMoviesToBeProcessed"
+    "bond_topic": "BondMoviesToBeProcessed",
+    "url": "kafka:9092"
   }
 }
