@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MovieController {
 
-    @RequestMapping("/")
-    public BondMovie getDefaultDoc() {
-        return new BondMovie();
+    @RequestMapping("/v1/bond-movies")
+    public BondMovie[] getAllMovies() {
+        BondMovie[] allMovies = new BondMovie[] {new BondMovie()};
+        return allMovies;
     }
 }

@@ -7,7 +7,8 @@ import javax.persistence.Id;
 @Entity
 public class BondMovie {
 
-  @Id @GeneratedValue
+  @Id
+  @GeneratedValue
   private Long id;
   private String bookingName;
 

@@ -5,6 +5,8 @@ services:
     build:
       context: ./bond-movies-api
       dockerfile: ./Dockerfile
+    depends_on:
+      - dynamodb
     ports:
       - 3000:3000
     working_dir: /opt/bond-movies-api
