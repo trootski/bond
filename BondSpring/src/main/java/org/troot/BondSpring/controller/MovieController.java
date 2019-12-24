@@ -16,7 +16,10 @@ public class MovieController {
     @ApiOperation(value = "Get a list of all current Bond movies", notes = "Get all Bond movies current stored in data persistence" )
     public List<BondMovie> getAllMovies() {
         BondMovie[] allMovies = new BondMovie[] { new BondMovie() };
-        List<BondMovie> newMovies = Arrays.asList(new BondMovie());
+        BondMovie b = new BondMovie();
+        b.setMovieTitle("Dr. No");
+        b.setTitle("Dr. No");
+        List<BondMovie> newMovies = Arrays.asList(b);
         return newMovies;
     }
 }
