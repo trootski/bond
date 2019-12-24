@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
-import org.troot.BondSpring.repository.BondMovieRepository;
 
 @Configuration
-@EnableDynamoDBRepositories(basePackageClasses = BondMovieRepository.class)
 public class DynamoDBConfig {
 
   @Value("${amazon.aws.accessKey}")

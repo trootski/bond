@@ -6,7 +6,7 @@ import org.troot.BondSpring.entity.BondMovie;
 
 import java.util.List;
 
+@EnableScan
 public interface BondMovieRepository extends CrudRepository<BondMovie, String> {
-  @EnableScan
   List<BondMovie> findByTitle(String movieTitle);
 }
