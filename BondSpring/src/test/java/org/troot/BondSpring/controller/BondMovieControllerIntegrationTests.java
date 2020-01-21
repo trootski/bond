@@ -10,22 +10,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.troot.BondSpring.domain.BondMovie;
 
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class MovieControllerIntegrationTests {
+public class BondMovieControllerIntegrationTests {
 
   @Autowired
-  MovieController movieController;
+  BondMovieController bondMovieController;
 
   @Test
   public void testGetAllMoviesHappyPath() {
-    List<BondMovie> result = movieController.getAllMovies();
+    List<BondMovie> result = bondMovieController.getAllMovies();
     assertThat(result, is(notNullValue()));
-    assertThat(result.get(0).getMovieTitle(), is(equalTo("Dr. No")));
+    assertThat(result.get(0).getTitle(), is(equalTo("Dr. No")));
   }
 }

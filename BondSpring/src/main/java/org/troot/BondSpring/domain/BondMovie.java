@@ -14,22 +14,19 @@ import javax.persistence.Id;
 public class BondMovie {
 
   @Id
-  private String MovieTitle;
-  @DynamoDBHashKey(attributeName = "MovieTitle")
-  public String getMovieTitle() {
-    return MovieTitle;
+  private String title;
+  @DynamoDBHashKey(attributeName = "title")
+  public String getTitle() {
+    return title;
   }
-  public void setMovieTitle(String MovieTitle) {
-    this.MovieTitle = MovieTitle;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
-  @DynamoDBAttribute(attributeName = "Title")
-  private String Title;
-  public String getTitle() {
-    return Title;
-  }
-  public void setTitle(String Title) {
-    this.Title = Title;
+  private String Actors;
+  @DynamoDBAttribute(attributeName = "Actors")
+  public String getActors() {
+    return Actors;
   }
 
   public BondMovie() {
@@ -38,7 +35,6 @@ public class BondMovie {
 
   public BondMovie(String movieTitle, String title) {
     super();
-    this.MovieTitle = movieTitle;
-    this.Title = title;
+    this.title = title;
   }
 }
