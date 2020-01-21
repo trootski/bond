@@ -41,7 +41,7 @@ app.use(async (ctx, next) => {
 const router = new KoaRouter();
 router.get('/v1/bond-movies', getAllMovies);
 router.get('/v1/bond-movies/:title', getMovie);
-router.put('/v1/bond-movies', putMovie);
+router.put('/v1/bond-movies/:title', putMovie);
 router.get('/v1/setup', setup);
 app.use(router.routes());
 

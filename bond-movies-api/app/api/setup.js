@@ -13,13 +13,13 @@ const setup = async (ctx, next) => {
       TableName: config.get('dynamodb:tableName'),
       AttributeDefinitions: [
         {
-          AttributeName: 'MovieTitle',
+          AttributeName: 'title',
           AttributeType: 'S',
         },
       ],
       KeySchema: [
         {
-          AttributeName: 'MovieTitle',
+          AttributeName: 'title',
           KeyType: 'HASH',
         },
       ],

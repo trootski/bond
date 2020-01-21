@@ -12,7 +12,7 @@ const getMovie = async (ctx, next) => {
     const results = await dynamodb.get({
       TableName: config.get('dynamodb:tableName'),
       Key: {
-        'MovieTitle': movieTitle,
+        'title': movieTitle,
       },
     }).promise();
     ctx.response.status = 200;
