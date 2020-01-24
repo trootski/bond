@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface BondMovieRepository extends CrudRepository<BondMovie, String> {
   List<BondMovie> findAll();
+
+  List<BondMovie> findByTitle(String title);
 }
 
