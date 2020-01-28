@@ -17,11 +17,11 @@ const getMovie = async (ctx, next) => {
     }).promise();
     ctx.response.status = 200;
     const { Item } = results;
-    ctx.response.body = { ok: true, data: Item };
+    ctx.response.body = Item;
   } catch (err) {
     logger.error({ err });
     ctx.response.status = 500;
-    ctx.response.body = { code: 'err' };
+    ctx.response.body = '';
   }
   await next();
 };

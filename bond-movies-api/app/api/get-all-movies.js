@@ -18,7 +18,7 @@ const getAllMovies = async (ctx, next) => {
     const { Items } = res;
 
     ctx.response.status = 200;
-    ctx.response.body = { ok: true, data: Items };
+    ctx.response.body = Items;
   } catch (err) {
   }
 
