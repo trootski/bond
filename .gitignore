@@ -4,3 +4,7 @@
 
 koa-service/cache/*
 !koa-service/cache/.keep
+
+storage/*
+!storage/dynamodb-data/.keep
+

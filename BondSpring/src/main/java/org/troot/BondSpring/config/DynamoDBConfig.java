@@ -13,13 +13,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
-import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
-import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 
 @Configuration
-@PropertySource("classpath:/application.properties")
 public class DynamoDBConfig {
 
   @Value("${amazon.dynamodb.endpoint}")
@@ -43,15 +40,17 @@ public class DynamoDBConfig {
 
   @Bean
   public EndpointConfiguration amazonEndpointConfiguration() {
-    return new AWSKMSClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, Region.getRegion(Regions.DEFAULT_REGION).getName());
+    return new AWSKMSClientBuilder.EndpointConfiguration("http://localhost:9000", Region.getRegion(Regions.DEFAULT_REGION).getName());
   }
 
   @Bean
+  @Primary
   public DynamoDBMapperConfig dynamoDBMapperConfig() {
     return DynamoDBMapperConfig.DEFAULT;
   }
 
   @Bean
+  @Primary
   public DynamoDBMapper dynamoDBMapper (AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig config) {
     return new DynamoDBMapper(amazonDynamoDB, config);
   }
@@ -60,8 +59,10 @@ public class DynamoDBConfig {
   public AmazonDynamoDB amazonDynamoDB() {
     return AmazonDynamoDBClientBuilder
       .standard()
-      .withEndpointConfiguration(amazonEndpointConfiguration())
       .withCredentials(awsCredentialsProvider())
+      .withEndpointConfiguration(
+        new AwsClientBuilder
+          .EndpointConfiguration(amazonDynamoDBEndpoint, Regions.EU_WEST_1.getName()))
       .build();
   }
 

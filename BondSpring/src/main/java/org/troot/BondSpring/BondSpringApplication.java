@@ -1,12 +1,12 @@
 package org.troot.BondSpring;
 
+import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import static org.springframework.boot.SpringApplication.run;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = {"org.troot.BondSpring.repository"})
+@EnableDynamoDBRepositories
 public class BondSpringApplication {
 
 	public static void main(String[] args) {

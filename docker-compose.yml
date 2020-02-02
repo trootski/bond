@@ -25,10 +25,14 @@ services:
       - ./mount/config:/opt/cache_sync/config
 
   dynamodb:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
     container_name: dynamodb
+    entrypoint: java
     image: amazon/dynamodb-local
     ports:
       - 8000:8000
+    volumes:
+      - ./storage/dynamodb-data:/data
 
   kafka:
     environment:
