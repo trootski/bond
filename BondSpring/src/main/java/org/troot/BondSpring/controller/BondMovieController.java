@@ -8,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.troot.BondSpring.domain.BondMovie;
 import org.troot.BondSpring.service.BondMovieService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,7 +26,7 @@ public class BondMovieController {
   @ApiOperation(value = "Get a bond movie by title", notes = "Search for a particular bond movie" )
   public BondMovie getBondMovie(@PathVariable("title") String title) {
     List<BondMovie> bondMovies = bondMovieService.getBondMovie(title);
-    if (bondMovies.isEmpty()) {
+    if (bondMovies.isEmpty() || bondMovies.get(0) == null) {
       throw new ResponseStatusException(
         HttpStatus.NOT_FOUND, "bond movie not found"
       );

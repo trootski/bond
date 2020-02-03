@@ -4,24 +4,26 @@ const { deepCopyAndLowerCaseProps } = require('../utils/deepCopyAndLowerCaseProp
 
 const getMovie = async (ctx, next) => {
   const { config, logger } = ctx;
+  const getAsyncCtx = getAsync({ config, logger });
   const setAsyncCtx = setAsync({ config, logger });
   const delAsyncCtx = delAsync({ config, logger });
   const movieTitle = ctx.params.title;
 
   // Get the movie data
-  const cachedDataStr = await getAsync({ config, logger })(movieTitle);
-  const getCacheJSON = async v => {
+  const getCacheJSON = async key => {
     try {
-      return JSON.parse(cachedData);
+      const cachedDataStr = await getAsyncCtx(key);
+      logger.info({ msg: `Cached data: '${cachedDataStr}'` })
+      return JSON.parse(cachedDataStr);
     } catch (e) {
-      logger.info({ msg: `Error parsing cached value` })
-      await delAsyncCtx(movieTitle);
+      logger.info({ msg: `Error parsing key ("${key}") cached value: '${cachedDataStr}'` })
+      await delAsyncCtx(key);
       return null;
     }
   };
-  const cachedData = getCacheJSON(cachedDataStr);
+  const cachedData = await getCacheJSON(movieTitle);
   if (cachedData) {
-    logger.info({ msg: `Cache data receieved for ${movieTitle}.` })
+    logger.info({ msg: `Cache data receieved for ${movieTitle}.`, data: cachedData })
     ctx.response.status = 200;
     ctx.response.body = { ok: true, data: cachedData };
   } else {
