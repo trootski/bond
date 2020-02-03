@@ -24,7 +24,19 @@ const setAsync = ({ config, logger }) => {
   return promisify(client.set).bind(client);
 };
 
+const delAsync = ({ config, logger }) => {
+  const client = redis.createClient({
+    host: config.get('redis:url'),
+    port: config.get('redis:port'),
+  });
+  client.on("error", function (err) {
+    logger.error({ err });
+  });
+  return promisify(client.del).bind(client);
+};
+
 module.exports = {
-    getAsync,
-    setAsync,
+  delAsync,
+  getAsync,
+  setAsync,
 };
