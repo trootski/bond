@@ -3,7 +3,6 @@ const cors = require('@koa/cors');
 const Koa = require('koa');
 const KoaBodyParser = require('koa-bodyparser');
 const KoaRouter = require('koa-router');
-const KoaStatic = require('koa-static');
 const logger = require('pino')().child({ app: 'OMDB-API' });
 const path = require('path');
 

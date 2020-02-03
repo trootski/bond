@@ -3,6 +3,11 @@ package org.troot.BondSpring.domain;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.util.Date;
 
 @DynamoDBTable(tableName = "BondMovies")
 public class BondMovie {
@@ -70,15 +75,6 @@ public class BondMovie {
     this.imdbVotes = imdbVotes;
   }
 
-  private String MovieTitle;
-  @DynamoDBAttribute(attributeName = "movietitle")
-  public String getMovieTitle() {
-    return MovieTitle;
-  }
-  public void setMovieTitle(String MovieTitle) {
-    this.MovieTitle = MovieTitle;
-  }
-
   private String Runtime;
   @DynamoDBAttribute(attributeName = "runtime")
   public String getRuntime() {
@@ -86,15 +82,6 @@ public class BondMovie {
   }
   public void setRuntime(String Runtime) {
     this.Runtime = Runtime;
-  }
-
-  private String dateCreated;
-  @DynamoDBAttribute(attributeName = "datecreated")
-  public String getdateCreated() {
-    return dateCreated;
-  }
-  public void setdateCreated(String dateCreated) {
-    this.dateCreated = dateCreated;
   }
 
   private String Language;
@@ -131,15 +118,6 @@ public class BondMovie {
   }
   public void setProduction(String Production) {
     this.Production = Production;
-  }
-
-  private String html;
-  @DynamoDBAttribute(attributeName = "html")
-  public String gethtml() {
-    return html;
-  }
-  public void sethtml(String html) {
-    this.html = html;
   }
 
   private String Released;
@@ -268,6 +246,27 @@ public class BondMovie {
     this.order = order;
   }
 
+  @CreatedDate
+  @JsonIgnore
+  @DynamoDBAttribute
+  private Date dateCreated;
+  public Date getDateCreated() {
+    return dateCreated;
+  }
+  public void setDateCreated(Date dateCreated) {
+    this.dateCreated = dateCreated;
+  }
+
+  @LastModifiedDate
+  @JsonIgnore
+  @DynamoDBAttribute
+  private Date dateModified = new Date();
+  public Date getDateModified() {
+    return dateModified;
+  }
+  public void setDateModified(Date dateModified) {
+    this.dateModified = dateModified;
+  }
 
   public BondMovie() {
 

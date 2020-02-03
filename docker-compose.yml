@@ -75,10 +75,6 @@ services:
     build:
       context: ./watch-reviews
       dockerfile: Dockerfile
-    depends_on:
-      - redis
     volumes:
-      - ./storage:/opt/watch_reviews/storage
-      - ./mount/app/utils:/opt/watch_reviews/app/utils
-      - ./mount/config:/opt/watch_reviews/config
+      - ./watch-reviews/storage:/opt/watch_reviews/storage
 

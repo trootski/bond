@@ -7,8 +7,7 @@ const postMessage = ({ body, config, logger }) => new Promise(async (reslv, rej)
   const producer = await getProducer({ config });
 
   producer.on('ready', () => {
-    logger.info({ msg: 'Kafka ready to receive messages' })
-    const km = new KeyedMessage('reviewData', body);
+    const km = new KeyedMessage('reviewData', JSON.stringify(body));
     const payloads = [
         {
           topic: config.get('kafka:bond_topic'),
@@ -17,10 +16,10 @@ const postMessage = ({ body, config, logger }) => new Promise(async (reslv, rej)
     ];
     producer.send(payloads, (err, data) => {
       if (err) {
-        logger.info({ err });
+        logger.error({ type: 'PRODUCER_SEND_ERR', err });
         rej(err);
       }
-      logger.info({ type: 'PRODUCER_SEND', data });
+      logger.info({ type: 'PRODUCER_SEND', data: JSON.stringify(data) });
       reslv(data);
     });
   });
@@ -32,9 +31,8 @@ const postMessage = ({ body, config, logger }) => new Promise(async (reslv, rej)
 
 const addMovieReviewUpdate = async (ctx, next) => {
   const { request: { body }, config, logger } = ctx;
-
-  logger.info({ msg: 'received', b: body });
   try {
+    logger.info({ body });
     await postMessage({ body, config, logger });
     ctx.status = 204;
     ctx.body = '';

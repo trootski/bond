@@ -1,6 +1,8 @@
 const kafka = require('kafka-node');
 const { promisify } = require('util');
 
+let client, consumer;
+
 const { Consumer, Offset, Producer } = kafka;
 
 const setTimeoutAsync = promisify(setTimeout);
@@ -10,12 +12,17 @@ const handleErr = logger => rej => err => {
   rej(err);
 };
 
+const getClient = config => {
+  if (client) return client;
+  return new kafka.KafkaClient({
+    kafkaHost: config.get('kafka:url'),
+  });
+};
+
 const checkTopicAvailable = ({ config, logger }) => new Promise(async (rslv, rej) => {
   const handleRejection = handleErr(logger)(rej);
   try {
-    const client = new kafka.KafkaClient({
-      kafkaHost: config.get('kafka:url'),
-    });
+    const client = getClient(config);
     const admin = new kafka.Admin(client);
     admin.on('error', handleRejection);
     admin.listTopics((err, data) => {
@@ -50,9 +57,7 @@ const waitForHostAndTopic = async ({ config, logger }) => {
 
 const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, rej) => {
   try {
-    const client = new kafka.KafkaClient({
-      kafkaHost: config.get('kafka:url'),
-    });
+    const client = getClient(config);
     const topicsToCreate = [{
       topic: topicName,
       partitions: 1,
@@ -68,22 +73,43 @@ const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, 
   }
 });
 
-const getConsumer = async ({ config }) => {
-  const client = new kafka.KafkaClient({
-    kafkaHost: config.get('kafka:url'),
+const getConsumer = ({ config }) => new Promise((resolve, reject) => {
+  if (consumer) return resolve(consumer);
+  const client = getClient(config);
+  consumer = new Consumer(
+    client,
+    [{ topic: config.get('kafka:bond_topic'), partitions: 0 },],
+    { autoCommit: false, fetchMaxWaitMs: 1000, fetchMaxBytes: 1024 * 1024 }
+  );
+  client.refreshMetadata([config.get('kafka:bond_topic')], err => {
+    const offset = new Offset(client);
+    if (err) {
+      logger.error({ type: "CONSUMER_METADATA_REFRESH", err });
+      reject(null);
+    }
+    consumer.on('error', err => {
+      logger.error({ type: "CONSUMER_ERR", err });
+      process.exit(1);
+    });
+    consumer.on(
+      'offsetOutOfRange',
+      topic => {
+        offset.fetch([topic], function(err, offsets) {
+          if (err) {
+            logger.error({ err, type: "CONSUMER_OFFSET_OUT_OF_RANGE" });
+            return;
+          }
+          const min = Math.min.apply(null, offsets[topic.topic][topic.partition]);
+          consumer.setOffset(topic.topic, topic.partition, min);
+        });
+      }
+    );
+    return resolve(consumer);
   });
-  const offset = new Offset(client);
-  const consumer = new Consumer(client, [
-    { topic: config.get('kafka:bond_topic'), partitions: 0 },
-  ], { autoCommit: false, fetchMaxWaitMs: 1000, fetchMaxBytes: 1024 * 1024 });
-  return consumer;
-};
+});
 
 const getProducer = async ({ config }) => {
-  const client = new kafka.KafkaClient({
-    kafkaHost: config.get('kafka:url'),
-  });
-
+  const client = getClient(config);
   return new Producer(client);
 };
 

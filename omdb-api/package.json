@@ -5,6 +5,7 @@
   "main": "./app/setup.js",
   "scripts": {
     "start": "setup.js",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d omdb-api && docker-compose logs -f omdb-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

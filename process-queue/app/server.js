@@ -37,7 +37,7 @@ app.use(async (ctx, next) => {
 });
 
 const router = new KoaRouter();
-router.put('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate);
+router.post('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate);
 router.get('/v1/setup', setup);
 app.use(router.routes());
 

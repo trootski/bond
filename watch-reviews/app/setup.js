@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
+const fetch = require('node-fetch');
+const fs = require('fs');
 const config = require('nconf');
-const fg = require('fast-glob');
 const logger = require('pino')().child({ app: 'WATCH_REVIEWS' });
 const showdown = require('showdown');
 const watch = require('glob-watcher');
-const { registerUncaughtErrors } = require('bond-common');
 
 const converter = new showdown.Converter();
 
 const getReviewHTML = async (fname) => {
-  const markdown = fs.readFileSync(`/opt/process_queue/storage/reviews/${fname}`, 'utf8');
+  const markdown = fs.readFileSync(
+    `${config.get('app:base_fs_path')}/${config.get('app:storage_path')}${fname}`, 'utf8');
   return converter.makeHtml(markdown);
 }
 
@@ -21,28 +22,35 @@ logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
 });
 
-registerUncaughtErrors({ logger });
+const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:film_meta_path')}`);
 
 (async () => {
   // Raw chokidar instance
-  const watcher = watch(['./storage/**/*'], { ignoreInitial: false });
+  const watcher = watch(['./storage/reviews/**/*'], { ignoreInitial: false });
 
   const postMovieToProcess = async reviewFileName => {
-    const url = `${config.get('app:queue_service_url')}/bond-movies-events/review-updates/enqueue/`;
-    const rslt = await fetch({
-      method: 'PUT',
-      url,
+    const url = `${config.get('app:queue_service_url')}/v1/bond-movie-events/review-updates/enqueue`;
+    const fName = reviewFileName.split('/').slice(-1).pop();
+    const metaData = filmMeta.data.find(v => v.review === fName);
+    const { order, title }  = metaData;
+    const review = await getReviewHTML(fName);
+    const dataToSend = { order, review, title };
+    logger.info({ type: 'SEND_DATA', data: JSON.stringify(dataToSend)});
+    const rslt = await fetch(url, {
+      body: JSON.stringify(dataToSend),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
     });
     logger.info({ msg: rslt });
   };
 
     watcher.on('change', path => {
-      logger.info({ type: 'PRODUCER_FILE_CHANGE', data: { path } });
       postMovieToProcess(path);
     });
 
     watcher.on('add', path => {
-      logger.info({ type: 'PRODUCER_FILE_ADD', data: { path } });
       postMovieToProcess(path);
     });
 })();

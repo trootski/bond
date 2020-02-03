@@ -5,15 +5,16 @@
   "main": "./app/setup.js",
   "scripts": {
     "start": "app/setup.js",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d watch_reviews && docker-compose logs -f watch_reviews",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bond-common": "../packages",
     "fast-glob": "^3.0.4",
     "glob-watcher": "^5.0.3",
     "nconf": "^0.10.0",
+    "node-fetch": "^2.6.0",
     "pino": "^5.13.2",
     "showdown": "^1.9.1"
   }

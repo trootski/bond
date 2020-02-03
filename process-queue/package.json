@@ -5,6 +5,7 @@
   "main": "./app/setup.js",
   "scripts": {
     "start": "nodemon app/server.js",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d process_queue && docker-compose logs -f process_queue kafka",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

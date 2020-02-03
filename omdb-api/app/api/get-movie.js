@@ -25,7 +25,7 @@ const getMovie = async (ctx, next) => {
   if (cachedData) {
     logger.info({ msg: `Cache data receieved for ${movieTitle}.`, data: cachedData })
     ctx.response.status = 200;
-    ctx.response.body = { ok: true, data: cachedData };
+    ctx.response.body = cachedData;
   } else {
     logger.info({ msg: `Getting live data for ${movieTitle}.` })
     const apiKey = config.get('omdb:key');
@@ -35,7 +35,7 @@ const getMovie = async (ctx, next) => {
     const resultsLowerCaseProps = deepCopyAndLowerCaseProps(resultJson);
     await setAsyncCtx(movieTitle, JSON.stringify(resultsLowerCaseProps), 'EX', config.get('app:cache_expiry_timeout'));
     ctx.response.status = 200;
-    ctx.response.body = { ok: true, data: resultsLowerCaseProps };
+    ctx.response.body = resultsLowerCaseProps;
   }
   await next();
 };
