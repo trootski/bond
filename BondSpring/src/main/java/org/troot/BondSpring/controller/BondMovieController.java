@@ -24,7 +24,7 @@ public class BondMovieController {
 
   @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.GET)
   @ApiOperation(value = "Get a bond movie by title", notes = "Search for a particular bond movie" )
-  public BondMovie getBondMovie(@PathVariable("title") String title) {
+  public BondMovie getBondMovie(@PathVariable(value = "title", required = true) String title) {
     List<BondMovie> bondMovies = bondMovieService.getBondMovie(title);
     if (bondMovies.isEmpty() || bondMovies.get(0) == null) {
       throw new ResponseStatusException(
