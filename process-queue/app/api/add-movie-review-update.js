@@ -32,7 +32,7 @@ const postMessage = ({ body, config, logger }) => new Promise(async (reslv, rej)
 const addMovieReviewUpdate = async (ctx, next) => {
   const { request: { body }, config, logger } = ctx;
   try {
-    logger.info({ body });
+    logger.info({ type: 'ingress', body });
     await postMessage({ body, config, logger });
     ctx.status = 204;
     ctx.body = '';

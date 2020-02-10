@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon app/server.js",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d bond-movies-api && docker-compose logs -f bond-movies-api",
+    "clean": "docker-compose -f ../docker-compose.yml stop bond-movies-api dynamodb && rm -rf ../storage/dynamodb-data/*",
     "test": "jest"
   },
   "author": "John Byrne",

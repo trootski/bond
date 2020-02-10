@@ -73,7 +73,7 @@ const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, 
   }
 });
 
-const getConsumer = ({ config }) => new Promise((resolve, reject) => {
+const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
   if (consumer) return resolve(consumer);
   const client = getClient(config);
   consumer = new Consumer(

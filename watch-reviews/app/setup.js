@@ -34,6 +34,7 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
     const metaData = filmMeta.data.find(v => v.review === fName);
     const { order, title }  = metaData;
     const review = await getReviewHTML(fName);
+    if (!review) return null;
     const dataToSend = { order, review, title };
     logger.info({ type: 'SEND_DATA', data: JSON.stringify(dataToSend)});
     const rslt = await fetch(url, {
@@ -43,7 +44,6 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
       },
       method: 'POST',
     });
-    logger.info({ msg: rslt });
   };
 
     watcher.on('change', path => {

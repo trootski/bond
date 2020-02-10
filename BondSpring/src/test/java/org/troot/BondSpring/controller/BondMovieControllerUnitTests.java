@@ -165,7 +165,6 @@ public class BondMovieControllerUnitTests {
         .content("{\"title\":\"GoldenEye\"}")
       )
       .andExpect(status().isOk())
-      .andExpect(content().string(""))
-      .andExpect(jsonPath("$.title", is("GoldenEye")));
+      .andExpect(content().string(""));
   }
 }

@@ -1,14 +1,16 @@
 const { getDocumentClient } = require('../db/dynamo.js');
 
 const putMovie = async (ctx, next) => {
-  const { config, logger } = ctx;
-  const movieTitle = ctx.params.title;
+  const {
+    params: { title: movieTitle },
+    request: { body: setPayload },
+    config,
+    logger,
+  } = ctx;
+
+  logger.info({ type: 'ingress', endpoint: 'PUT /v1/bond-movies/:title', movieTitle, setPayload });
 
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
-
-  logger.info({ msg: 'PUT /v1/bond-movies/:title' });
-
-  const setPayload = { ...ctx.request.body, title: movieTitle };
 
   const results = await dynamodb.put({
     Item: setPayload,

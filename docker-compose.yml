@@ -43,15 +43,16 @@ services:
       - 2181:2181
       - 9092:9092
     volumes:
-      - ../storage/kafka/kafka-logs:/tmp/kafka-logs
-      - ../storage/kafka/zookeeper:/var/lib/zookeeper
+      - ./storage/kafka/kafka-logs:/tmp/kafka-logs
+      - ./storage/kafka/zookeeper:/var/lib/zookeeper
 
-  process_queue:
+  process-queue:
     build:
       context: ./process-queue
       dockerfile: Dockerfile
     depends_on:
       - kafka
+    container_name: "process_queue"
     ports:
       - 3002:3002
 
@@ -71,10 +72,11 @@ services:
       - ./fe/vanilla:/opt/vanilla
     working_dir: /opt/vanilla
 
-  watch_reviews:
+  watch-reviews:
     build:
       context: ./watch-reviews
       dockerfile: Dockerfile
+    container_name: "watch_reviews"
     volumes:
       - ./watch-reviews/storage:/opt/watch_reviews/storage
 

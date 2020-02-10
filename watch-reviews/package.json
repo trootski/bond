@@ -5,7 +5,7 @@
   "main": "./app/setup.js",
   "scripts": {
     "start": "app/setup.js",
-    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d watch_reviews && docker-compose logs -f watch_reviews",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d watch-reviews && docker-compose logs -f watch-reviews",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
