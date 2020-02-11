@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   const loader = document.querySelector('#loading');
   const mainHolder = document.querySelector('#filmCard');
   const renderFilm = (data) => {
-    renderTitle(data.Title, mainHolder)
-    renderYear(data.Year, mainHolder)
-    renderPlot(data.Plot, mainHolder)
-    renderPoster(data.Poster, mainHolder)
+    renderTitle(data.title, mainHolder)
+    renderYear(data.year, mainHolder)
+    renderPlot(data.plot, mainHolder)
+    renderPoster(data.poster, mainHolder)
     return 1;
   };
   const renderTitle = (title, el) => {
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   const render = async () => {
     document.body.classList.remove('loaded');
     try {
-      const op = await fetch(`//localhost:3000/films`, {
+      const op = await fetch(`//localhost:3000/v1/bond-movies`, {
         headers: {
           'Access-Control-Allow-Origin': '*',
         }
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async function(e) {
       } else {
         document.body.classList.add('loaded');
         const filmRes = await op.json();
-        m.set('filmDB', filmRes.data);
+        m.set('filmDB', filmRes);
         m.set('currentIndex', 0);
       }
     } catch (e) {

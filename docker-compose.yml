@@ -11,19 +11,6 @@ services:
       - 3000:3000
     working_dir: /opt/bond-movies-api
 
-  omdb-api:
-    build:
-      context: ./omdb-api
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-    ports:
-      - 3001:3001
-    volumes:
-      - ./storage:/opt/cache_sync/storage
-      - ./mount/app/utils:/opt/cache_sync/app/utils
-      - ./mount/config:/opt/cache_sync/config
-
   dynamodb:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
     container_name: dynamodb
@@ -46,6 +33,19 @@ services:
       - ./storage/kafka/kafka-logs:/tmp/kafka-logs
       - ./storage/kafka/zookeeper:/var/lib/zookeeper
 
+  omdb-api:
+    build:
+      context: ./omdb-api
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    ports:
+      - 3001:3001
+    volumes:
+      - ./storage:/opt/cache_sync/storage
+      - ./mount/app/utils:/opt/cache_sync/app/utils
+      - ./mount/config:/opt/cache_sync/config
+
   process-queue:
     build:
       context: ./process-queue
@@ -64,13 +64,11 @@ services:
       - 6375:6375
 
   vanilla:
-    command: ["node", "/opt/vanilla/app/server.js"]
-    image: node:12
+    image: nginx
     ports:
-      - 3001:3001
+      - 9090:80
     volumes:
-      - ./fe/vanilla:/opt/vanilla
-    working_dir: /opt/vanilla
+      - ./fe/vanilla/public:/usr/share/nginx/html:ro
 
   watch-reviews:
     build:
