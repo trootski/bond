@@ -19,7 +19,6 @@ const putMovie = async (ctx, next) => {
   }).promise();
   ctx.response.status = 204;
   ctx.response.body = '';
-  logger.info({ msg: `Got results for put`, results });
 
   await next();
 };

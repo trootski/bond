@@ -10,6 +10,7 @@ const getAllMovies = async (ctx, next) => {
 
   try {
     const res = await dynamodb.scan({
+      IndexName: 'SortByOrder',
       TableName: 'BondMovies',
     }).promise();
 

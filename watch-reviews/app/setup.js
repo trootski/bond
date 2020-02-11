@@ -32,6 +32,7 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
     const url = `${config.get('app:queue_service_url')}/v1/bond-movie-events/review-updates/enqueue`;
     const fName = reviewFileName.split('/').slice(-1).pop();
     const metaData = filmMeta.data.find(v => v.review === fName);
+    logger.info({ type: 'META_INFO', data: JSON.stringify(metaData), reviewFileName });
     const { order, title }  = metaData;
     const review = await getReviewHTML(fName);
     if (!review) return null;
@@ -44,6 +45,9 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
       },
       method: 'POST',
     });
+    if (rslt.status !== 204) {
+      logger.info({ type: 'SEND_DATA_RESPONSE', body: (await rslt.text()), status: rslt.status });
+    }
   };
 
     watcher.on('change', path => {

@@ -13,9 +13,39 @@ const setup = async (ctx, next) => {
       TableName: config.get('dynamodb:tableName'),
       AttributeDefinitions: [
         {
+          AttributeName: 'order',
+          AttributeType: 'N',
+        },
+        {
           AttributeName: 'title',
           AttributeType: 'S',
         },
+        {
+          AttributeName: 'type',
+          AttributeType: 'S',
+        },
+      ],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: 'SortByOrder',
+          KeySchema: [
+            {
+              AttributeName: 'type',
+              KeyType: 'HASH'
+            },
+            {
+              AttributeName: 'order',
+              KeyType: 'RANGE'
+            }
+          ],
+          Projection: {
+            ProjectionType: 'ALL'
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
+          }
+        }
       ],
       KeySchema: [
         {
