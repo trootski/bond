@@ -1,7 +1,7 @@
 const kafka = require('kafka-node');
 const { promisify } = require('util');
 
-let client, consumer;
+let client, consumer, producer;
 
 const { Consumer, Offset, Producer } = kafka;
 
@@ -108,10 +108,25 @@ const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
   });
 });
 
-const getProducer = async ({ config }) => {
+const getProducer = ({ config, logger }) => new Promise((resolve, reject) => {
+  if (producer) return resolve(producer);
+
   const client = getClient(config);
-  return new Producer(client);
-};
+  producer = new Producer(client);
+
+  producer.on('ready', () => {
+    client.refreshMetadata([config.get('kafka:bond_topic')], err => {
+      if (err) {
+        logger.error({ type: 'KAFKA_PRODUCER_META_REFRESH', err });
+        return reject(err);
+      }
+      resolve(producer);
+    });
+  });
+  producer.on('error', err => {
+    logger.error({ err });
+  })
+});
 
 module.exports = {
   checkTopicAvailable,

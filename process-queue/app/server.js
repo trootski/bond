@@ -1,12 +1,8 @@
 const config = require('nconf');
 const cors = require('@koa/cors');
-const {
-  errorHandling,
-} = require('./middleware');
 const Koa = require('koa');
 const KoaBodyParser = require('koa-bodyparser');
 const KoaRouter = require('koa-router');
-const KoaStatic = require('koa-static');
 const logger = require('pino')().child({ app: 'PROCESS-QUEUE' });
 const path = require('path');
 

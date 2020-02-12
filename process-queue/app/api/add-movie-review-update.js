@@ -4,37 +4,31 @@ const { getProducer } = require('../kafka/kafka.js');
 const { KeyedMessage } = require('kafka-node');
 
 const postMessage = ({ body, config, logger }) => new Promise(async (reslv, rej) => {
-  const producer = await getProducer({ config });
-
-  producer.on('ready', () => {
-    const km = new KeyedMessage('reviewData', JSON.stringify(body));
-    const payloads = [
-        {
-          topic: config.get('kafka:bond_topic'),
-          messages: [km],
-        },
-    ];
-    producer.send(payloads, (err, data) => {
-      if (err) {
-        logger.error({ type: 'PRODUCER_SEND_ERR', err });
-        rej(err);
-      }
-      logger.info({ type: 'PRODUCER_SEND', data: JSON.stringify(data) });
-      reslv(data);
-    });
-  });
-  producer.on('error', err => {
-    logger.error({ err });
-    rej(err);
+  const producer = await getProducer({ config, logger });
+  const km = new KeyedMessage('reviewData', JSON.stringify(body));
+  const payloads = [
+    {
+      topic: config.get('kafka:bond_topic'),
+      messages: [km],
+      partition: 0,
+    },
+  ];
+  producer.send(payloads, (err, data) => {
+    if (err) {
+      logger.error({ type: 'PRODUCER_SEND_ERR', err });
+      rej(err);
+    }
+    logger.info({ type: 'PRODUCER_SEND', data: JSON.stringify(data) });
+    reslv(data);
   });
 });
 
 const addMovieReviewUpdate = async (ctx, next) => {
   const { request: { body }, config, logger } = ctx;
+  logger.info({ type: 'ingress' });
   try {
-    logger.info({ type: 'ingress', body });
     await postMessage({ body, config, logger });
-    ctx.status = 204;
+    ctx.status = 207;
     ctx.body = '';
   } catch (err) {
     logger.error({ err });
