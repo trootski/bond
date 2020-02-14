@@ -1,9 +1,7 @@
 package org.troot.BondSpring.repository;
 
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import org.troot.BondSpring.domain.BondMovie;
 
 import java.util.List;

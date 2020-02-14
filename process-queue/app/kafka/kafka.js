@@ -16,6 +16,7 @@ const getClient = config => {
   if (client) return client;
   return new kafka.KafkaClient({
     kafkaHost: config.get('kafka:url'),
+    autoConnect: true,
   });
 };
 

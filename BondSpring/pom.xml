@@ -54,7 +54,23 @@
       <version>5.1.0</version>
     </dependency>
 	</dependencies>
-
+<profiles>
+  <profile>
+    <id>local</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+      <spring.profiles.active>local</spring.profiles.active>
+    </properties>
+  </profile>
+  <profile>
+    <id>docker</id>
+    <properties>
+      <spring.profiles.active>docker</spring.profiles.active>
+    </properties>
+  </profile>
+</profiles>
 	<build>
 		<plugins>
 			<plugin>

@@ -11,6 +11,16 @@ services:
       - 3000:3000
     working_dir: /opt/bond-movies-api
 
+  bond-movies-api-spring:
+    build:
+      context: ./BondSpring
+      dockerfile: ./src/main/resources/docker/Dockerfile
+    depends_on:
+      - dynamodb
+    ports:
+      - 3009:8080
+    working_dir: /
+
   dynamodb:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
     container_name: dynamodb
