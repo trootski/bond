@@ -1,5 +1,6 @@
 package org.troot.BondSpring.controller;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -30,6 +31,7 @@ public class BondMovieControllerIntegrationTests {
   private MockMvc mockMvc;
 
   @Test
+  @Ignore
   public void testGetAllMoviesHappyPath() throws Exception {
     this.mockMvc.perform(get("/v1/bond-movies"))
       .andDo(print())

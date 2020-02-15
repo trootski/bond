@@ -28,7 +28,7 @@ const addMovieReviewUpdate = async (ctx, next) => {
   logger.info({ type: 'ingress' });
   try {
     await postMessage({ body, config, logger });
-    ctx.status = 207;
+    ctx.status = 204;
     ctx.body = '';
   } catch (err) {
     logger.error({ err });

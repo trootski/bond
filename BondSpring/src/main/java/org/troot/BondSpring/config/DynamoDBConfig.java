@@ -41,20 +41,9 @@ public class DynamoDBConfig {
   }
 
   @Bean
-  public EndpointConfiguration amazonEndpointConfiguration() {
-    return new AWSKMSClientBuilder.EndpointConfiguration("http://localhost:9000", Region.getRegion(Regions.DEFAULT_REGION).getName());
-  }
-
-  @Bean
   @Primary
   public DynamoDBMapperConfig dynamoDBMapperConfig() {
     return DynamoDBMapperConfig.DEFAULT;
-  }
-
-  @Bean
-  @Primary
-  public DynamoDBMapper dynamoDBMapper (AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig config) {
-    return new DynamoDBMapper(amazonDynamoDB, config);
   }
 
   @Bean

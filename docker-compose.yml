@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  bond-movies-api:
+  bond-movies-api-nodejs:
     build:
       context: ./bond-movies-api
       dockerfile: ./Dockerfile
@@ -15,6 +15,7 @@ services:
     build:
       context: ./BondSpring
       dockerfile: ./src/main/resources/docker/Dockerfile
+    container_name: "bond-movies-api"
     depends_on:
       - dynamodb
     ports:
@@ -35,6 +36,7 @@ services:
     environment:
       ADVERTISED_HOST: "kafka"
       ADVERTISED_PORT: 9092
+      KAFKA_ADVERTISED_HOST_NAME:
     image: spotify/kafka
     ports:
       - 2181:2181
