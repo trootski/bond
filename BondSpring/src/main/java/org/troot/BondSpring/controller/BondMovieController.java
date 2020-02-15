@@ -52,7 +52,7 @@ public class BondMovieController {
       String json = objectMapper.writeValueAsString(bondMovie);
       logger.info("PAYLOAD: {}", json);
     } catch (JsonProcessingException jpe) {
-      logger.error("Error deserializing input");
+      logger.error("Error parsing input");
     }
     bondMovie.setTitle(title);
     return bondMovieService.createBondMovie(bondMovie);

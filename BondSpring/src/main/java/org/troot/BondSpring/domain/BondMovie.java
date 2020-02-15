@@ -165,6 +165,7 @@ public class BondMovie {
 
   private String Type;
   @DynamoDBAttribute(attributeName = "type")
+  @DynamoDBIndexHashKey(globalSecondaryIndexName = "SortByOrder")
   public String getType() {
     return Type;
   }
@@ -236,6 +237,7 @@ public class BondMovie {
   }
 
   private Integer order;
+  @DynamoDBIndexRangeKey(globalSecondaryIndexName = "SortByOrder")
   @DynamoDBAttribute(attributeName = "order")
   public Integer getOrder() {
     return order;

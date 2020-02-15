@@ -19,7 +19,7 @@ services:
     depends_on:
       - dynamodb
     ports:
-      - 3009:8080
+      - 3000:3000
     working_dir: /
 
   dynamodb:
@@ -62,9 +62,11 @@ services:
     build:
       context: ./process-queue
       dockerfile: Dockerfile
+    container_name: "process_queue"
     depends_on:
       - kafka
-    container_name: "process_queue"
+    environment:
+      ADV_HOST: kafka
     ports:
       - 3002:3002
 
