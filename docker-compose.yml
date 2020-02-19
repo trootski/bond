@@ -3,7 +3,7 @@ version: '3'
 services:
   bond-movies-api-nodejs:
     build:
-      context: ./bond-movies-api
+      context: ./bond-movies-api-nodejs
       dockerfile: ./Dockerfile
     depends_on:
       - dynamodb
@@ -11,9 +11,9 @@ services:
       - 3000:3000
     working_dir: /opt/bond-movies-api
 
-  bond-movies-api-spring:
+  bond-movies-api-spring-dynamodb:
     build:
-      context: ./BondSpring
+      context: ./bond-movies-api-spring-dynamodb
       dockerfile: ./src/main/resources/docker/Dockerfile
     container_name: "bond-movies-api"
     depends_on:
