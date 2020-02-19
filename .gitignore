@@ -7,4 +7,5 @@ koa-service/cache/*
 
 storage/*
 !storage/dynamodb-data/.keep
+!storage/rest-requests
 
