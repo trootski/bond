@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"/>
+    <changeSet author="byrnej (generated)" id="1582238851039-1">
+        <createTable tableName="bond_movie">
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="actors" type="VARCHAR(255)"/>
+            <column name="awards" type="VARCHAR(255)"/>
+            <column name="box_office" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="dvd" type="VARCHAR(255)"/>
+            <column name="director" type="VARCHAR(255)"/>
+            <column name="genre" type="VARCHAR(255)"/>
+            <column name="language" type="VARCHAR(255)"/>
+            <column name="metascore" type="VARCHAR(255)"/>
+            <column name="plot" type="VARCHAR(255)"/>
+            <column name="poster" type="VARCHAR(255)"/>
+            <column name="production" type="VARCHAR(255)"/>
+            <column name="rated" type="VARCHAR(255)"/>
+            <column name="released" type="VARCHAR(255)"/>
+            <column name="response" type="VARCHAR(255)"/>
+            <column name="runtime" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="website" type="VARCHAR(255)"/>
+            <column name="writer" type="VARCHAR(255)"/>
+            <column name="year" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP(29) WITHOUT TIME ZONE"/>
+            <column name="date_modified" type="TIMESTAMP(29) WITHOUT TIME ZONE"/>
+            <column name="imdbid" type="VARCHAR(255)"/>
+            <column name="imdb_rating" type="VARCHAR(255)"/>
+            <column name="imdb_votes" type="VARCHAR(255)"/>
+            <column name="review" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="byrnej (generated)" id="1582238851039-2">
+        <addPrimaryKey columnNames="title" constraintName="bond_movie_pkey" tableName="bond_movie"/>
+    </changeSet>
+</databaseChangeLog>
