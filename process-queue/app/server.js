@@ -8,6 +8,7 @@ const path = require('path');
 
 const {
   addMovieReviewUpdate,
+  getReviewUpdates,
   setup,
 } = require('./api/index.js');
 
@@ -33,11 +34,12 @@ app.use(async (ctx, next) => {
 });
 
 const router = new KoaRouter();
+router.get('/v1/bond-movie-events/review-updates', getReviewUpdates);
 router.post('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate);
 router.get('/v1/setup', setup);
 app.use(router.routes());
 
-logger.info({ msg: 'Listening on 3002' });
+logger.info({ msg: 'Listening on 3002', routes: router.stack.map(i => i.path)  });
 app.listen(3002);
 
 // Hacky setup method...
