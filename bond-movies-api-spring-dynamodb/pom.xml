@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.troot</groupId>
-	<artifactId>BondSpring</artifactId>
+	<artifactId>bond-movies-api-spring-dynamodb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BondSpring</name>
 	<description>Movies endpoints for bond REST service</description>

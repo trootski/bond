@@ -2,6 +2,8 @@
 .DS_Store
 **/.idea
 
+/**/.mvn/
+
 koa-service/cache/*
 !koa-service/cache/.keep
 
