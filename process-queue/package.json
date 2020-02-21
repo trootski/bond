@@ -4,9 +4,9 @@
   "description": "Watch queue for updates to movie reviews which need to be merged with other metadata",
   "main": "./app/setup.js",
   "scripts": {
-    "clean": "docker-compose -f ../docker-compose.yml stop process-queue kafka && rm -rf ../storage/kafka",
+    "clean": "docker-compose -f ../docker-compose.yml stop process-queue kafka && rm -rf ../storage/kafka ../storage/zookeeper",
     "start": "nodemon app/server.js",
-    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d process-queue && docker-compose logs -f process-queue kafka",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d process-queue && docker-compose logs -f process-queue kafka zoo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

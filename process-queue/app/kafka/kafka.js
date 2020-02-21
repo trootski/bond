@@ -1,9 +1,9 @@
 const kafka = require('kafka-node');
 const { promisify } = require('util');
 
-let client, consumer, producer;
+let admin, client, consumer, producer;
 
-const { Consumer, Offset, Producer } = kafka;
+const { Admin, Consumer, KafkaClient, Offset, Producer } = kafka;
 
 const setTimeoutAsync = promisify(setTimeout);
 
@@ -14,9 +14,10 @@ const handleErr = logger => rej => err => {
 
 const getClient = config => {
   if (client) return client;
-  return new kafka.KafkaClient({
-    kafkaHost: config.get('kafka:url'),
+  return new KafkaClient({
     autoConnect: true,
+    // idleConnection: 24 * 60 * 60 * 1000,
+    kafkaHost: config.get('kafka:url'),
   });
 };
 
@@ -74,6 +75,28 @@ const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, 
   }
 });
 
+const getAdmin = ({ config, logger }) => new Promise((resolve, reject) => {
+  if (admin) return resolve(admin);
+  const client = getClient(config);
+  admin = new Admin(client);
+  admin.on('ready', () => {
+    logger.info({ msg: 'admin is ready '});
+    client.refreshMetadata([config.get('kafka:bond_topic')], err => {
+      logger.info({ msg: 'admin metadata retrieved'});
+      if (err) {
+        logger.error({ type: 'ADMIN_META_REFRESH', err });
+        return reject(err);
+      }
+      logger.info({ msg: 'returning instance of admin'});
+      return resolve(admin);
+    });
+  })
+  admin.on('error', err => {
+    logger.error({ type: 'ADMIN_ERROR', err });
+    return reject(err);
+  })
+});
+
 const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
   if (consumer) return resolve(consumer);
   const client = getClient(config);
@@ -86,11 +109,11 @@ const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
     const offset = new Offset(client);
     if (err) {
       logger.error({ type: "CONSUMER_METADATA_REFRESH", err });
-      reject(null);
+      return reject(null);
     }
     consumer.on('error', err => {
       logger.error({ type: "CONSUMER_ERR", err });
-      process.exit(1);
+      return;
     });
     consumer.on(
       'offsetOutOfRange',
@@ -126,12 +149,14 @@ const getProducer = ({ config, logger }) => new Promise((resolve, reject) => {
   });
   producer.on('error', err => {
     logger.error({ err });
+    return;
   })
 });
 
 module.exports = {
   checkTopicAvailable,
   createTopic,
+  getAdmin,
   getConsumer,
   getProducer,
   waitForHostAndTopic,
