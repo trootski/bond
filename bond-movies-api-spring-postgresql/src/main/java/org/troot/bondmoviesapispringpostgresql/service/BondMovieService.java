@@ -13,8 +13,7 @@ public class BondMovieService {
   BondMovieRepository bondMovieRepository;
 
   public List<BondMovie> getAllMovies() {
-    // return bondMovieRepository.findByType("movie");
-    return null;
+    return bondMovieRepository.findAll();
   }
 
   // public List<BondMovie> getBondMovie(String title) {

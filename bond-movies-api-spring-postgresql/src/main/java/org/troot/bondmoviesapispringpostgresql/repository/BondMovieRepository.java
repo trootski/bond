@@ -1,15 +1,13 @@
 package org.troot.bondmoviesapispringpostgresql.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
 
-import java.util.List;
-
 @Repository
-public interface BondMovieRepository extends CrudRepository<BondMovie, String> {
-  // List<BondMovie> findByType(String type);
-
-  // List<BondMovie> findByTitle(String title);
+public interface BondMovieRepository extends JpaRepository<BondMovie, Long> {
+    List<BondMovie> findAll();
 }
 
