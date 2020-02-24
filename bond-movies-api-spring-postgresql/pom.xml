@@ -21,7 +21,7 @@
 		<liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
 		<liquibase-maven-plugin.version>3.5.5</liquibase-maven-plugin.version>
 		<spring-boot.version>2.2.4.RELEASE</spring-boot.version>
-		<swagger.version>2.9.2</swagger.version>
+		<swagger.version>3.0.0-SNAPSHOT</swagger.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 	</properties>
 
@@ -38,6 +38,11 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -47,15 +52,11 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+        <!-- DB Packages -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.liquibase</groupId>-->
-<!--			<artifactId>liquibase-core</artifactId>-->
-<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -63,6 +64,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- OpenAPI Docs -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -72,9 +74,8 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<version>${swagger.version}</version>
 		</dependency>
-
 
 	</dependencies>
 
@@ -84,37 +85,39 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.8.6</version>
+				<configuration>
+					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate4</artifactId>
+						<version>3.5</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+						<version>4.1.7.RELEASE</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.data</groupId>
+						<artifactId>spring-data-jpa</artifactId>
+						<version>1.7.3.RELEASE</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 
-<!--	<build>-->
-<!--		<plugins>-->
-<!--			<plugin>-->
-<!--				<groupId>org.liquibase</groupId>-->
-<!--				<artifactId>liquibase-maven-plugin</artifactId>-->
-<!--				<version>3.8.6</version>-->
-<!--				<configuration>-->
-<!--					<propertyFile>src/main/resources/liquibase.properties</propertyFile>-->
-<!--				</configuration>-->
-<!--				<dependencies>-->
-<!--					<dependency>-->
-<!--						<groupId>org.liquibase.ext</groupId>-->
-<!--						<artifactId>liquibase-hibernate4</artifactId>-->
-<!--						<version>3.5</version>-->
-<!--					</dependency>-->
-<!--					<dependency>-->
-<!--						<groupId>org.springframework</groupId>-->
-<!--						<artifactId>spring-beans</artifactId>-->
-<!--						<version>4.1.7.RELEASE</version>-->
-<!--					</dependency>-->
-<!--					<dependency>-->
-<!--						<groupId>org.springframework.data</groupId>-->
-<!--						<artifactId>spring-data-jpa</artifactId>-->
-<!--						<version>1.7.3.RELEASE</version>-->
-<!--					</dependency>-->
-<!--				</dependencies>-->
-<!--			</plugin>-->
-<!--		</plugins>-->
-<!--	</build>-->
-
+	<repositories>
+		<repository>
+			<id>jcenter-snapshots</id>
+			<name>jcenter</name>
+			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+		</repository>
+	</repositories>
 </project>

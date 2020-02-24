@@ -90,8 +90,6 @@ services:
       - ./mount/config:/opt/cache_sync/config
 
   postgresql:
-    depends_on:
-      - kafka
     environment:
       POSTGRES_DB: bond_movies
       POSTGRES_PASSWORD: mysecretpassword
@@ -99,6 +97,15 @@ services:
     image: postgres:11
     ports:
       - 5432:5432
+
+  postgresql-test:
+    environment:
+      POSTGRES_DB: bond_movies_integration_tests
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: bond_movies
+    image: postgres:11
+    ports:
+      - 5433:5432
 
   process-queue:
     build:
