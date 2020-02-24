@@ -14,5 +14,4 @@ class BondMoviesApiSpringPostgresqlApplicationTests {
 	void contextLoads() {
 		System.out.println(bondMoviesApiSpringPostgresqlApplication.toString());
 	}
-
 }
