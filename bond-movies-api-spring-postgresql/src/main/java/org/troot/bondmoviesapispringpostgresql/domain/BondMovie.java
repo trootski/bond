@@ -20,25 +20,23 @@ public class BondMovie {
     this.id = id;
   }
 
-//
-//  // @NotBlank
-//  // private String title;
-//  // @Column
-//  // public String getTitle() {
-//  //   return title;
-//  // }
-//  // public void setTitle(String title) {
-//  //   this.title = title;
-//  // }
-//
-//  // @Column
-//  // private String Actors;
-//  // public String getActors() {
-//  //   return Actors;
-//  // }
-//  // public void setActors(String Actors) {
-//  //   this.Actors = Actors;
-//  // }
+  private String title;
+  @Column
+  public String getTitle() {
+    return title;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  @Column
+  private String Actors;
+  public String getActors() {
+    return Actors;
+  }
+  public void setActors(String Actors) {
+    this.Actors = Actors;
+  }
 //
 //  // @Column
 //  // private String Metascore;
