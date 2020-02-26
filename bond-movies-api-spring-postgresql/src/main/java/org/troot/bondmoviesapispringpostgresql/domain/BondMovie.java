@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "bond_movies")
+@Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
   @Id
@@ -31,12 +31,12 @@ public class BondMovie {
   }
 
   @Column
-  private String Actors;
+  private String actors;
   public String getActors() {
-    return Actors;
+    return actors;
   }
-  public void setActors(String Actors) {
-    this.Actors = Actors;
+  public void setActors(String actors) {
+    this.actors = actors;
   }
 //
 //  // @Column

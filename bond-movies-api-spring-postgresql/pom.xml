@@ -91,7 +91,7 @@
 				<version>3.8.6</version>
 				<configuration>
 					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
-					<diffChangeLogFile>src/main/resources/changelog/liquibase.diff-${maven.build.timestamp}-changelog.xml</diffChangeLogFile>
+					<diffChangeLogFile>src/main/resources/changelog/liquibase.diff-${project.version}-changelog.xml</diffChangeLogFile>
 					<changeLogFile>src/main/resources/liquibase.changelog-master.xml</changeLogFile>
 				</configuration>
 				<dependencies>
