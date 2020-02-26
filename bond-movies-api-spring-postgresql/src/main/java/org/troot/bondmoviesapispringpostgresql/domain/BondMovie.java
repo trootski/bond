@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
+@Table(name = "bond_movies")
 public class BondMovie {
 
   @Id
