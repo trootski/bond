@@ -111,14 +111,6 @@
 						<version>2.2.4.RELEASE</version>
 					</dependency>
 				</dependencies>
-				<executions>
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>update</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		<testResources>
