@@ -2,6 +2,8 @@ package org.troot.bondmoviesapispringpostgresql.controller;
 
 
 //import io.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
 import org.troot.bondmoviesapispringpostgresql.service.BondMovieService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class BondMovieController {
   private static final Logger logger = LoggerFactory.getLogger(BondMovieController.class);
 
   @RequestMapping(value = "/v1/bond-movies", method = RequestMethod.GET)
-//  @ApiOperation(value = "Get a list of all current Bond movies", notes = "Get all Bond movies current stored in data persistence" )
+  @ApiOperation(value = "Get a list of all current Bond movies", notes = "Get all Bond movies current stored in data persistence" )
   public List<BondMovie> getAllMovies() {
       logger.info("GET /v1/bond-movies");
       return bondMovieService.getAllMovies();
