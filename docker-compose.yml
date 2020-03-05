@@ -99,6 +99,7 @@ services:
       - 5432:5432
 
   postgresql-test:
+    command: ["postgres", "-c", "log_statement=all"]
     environment:
       POSTGRES_DB: bond_movies_integration_tests
       POSTGRES_PASSWORD: mysecretpassword

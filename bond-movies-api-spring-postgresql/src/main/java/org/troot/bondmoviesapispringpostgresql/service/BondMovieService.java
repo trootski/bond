@@ -17,9 +17,9 @@ public class BondMovieService {
     return bondMovieRepository.findAll();
   }
 
-  // public List<BondMovie> getBondMovie(String title) {
-  //   return bondMovieRepository.findByTitle(title);
-  // }
+  public List<BondMovie> getBondMovie(String title) {
+    return bondMovieRepository.findBondMovieByTitle(title);
+  }
 
   // public BondMovie createBondMovie(BondMovie bondMovie) { return bondMovieRepository.save(bondMovie); }
 }

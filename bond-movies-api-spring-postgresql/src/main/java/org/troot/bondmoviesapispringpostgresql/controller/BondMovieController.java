@@ -7,9 +7,12 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
 import org.troot.bondmoviesapispringpostgresql.service.BondMovieService;
 
@@ -30,19 +33,19 @@ public class BondMovieController {
       return bondMovieService.getAllMovies();
   }
 
-  // @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.GET)
-  // @ApiOperation(value = "Get a bond movie by title", notes = "Search for a particular bond movie" )
-  // public BondMovie getBondMovie(@PathVariable(value = "title", required = true) String title) {
-  //   logger.info("GET /v1/bond-movies/{}", title);
-  //   List<BondMovie> bondMovies = bondMovieService.getBondMovie(title);
-  //   if (bondMovies.isEmpty() || bondMovies.get(0) == null) {
-  //     throw new ResponseStatusException(
-  //       HttpStatus.NOT_FOUND, "bond movie not found"
-  //     );
-  //   } else {
-  //     return bondMovies.get(0);
-  //   }
-  // }
+  @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.GET)
+  @ApiOperation(value = "Get a bond movie by title", notes = "Search for a particular bond movie" )
+  public BondMovie getBondMovie(@PathVariable(value = "title", required = true) String title) {
+    logger.info("GET /v1/bond-movies/{}", title);
+    List<BondMovie> bondMovies = bondMovieService.getBondMovie(title);
+    if (bondMovies.isEmpty() || bondMovies.get(0) == null) {
+      throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND, "bond movie not found"
+      );
+    } else {
+      return bondMovies.get(0);
+    }
+  }
 
   // @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.PUT)
   // @ApiOperation(value = "Put a new bond movie entry", notes = "Create a new record in the database for the given bond movie" )
