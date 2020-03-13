@@ -1,59 +1,53 @@
-const kafka = require('kafka-node');
 const { promisify } = require('util');
 
 let admin, client, consumer, producer;
 
-const { Admin, Consumer, KafkaClient, Offset, Producer } = kafka;
+const { Kafka, logLevel } = require('kafkajs');
 
 const setTimeoutAsync = promisify(setTimeout);
 
-const handleErr = logger => rej => err => {
-  logger.error({ err });
-  rej(err);
-};
-
 const getClient = config => {
   if (client) return client;
-  return new KafkaClient({
-    autoConnect: true,
-    // idleConnection: 24 * 60 * 60 * 1000,
-    kafkaHost: config.get('kafka:url'),
+  client = new Kafka({
+    brokers: [config.get('kafka:url')],
+    clientId: 'bond-kafka-queue-consumer-local',
+    logLevel: logLevel.ERROR,
+    retry: {
+      initialRetryTime: 1000,
+      retries: 8
+    }
   });
+  return client;
 };
 
 const checkTopicAvailable = ({ config, logger }) => new Promise(async (rslv, rej) => {
-  const handleRejection = handleErr(logger)(rej);
   try {
-    const client = getClient(config);
-    const admin = new kafka.Admin(client);
-    admin.on('error', handleRejection);
-    admin.listTopics((err, data) => {
-      if (err) handleRejection(err);
-      rslv(data);
-    });
+    rslv(topicMetadata);
   } catch (err) {
-    handleRejection(err);
+    logger.error({ type: 'CHECK_TOPIC_AVAILABLE', err });
   }
 });
 
 const waitForHostAndTopic = async ({ config, logger }) => {
+  const kafka = getClient(config);
+  const admin = kafka.admin();
   do {
     try {
-      const rslt = await checkTopicAvailable({ config, logger });
-      if (rslt && rslt[1] && rslt[1].metadata) {
-        if (rslt[1].metadata[config.get('kafka:bond_topic')]) {
-          logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka and topic found' });
+      const topicMetadata = await admin.fetchTopicMetadata({ topics: [config.get('kafka:bond_topic')] })
+      logger.info({ type: 'TOPIC_METADATA', msg: topicMetadata });
+      // if (rslt && rslt[1] && rslt[1].metadata) {
+      //   if (rslt[1].metadata[config.get('kafka:bond_topic')]) {
+      //     logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka and topic found' });
           return true;
-        } else {
-          logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka found' });
-          return false;
-        }
-      }
-      logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka topic not found, retrying...' });
-      await setTimeoutAsync(1000);
+      //   } else {
+      //     logger.info({ type: 'HOST_WAIT_INFO', msg: 'Kafka found' });
+      //     return false;
+      //   }
+      // }
     } catch (err) {
       logger.error({ type: 'HOST_WAIT_ERROR', err });
     }
+    await setTimeoutAsync(1000);
   } while(true);
 };
 
@@ -65,9 +59,14 @@ const createTopic = async ({ config, logger, topicName }) => new Promise((rslv, 
       partitions: 1,
       replicationFactor: 1
     }];
-    client.createTopics(topicsToCreate, (err, data) => {
-      if (err) { logger.error({ err }); rej(err); }
-      rslv(data);
+    client.refreshMetadata([config.get('kafka:bond_topic')], err => {
+      client.createTopics(topicsToCreate, (err, data) => {
+        if (err) {
+          logger.error({err});
+          rej(err);
+        }
+        rslv(data);
+      });
     });
   } catch (err) {
     logger.error({ err });
@@ -100,10 +99,12 @@ const getAdmin = ({ config, logger }) => new Promise((resolve, reject) => {
 const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
   if (consumer) return resolve(consumer);
   const client = getClient(config);
-  consumer = new Consumer(
-    client,
-    [{ topic: config.get('kafka:bond_topic'), partitions: 0 },],
-    { autoCommit: false, fetchMaxWaitMs: 1000, fetchMaxBytes: 1024 * 1024 }
+  consumer = new ConsumerGroup(
+      {
+        groupId: 'ExampleTestGroup',
+        kafkaHost: config.get('kafka:url'),
+      },
+    [config.get('kafka:bond_topic')]
   );
   client.refreshMetadata([config.get('kafka:bond_topic')], err => {
     const offset = new Offset(client);
@@ -111,6 +112,7 @@ const getConsumer = ({ config, logger }) => new Promise((resolve, reject) => {
       logger.error({ type: "CONSUMER_METADATA_REFRESH", err });
       return reject(null);
     }
+    consumer.on('message', )
     consumer.on('error', err => {
       logger.error({ type: "CONSUMER_ERR", err });
       return;

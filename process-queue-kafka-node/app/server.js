@@ -8,7 +8,6 @@ const path = require('path');
 
 const {
   addMovieReviewUpdate,
-  getReviewUpdates,
   setup,
 } = require('./api/index.js');
 
@@ -34,7 +33,6 @@ app.use(async (ctx, next) => {
 });
 
 const router = new KoaRouter();
-router.get('/v1/bond-movie-events/review-updates', getReviewUpdates);
 router.post('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate);
 router.get('/v1/setup', setup);
 app.use(router.routes());

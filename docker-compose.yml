@@ -5,6 +5,7 @@ services:
     build:
       context: ./bond-movies-api-nodejs
       dockerfile: ./Dockerfile
+    container_name: "bond-movies-api"
     depends_on:
       - dynamodb
     ports:
@@ -63,12 +64,14 @@ services:
       - zoo
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER://kafka1:19092,LISTENER_LOCAL://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER:PLAINTEXT,LISTENER_LOCAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
       KAFKA_BROKER_ID: 1
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER:PLAINTEXT,LISTENER_LOCAL:PLAINTEXT
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_LOG4J_ROOT_LOGLEVEL: ERROR
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
     hostname: kafka1
     image: confluentinc/cp-kafka:5.4.0
     ports:
@@ -108,9 +111,21 @@ services:
     ports:
       - 5433:5432
 
-  process-queue:
+  process-queue-kafka-node:
     build:
-      context: ./process-queue
+      context: ./process-queue-kafka-node
+      dockerfile: Dockerfile
+    container_name: "process_queue"
+    depends_on:
+      - kafka
+    environment:
+      ADV_HOST: kafka1
+    ports:
+      - 3002:3002
+
+  process-queue-kafkajs:
+    build:
+      context: ./process-queue-kafkajs
       dockerfile: Dockerfile
     container_name: "process_queue"
     depends_on:

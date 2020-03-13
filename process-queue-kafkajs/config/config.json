@@ -1,0 +1,10 @@
+{
+  "app": {
+    "omdb_api_url": "http://omdb-api:3001",
+    "bond_movies_api_url": "http://bond-movies-api:3000"
+  },
+  "kafka": {
+    "bond_topic": "BondMoviesToBeProcessed",
+    "url": "kafka1:9092"
+  }
+}
