@@ -5,6 +5,7 @@
   },
   "kafka": {
     "bond_topic": "BondMoviesToBeProcessed",
-    "url": "kafka1:9092"
+    "consumer_group_name": "BondProcessingConsumerGroup",
+    "url": "kafka1:19092"
   }
 }

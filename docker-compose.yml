@@ -134,6 +134,8 @@ services:
       ADV_HOST: kafka1
     ports:
       - 3002:3002
+      - 56745:56745
+      - 9229:9229
 
   redis:
     build:
