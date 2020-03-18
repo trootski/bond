@@ -65,7 +65,6 @@ const createTopic = async ({ config, logger }) => new Promise(async (rslv, rej) 
 module.exports = {
   createTopic,
   getAdmin,
-  getClient,
   getConsumer,
   getProducer,
 };

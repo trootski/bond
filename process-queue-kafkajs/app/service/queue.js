@@ -48,7 +48,7 @@ const startQueueListener = async ({ config, logger }) => {
       topic: config.get('kafka:bond_topic'),
       // fromBeginning: true,
     });
-    const output = await consumer.run({
+    await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
         const getOMDBDataCtx = getOMDBData({ config, logger });
         const setBondMovieAPICtx = setBondMovieAPI({ config, logger });
