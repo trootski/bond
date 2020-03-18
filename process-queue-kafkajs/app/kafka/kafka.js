@@ -6,12 +6,13 @@ const getClient = config => {
   if (client) return client;
   client = new Kafka({
     brokers: [config.get('kafka:url')],
-    clientId: 'bond-kafka-queue-consumer-local',
+    clientId: config.get('kafka:client_id'),
     logLevel: logLevel.ERROR,
     retry: {
       initialRetryTime: 1000,
       retries: 1000,
-    }});
+    },
+  });
   return client;
 };
 
@@ -25,7 +26,9 @@ const getAdmin = config => {
 const getConsumer = config => {
   if (consumer) return consumer;
   const kafka = getClient(config);
-  consumer = kafka.consumer({ groupId: config.get('kafka:consumer_group_name')})
+  consumer = kafka.consumer({
+    groupId: config.get('kafka:consumer_group_name'),
+  });
   return consumer;
 };
 
@@ -48,7 +51,7 @@ const createTopic = async ({ config, logger }) => new Promise(async (rslv, rej) 
         replicationFactor: 1,
         topic: config.get('kafka:bond_topic'),
       }],
-      waitForLeaders: true,
+      // waitForLeaders: true,
     });
   } catch (err) {
     logger.error({ type: 'CREATE_TOPIC_ERROR', err });
@@ -62,6 +65,7 @@ const createTopic = async ({ config, logger }) => new Promise(async (rslv, rej) 
 module.exports = {
   createTopic,
   getAdmin,
+  getClient,
   getConsumer,
   getProducer,
 };

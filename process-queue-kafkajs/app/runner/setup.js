@@ -1,8 +1,6 @@
 const { connectAndCreateTopic, startQueueListener } = require('../service/queue.js');
 
-const setup = async (ctx, next) => {
-  const { config, logger } = ctx;
-
+const setup = async ({ config, logger }) => {
   try {
     await connectAndCreateTopic({ config, logger });
 
@@ -11,7 +9,6 @@ const setup = async (ctx, next) => {
     logger.error({ type: 'QUEUE_SETUP_ERROR', err });
     throw err;
   }
-  await next();
 };
 
 module.exports = setup;
