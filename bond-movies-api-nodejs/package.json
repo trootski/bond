@@ -12,14 +12,14 @@
   "author": "John Byrne",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "^2.2.2",
-    "aws-sdk": "^2.355.0",
-    "koa": "^2.5.2",
-    "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
+    "@koa/cors": "^3.1.0",
+    "aws-sdk": "^2.694.0",
+    "koa": "^2.12.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^9.0.1",
     "nconf": "^0.10.0",
-    "nodemon": "^1.18.3",
-    "pino": "^5.13.2",
-    "request": "^2.88.0"
+    "nodemon": "^2.0.4",
+    "pino": "^6.3.2",
+    "request": "^2.88.2"
   }
 }
