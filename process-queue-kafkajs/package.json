@@ -18,7 +18,7 @@
     "autocannon": "^5.0.1",
     "aws-sdk": "^2.694.0",
     "fast-glob": "^3.2.2",
-    "glob-watcher": "^5.0.3",
+    "glob-watcher": "^5.0.5",
     "kafkajs": "^1.12.0",
     "koa": "^2.12.0",
     "koa-bodyparser": "^4.3.0",
