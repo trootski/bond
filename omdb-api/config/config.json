@@ -1,12 +1,16 @@
 {
   "app": {
-    "cache_expiry_timeout": 3000
+    "cache_expiry_timeout": 3000,
+    "movie_meta_store": "tmdb"
   },
   "omdb": {
     "key": "78ab6537"
   },
   "redis": {
     "port": "6375",
-    "url": "redis"
+    "url": "localhost"
+  },
+  "tmdb": {
+    "key": "548a50a25980c8498d4c52bdccd6d2ea"
   }
 }

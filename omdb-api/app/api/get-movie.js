@@ -1,6 +1,5 @@
-const fetch = require('node-fetch');
 const { delAsync, getAsync, setAsync } = require('../redis/redis.js');
-const { deepCopyAndLowerCaseProps } = require('../utils/deepCopyAndLowerCaseProps.js');
+const { getMovieMetadata: tmdb } = require('../tmdb');
 
 const getMovie = async (ctx, next) => {
   const { config, logger } = ctx;
@@ -27,15 +26,12 @@ const getMovie = async (ctx, next) => {
     ctx.response.status = 200;
     ctx.response.body = cachedData;
   } else {
-    logger.info({ msg: `Getting live data for ${movieTitle}.` })
-    const apiKey = config.get('omdb:key');
-    const omdbURL = `http://www.omdbapi.com/?apikey=${apiKey}&t=${movieTitle}`;
-    const results = await fetch(omdbURL);
-    const resultJson = await results.json();
-    const resultsLowerCaseProps = deepCopyAndLowerCaseProps(resultJson);
-    await setAsyncCtx(movieTitle, JSON.stringify(resultsLowerCaseProps), 'EX', config.get('app:cache_expiry_timeout'));
+    // const getMovieMetadata = (config.get('movie_meta_store') === 'tmdb' ? tmdb : omdb)({ config, logger });
+    const getMovieMetadata = tmdb({ config, logger });
+    const movieMetadata = await getMovieMetadata(movieTitle);
+    await setAsyncCtx(movieTitle, JSON.stringify(movieMetadata), 'EX', config.get('app:cache_expiry_timeout'));
     ctx.response.status = 200;
-    ctx.response.body = resultsLowerCaseProps;
+    ctx.response.body = movieMetadata;
   }
   await next();
 };

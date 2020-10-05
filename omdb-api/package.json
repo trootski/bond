@@ -4,7 +4,7 @@
   "description": "Sync OMDB movie data to redis",
   "main": "./app/setup.js",
   "scripts": {
-    "start": "setup.js",
+    "start": "nodemon app/server.js",
     "start:docker": "docker-compose -f ../docker-compose.yml up --build -d omdb-api && docker-compose logs -f omdb-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +20,8 @@
     "node-fetch": "^2.6.1",
     "pino": "^6.3.2",
     "redis": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
