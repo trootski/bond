@@ -1,3 +1,4 @@
+const { getMovieMetadata: omdb } = require('../omdb');
 const { delAsync, getAsync, setAsync } = require('../redis/redis.js');
 const { getMovieMetadata: tmdb } = require('../tmdb');
 
@@ -26,8 +27,8 @@ const getMovie = async (ctx, next) => {
     ctx.response.status = 200;
     ctx.response.body = cachedData;
   } else {
-    // const getMovieMetadata = (config.get('movie_meta_store') === 'tmdb' ? tmdb : omdb)({ config, logger });
-    const getMovieMetadata = tmdb({ config, logger });
+    const getMovieMetadata = (config.get('app:movie_meta_store') === 'tmdb' ?
+      tmdb : omdb)({ config, logger });
     const movieMetadata = await getMovieMetadata(movieTitle);
     await setAsyncCtx(movieTitle, JSON.stringify(movieMetadata), 'EX', config.get('app:cache_expiry_timeout'));
     ctx.response.status = 200;
