@@ -3,7 +3,7 @@ const cors = require('@koa/cors');
 const Koa = require('koa');
 const KoaBodyParser = require('koa-bodyparser');
 const KoaRouter = require('koa-router');
-const logger = require('pino')().child({ app: 'OMDB-API' });
+const logger = require('pino')().child({ app: 'MOVIE-METADATA-API' });
 const path = require('path');
 
 const {
@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
 });
 
 const router = new KoaRouter();
-router.get('/omdb/v1/movies/:title', getMovie);
+router.get('/api/v1/movies/:title', getMovie);
 app.use(router.routes());
 
 app.listen(3001);

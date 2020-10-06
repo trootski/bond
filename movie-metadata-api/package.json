@@ -1,11 +1,11 @@
 {
-  "name": "omdb-api",
+  "name": "movie-metadata-api",
   "version": "0.0.1",
-  "description": "Sync OMDB movie data to redis",
+  "description": "Sync movie metadata to redis",
   "main": "./app/setup.js",
   "scripts": {
     "start": "nodemon app/server.js",
-    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d omdb-api && docker-compose logs -f omdb-api",
+    "start:docker": "docker-compose -f ../docker-compose.yml up --build -d movie-metadata-api && docker-compose logs -f movie-metadata-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

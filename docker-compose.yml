@@ -79,9 +79,9 @@ services:
     volumes:
       - ./storage/kafka/data:/var/lib/kafka/data
 
-  omdb-api:
+  movie-metadata-api:
     build:
-      context: ./omdb-api
+      context: ./movie-metadata-api
       dockerfile: Dockerfile
     depends_on:
       - redis
