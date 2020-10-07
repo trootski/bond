@@ -1,5 +1,5 @@
 const { createTopic, getConsumer, getProducer } = require('../kafka/kafka.js');
-const { getOMDBData } = require('./omdb.js');
+const { getMovieMetadataDBData } = require('./movie-metadata.js');
 const { setBondMovieAPI } = require('./bond-movie-api.js');
 
 const connectAndCreateTopic = async ({ config, logger }) => {
@@ -50,7 +50,7 @@ const startQueueListener = async ({ config, logger }) => {
     });
     await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        const getOMDBDataCtx = getOMDBData({ config, logger });
+        const getMovieMetadataCtx = getMovieMetadataDBData({ config, logger });
         const setBondMovieAPICtx = setBondMovieAPI({ config, logger });
         const getMessageValue = () => {
           try {
@@ -61,9 +61,9 @@ const startQueueListener = async ({ config, logger }) => {
           }
         };
         const messageValue = getMessageValue();
-        const omdbData = await getOMDBDataCtx(messageValue.title);
+        const movieMetadata = await getMovieMetadataCtx(messageValue.title);
 
-        const movieData = { ...messageValue, ...omdbData };
+        const movieData = { ...messageValue, ...movieMetadata };
 
         logger.info({ type: 'CONSUMER_RECEIVE', msg: `Setting bond movie '${movieData.title}'` });
         try {
