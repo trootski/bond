@@ -32,7 +32,7 @@ const getMovie = async (ctx, next) => {
     const movieMetadata = await getMovieMetadata(movieTitle);
     await setAsyncCtx(movieTitle, JSON.stringify(movieMetadata), 'EX', config.get('app:cache_expiry_timeout'));
     ctx.response.status = 200;
-    ctx.response.body = movieMetadata;
+    ctx.response.body = { ...movieMetadata, type: 'movie' };
   }
   await next();
 };

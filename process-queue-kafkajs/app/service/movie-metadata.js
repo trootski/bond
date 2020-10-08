@@ -5,7 +5,7 @@ const getMovieMetadataDBData = ({ config, logger }) => async title => {
   try {
     return metadataJSON = await metadataResponse.json();
   } catch (err) {
-    logger.err({ type: 'CONSUMER_OMDB_RESP', err });
+    logger.err({ type: 'CONSUMER_MOVIE_METADATA_RESP', err });
     return null;
   }
 };
