@@ -48,8 +48,8 @@ public class BondMovieControllerUnitTests {
 
     BondMovie mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("Test Bond Movie Title");
-    mockBondMovie.setActors("Test ActorName");
-    mockBondMovie.setBoxOffice("Test Box Office");
+    mockBondMovie.setType("movie");
+    mockBondMovie.setReview("Test Bond Movie Review");
 
     mockBondMovies.add(mockBondMovie);
     given(bondMovieService.getAllMovies()).willReturn(mockBondMovies);
@@ -57,8 +57,8 @@ public class BondMovieControllerUnitTests {
     this.mockMvc.perform(get("/v1/bond-movies"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.[0].title", is("Test Bond Movie Title")))
-      .andExpect(jsonPath("$.[0].actors", is("Test ActorName")))
-      .andExpect(jsonPath("$.[0].boxOffice", is("Test Box Office")));
+      .andExpect(jsonPath("$.[0].type", is("movie")))
+      .andExpect(jsonPath("$.[0].review", is("Test Bond Movie Review")));
   }
 
   @Test
@@ -67,15 +67,15 @@ public class BondMovieControllerUnitTests {
 
     BondMovie mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("Test Bond Movie Title 1");
-    mockBondMovie.setActors("Test ActorName 1");
-    mockBondMovie.setBoxOffice("Test Box Office 1");
+    mockBondMovie.setType("movie");
+    mockBondMovie.setReview("Test Bond Movie Review 1");
 
     mockBondMovies.add(mockBondMovie);
 
     mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("Test Bond Movie Title 2");
-    mockBondMovie.setActors("Test ActorName 2");
-    mockBondMovie.setBoxOffice("Test Box Office 2");
+    mockBondMovie.setType("movie");
+    mockBondMovie.setReview("Test Bond Movie Review 2");
 
     mockBondMovies.add(mockBondMovie);
 
@@ -84,11 +84,11 @@ public class BondMovieControllerUnitTests {
     this.mockMvc.perform(get("/v1/bond-movies"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.[0].title", is("Test Bond Movie Title 1")))
-      .andExpect(jsonPath("$.[0].actors", is("Test ActorName 1")))
-      .andExpect(jsonPath("$.[0].boxOffice", is("Test Box Office 1")))
+      .andExpect(jsonPath("$.[0].type", is("movie")))
+      .andExpect(jsonPath("$.[0].review", is("Test Bond Movie Review 1")))
       .andExpect(jsonPath("$.[1].title", is("Test Bond Movie Title 2")))
-      .andExpect(jsonPath("$.[1].actors", is("Test ActorName 2")))
-      .andExpect(jsonPath("$.[1].boxOffice", is("Test Box Office 2")));
+      .andExpect(jsonPath("$.[1].type", is("movie")))
+      .andExpect(jsonPath("$.[1].review", is("Test Bond Movie Review 2")));
   }
 
   @Test
@@ -97,15 +97,15 @@ public class BondMovieControllerUnitTests {
 
     BondMovie mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("Test Bond Movie Title 1");
-    mockBondMovie.setActors("Test ActorName 1");
-    mockBondMovie.setBoxOffice("Test Box Office 1");
+    mockBondMovie.setType("movie");
+    mockBondMovie.setReview("Test Bond Movie Review 1");
 
     mockBondMovies.add(mockBondMovie);
 
     mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("Test Bond Movie Title 2");
-    mockBondMovie.setActors("Test ActorName 2");
-    mockBondMovie.setBoxOffice("Test Box Office 2");
+    mockBondMovie.setType("movie");
+    mockBondMovie.setReview("Test Bond Movie Review 2");
 
     mockBondMovies.add(mockBondMovie);
 
@@ -114,11 +114,11 @@ public class BondMovieControllerUnitTests {
     this.mockMvc.perform(get("/v1/bond-movies"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.[0].title", is("Test Bond Movie Title 1")))
-      .andExpect(jsonPath("$.[0].actors", is("Test ActorName 1")))
-      .andExpect(jsonPath("$.[0].boxOffice", is("Test Box Office 1")))
+      .andExpect(jsonPath("$.[0].type", is("movie")))
+      .andExpect(jsonPath("$.[0].review", is("Test Bond Movie Review 1")))
       .andExpect(jsonPath("$.[1].title", is("Test Bond Movie Title 2")))
-      .andExpect(jsonPath("$.[1].actors", is("Test ActorName 2")))
-      .andExpect(jsonPath("$.[1].boxOffice", is("Test Box Office 2")));
+      .andExpect(jsonPath("$.[1].type", is("movie")))
+      .andExpect(jsonPath("$.[1].review", is("Test Bond Movie Review 2")));
   }
 
   @Test
@@ -140,7 +140,7 @@ public class BondMovieControllerUnitTests {
 
     BondMovie mockBondMovie = new BondMovie();
     mockBondMovie.setTitle("GoldenEye");
-    mockBondMovie.setAwards("Some Test Awards");
+    mockBondMovie.setImdbid("imdbid1");
 
     mockBondMovies.add(mockBondMovie);
 
@@ -149,7 +149,7 @@ public class BondMovieControllerUnitTests {
     this.mockMvc.perform(get("/v1/bond-movies/GoldenEye"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.title", is("GoldenEye")))
-      .andExpect(jsonPath("$.awards", is("Some Test Awards")));
+      .andExpect(jsonPath("$.imdbid", is("imdbid1")));
   }
 
   @Test

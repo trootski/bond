@@ -19,60 +19,6 @@ public class BondMovie {
     this.title = title;
   }
 
-  private String Actors;
-  @DynamoDBAttribute(attributeName = "actors")
-  public String getActors() {
-    return Actors;
-  }
-  public void setActors(String Actors) {
-    this.Actors = Actors;
-  }
-
-  private String Metascore;
-  @DynamoDBAttribute(attributeName = "metascore")
-  public String getMetascore() {
-    return Metascore;
-  }
-  public void setMetascore(String Metascore) {
-    this.Metascore = Metascore;
-  }
-
-  private String BoxOffice;
-  @DynamoDBAttribute(attributeName = "boxoffice")
-  public String getBoxOffice() {
-    return BoxOffice;
-  }
-  public void setBoxOffice(String BoxOffice) {
-    this.BoxOffice = BoxOffice;
-  }
-
-  private String Website;
-  @DynamoDBAttribute(attributeName = "website")
-  public String getWebsite() {
-    return Website;
-  }
-  public void setWebsite(String Website) {
-    this.Website = Website;
-  }
-
-  private String imdbRating;
-  @DynamoDBAttribute(attributeName = "imdbrating")
-  public String getimdbRating() {
-    return imdbRating;
-  }
-  public void setimdbRating(String imdbRating) {
-    this.imdbRating = imdbRating;
-  }
-
-  private String imdbVotes;
-  @DynamoDBAttribute(attributeName = "imdbvotes")
-  public String getimdbVotes() {
-    return imdbVotes;
-  }
-  public void setimdbVotes(String imdbVotes) {
-    this.imdbVotes = imdbVotes;
-  }
-
   private String Runtime;
   @DynamoDBAttribute(attributeName = "runtime")
   public String getRuntime() {
@@ -82,158 +28,59 @@ public class BondMovie {
     this.Runtime = Runtime;
   }
 
-  private String Language;
-  @DynamoDBAttribute(attributeName = "language")
-  public String getLanguage() {
-    return Language;
-  }
-  public void setLanguage(String Language) {
-    this.Language = Language;
-  }
-
-  private String Rated;
-  @DynamoDBAttribute(attributeName = "rated")
-  public String getRated() {
-    return Rated;
-  }
-  public void setRated(String Rated) {
-    this.Rated = Rated;
-  }
-
   private String review;
   @DynamoDBAttribute(attributeName = "review")
-  public String getreview() {
+  public String getReview() {
     return review;
   }
-  public void setreview(String review) {
+  public void setReview(String review) {
     this.review = review;
   }
 
-  private String Production;
-  @DynamoDBAttribute(attributeName = "production")
-  public String getProduction() {
-    return Production;
-  }
-  public void setProduction(String Production) {
-    this.Production = Production;
-  }
-
-  private String Released;
-  @DynamoDBAttribute(attributeName = "released")
-  public String getReleased() {
-    return Released;
-  }
-  public void setReleased(String Released) {
-    this.Released = Released;
-  }
-
-  private String imdbID;
+  private String imdbid;
   @DynamoDBAttribute(attributeName = "imdbid")
-  public String getimdbID() {
-    return imdbID;
+  public String getImdbid() {
+    return imdbid;
   }
-  public void setimdbID(String imdbID) {
-    this.imdbID = imdbID;
-  }
-
-  private String Plot;
-  @DynamoDBAttribute(attributeName = "plot")
-  public String getPlot() {
-    return Plot;
-  }
-  public void setPlot(String Plot) {
-    this.Plot = Plot;
+  public void setImdbid(String imdbid) {
+    this.imdbid = imdbid;
   }
 
-  private String Director;
-  @DynamoDBAttribute(attributeName = "director")
-  public String getDirector() {
-    return Director;
+  private String synopsis;
+  @DynamoDBAttribute(attributeName = "synopsis")
+  public String getSynopsis() {
+    return synopsis;
   }
-  public void setDirector(String Director) {
-    this.Director = Director;
-  }
-
-  private String Response;
-  @DynamoDBAttribute(attributeName = "response")
-  public String getResponse() {
-    return Response;
-  }
-  public void setResponse(String Response) {
-    this.Response = Response;
+  public void setSynopsis(String synopsis) {
+    this.synopsis = synopsis;
   }
 
-  private String Type;
+  private String type;
   @DynamoDBAttribute(attributeName = "type")
   @DynamoDBIndexHashKey(globalSecondaryIndexName = "SortByOrder")
   public String getType() {
-    return Type;
+    return type;
   }
-  public void setType(String Type) {
-    this.Type = Type;
-  }
-
-  private String Awards;
-  @DynamoDBAttribute(attributeName = "awards")
-  public String getAwards() {
-    return Awards;
-  }
-  public void setAwards(String Awards) {
-    this.Awards = Awards;
+  public void setType(String type) {
+    this.type = type;
   }
 
-  private String DVD;
-  @DynamoDBAttribute(attributeName = "dvd")
-  public String getDVD() {
-    return DVD;
-  }
-  public void setDVD(String DVD) {
-    this.DVD = DVD;
-  }
-
-  private String Year;
+  private String year;
   @DynamoDBAttribute(attributeName = "year")
   public String getYear() {
-    return Year;
+    return year;
   }
-  public void setYear(String Year) {
-    this.Year = Year;
+  public void setYear(String year) {
+    this.year = year;
   }
 
-  private String Poster;
+  private String poster;
   @DynamoDBAttribute(attributeName = "poster")
   public String getPoster() {
-    return Poster;
+    return poster;
   }
-  public void setPoster(String Poster) {
-    this.Poster = Poster;
-  }
-
-  private String Country;
-  @DynamoDBAttribute(attributeName = "country")
-  public String getCountry() {
-    return Country;
-  }
-  public void setCountry(String Country) {
-    this.Country = Country;
-  }
-
-  private String Genre;
-  @DynamoDBAttribute(attributeName = "genre")
-  public String getGenre() {
-    return Genre;
-  }
-  public void setGenre(String Genre) {
-    this.Genre = Genre;
-  }
-
-  private String Writer;
-  @DynamoDBAttribute(attributeName = "writer")
-  public String getWriter() {
-    return Writer;
-  }
-  public void setWriter(String Writer) {
-    this.Writer = Writer;
+  public void setPoster(String poster) {
+    this.poster = poster;
   }
 
   private Integer order;
