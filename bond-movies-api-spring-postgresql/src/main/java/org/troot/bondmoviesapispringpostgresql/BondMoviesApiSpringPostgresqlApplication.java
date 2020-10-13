@@ -12,9 +12,4 @@ public class BondMoviesApiSpringPostgresqlApplication {
 		SpringApplication.run(BondMoviesApiSpringPostgresqlApplication.class, args);
 	}
 
-	@Bean
-	public InternalResourceViewResolver defaultViewResolver() {
-		return new InternalResourceViewResolver();
-	}
-
 }

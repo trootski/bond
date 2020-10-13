@@ -9,4 +9,47 @@
             <column name="title" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-1">
+        <addColumn tableName="bond_movies">
+            <column name="imdbid" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-2">
+        <addColumn tableName="bond_movies">
+            <column name="order" type="int4"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-3">
+        <addColumn tableName="bond_movies">
+            <column name="poster" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-4">
+        <addColumn tableName="bond_movies">
+            <column name="review" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-5">
+        <addColumn tableName="bond_movies">
+            <column name="runtime" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-6">
+        <addColumn tableName="bond_movies">
+            <column name="synopsis" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-7">
+        <addColumn tableName="bond_movies">
+            <column name="type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-8">
+        <addColumn tableName="bond_movies">
+            <column name="year" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="troot (generated)" id="1602333578932-9">
+        <dropColumn columnName="actors" tableName="bond_movies"/>
+    </changeSet>
 </databaseChangeLog>

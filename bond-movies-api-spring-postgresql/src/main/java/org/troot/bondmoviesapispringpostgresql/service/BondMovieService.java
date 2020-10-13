@@ -10,8 +10,12 @@ import java.util.List;
 @Service
 public class BondMovieService {
 
+  private BondMovieRepository bondMovieRepository;
+
   @Autowired
-  BondMovieRepository bondMovieRepository;
+  void BondMovieService(BondMovieRepository bondMovieRepository) {
+    this.bondMovieRepository = bondMovieRepository;
+  }
 
   public List<BondMovie> getAllMovies() {
     return bondMovieRepository.findAll();
@@ -21,5 +25,8 @@ public class BondMovieService {
     return bondMovieRepository.findBondMovieByTitle(title);
   }
 
-  // public BondMovie createBondMovie(BondMovie bondMovie) { return bondMovieRepository.save(bondMovie); }
+  public BondMovie createBondMovie(BondMovie bondMovie) {
+    return null;
+  }
+
 }

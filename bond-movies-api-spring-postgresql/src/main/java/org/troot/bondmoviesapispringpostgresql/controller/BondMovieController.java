@@ -3,15 +3,14 @@ package org.troot.bondmoviesapispringpostgresql.controller;
 
 //import io.swagger.annotations.ApiOperation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
 import org.troot.bondmoviesapispringpostgresql.service.BondMovieService;
@@ -21,8 +20,12 @@ import java.util.List;
 @RestController
 public class BondMovieController {
 
+  private BondMovieService bondMovieService;
+
   @Autowired
-  BondMovieService bondMovieService;
+  void BondMovieController(BondMovieService bondMovieService) {
+    this.bondMovieService = bondMovieService;
+  }
 
   private static final Logger logger = LoggerFactory.getLogger(BondMovieController.class);
 
@@ -47,18 +50,18 @@ public class BondMovieController {
     }
   }
 
-  // @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.PUT)
-  // @ApiOperation(value = "Put a new bond movie entry", notes = "Create a new record in the database for the given bond movie" )
-  // public BondMovie putBondMovie(@PathVariable("title") String title, @RequestBody BondMovie bondMovie) {
-  //   logger.info("PUT /v1/bond-movies/{}", title);
-  //   try {
-  //     ObjectMapper objectMapper = new ObjectMapper();
-  //     String json = objectMapper.writeValueAsString(bondMovie);
-  //     logger.info("PAYLOAD: {}", json);
-  //   } catch (JsonProcessingException jpe) {
-  //     logger.error("Error parsing input");
-  //   }
-  //   bondMovie.setTitle(title);
-  //   return bondMovieService.createBondMovie(bondMovie);
-  // }
+   @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.PUT)
+   @ApiOperation(value = "Put a new bond movie entry", notes = "Create a new record in the database for the given bond movie" )
+   public BondMovie putBondMovie(@PathVariable("title") String title, @RequestBody BondMovie bondMovie) {
+     logger.info("PUT /v1/bond-movies/{}", title);
+     try {
+       ObjectMapper objectMapper = new ObjectMapper();
+       String json = objectMapper.writeValueAsString(bondMovie);
+       logger.info("PAYLOAD: {}", json);
+     } catch (JsonProcessingException jpe) {
+       logger.error("Error parsing input");
+     }
+     bondMovie.setTitle(title);
+     return bondMovieService.createBondMovie(bondMovie);
+   }
 }

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <bond_movies id="0" actors="Jim Carrey" title="The Mask" />
-    <bond_movies id="1" actors="Arnold Schwarzeneger" title="Predator" />
-    <bond_movies id="2" actors="Ryan Gosling" title="Driver" />
-    <bond_movies id="3" actors="Tom Hardy" title="Mad Max" />
-    <bond_movies id="4" actors="Michael Fassbender" title="X-Men" />
-</dataset>
