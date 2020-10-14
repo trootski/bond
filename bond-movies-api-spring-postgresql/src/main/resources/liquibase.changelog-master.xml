@@ -5,4 +5,20 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <includeAll path="changelog/" />
+    <changeSet author="troot (generated)" id="1602625931504-1">
+        <createTable tableName="bond_movies">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="bond_moviesPK"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="imdbid" type="VARCHAR(255)"/>
+            <column name="catalog_order" type="INTEGER"/>
+            <column name="poster" type="VARCHAR(255)"/>
+            <column name="review" type="VARCHAR(255)"/>
+            <column name="runtime" type="VARCHAR(255)"/>
+            <column name="synopsis" type="VARCHAR(10000)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="year" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

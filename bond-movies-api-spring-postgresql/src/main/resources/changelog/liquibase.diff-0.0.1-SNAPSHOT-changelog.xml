@@ -16,7 +16,7 @@
     </changeSet>
     <changeSet author="troot (generated)" id="1602333578932-2">
         <addColumn tableName="bond_movies">
-            <column name="order" type="int4"/>
+            <column name="catalog_order" type="int4"/>
         </addColumn>
     </changeSet>
     <changeSet author="troot (generated)" id="1602333578932-3">
@@ -36,7 +36,7 @@
     </changeSet>
     <changeSet author="troot (generated)" id="1602333578932-6">
         <addColumn tableName="bond_movies">
-            <column name="synopsis" type="varchar(255)"/>
+            <column name="synopsis" type="varchar(10000)" />
         </addColumn>
     </changeSet>
     <changeSet author="troot (generated)" id="1602333578932-7">

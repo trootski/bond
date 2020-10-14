@@ -26,7 +26,7 @@ public class BondMovieService {
   }
 
   public BondMovie createBondMovie(BondMovie bondMovie) {
-    return null;
+    return bondMovieRepository.save(bondMovie);
   }
 
 }

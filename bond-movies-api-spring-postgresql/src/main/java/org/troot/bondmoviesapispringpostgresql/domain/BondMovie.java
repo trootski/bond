@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "bond_movies", schema = "public")
+@Table(name = "bond_movies", schema = "public", uniqueConstraints = "title")
 public class BondMovie {
 
   @Id
@@ -19,7 +19,7 @@ public class BondMovie {
   }
 
   private String title;
-  @Column
+  @Column(name = "bla2")
   public String getTitle() {
     return title;
   }
@@ -45,6 +45,15 @@ public class BondMovie {
     this.review = review;
   }
 
+  private String i;
+  @Column
+  public String getI() {
+    return i;
+  }
+  public void setI(String i) {
+    this.i = i;
+  }
+
   private String imdbid;
   @Column
   public String getImdbid() {
@@ -55,7 +64,7 @@ public class BondMovie {
   }
 
   private String synopsis;
-  @Column
+  @Column(length = 10000)
   public String getSynopsis() {
     return synopsis;
   }
@@ -90,13 +99,13 @@ public class BondMovie {
     this.poster = poster;
   }
 
-  private Integer order;
+  private Integer catalog_order;
   @Column
-  public Integer getOrder() {
-    return order;
+  public Integer getCatalog_order() {
+    return catalog_order;
   }
-  public void setOrder(Integer order) {
-    this.order = order;
+  public void setCatalog_order(Integer catalog_order) {
+    this.catalog_order = catalog_order;
   }
 
   public BondMovie() { }
