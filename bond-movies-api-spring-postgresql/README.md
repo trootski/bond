@@ -2,7 +2,6 @@
 
 #Build command with profile:
 #mvn clean install -Dspring.profiles.active=local
-mvn test-compile surefire:test@unit -Dtest.env=local
 
 #Command to install.
 mvn clean install -Dmaven.test.skip=true
@@ -10,14 +9,23 @@ mvn clean install -Dmaven.test.skip=true
 #RUN:
 mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8080 -Dspring.profiles.active=local"
 
+#UNIT TEST
+mvn test-compile surefire:test@unit -Plocal
+
 #DEBUG:
 mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dserver.port=8080 -Dspring.profiles.active=local"
 
-#Liquibase execution
+#PACKAGE
+mvn clean package -Dmaven.test.skip=true
+
+#Liquibase Sync Changesets
+mvn liquibase:dropAll -Plocal
+
+#Liquibase Sync Changesets
 mvn resources:resources liquibase:update -Plocal
 
-#E2e service
-mvn test-compile surefire:test@service -Dtest.env=local // to run the services test
+#Liquibase Diff Hibernate and Local DB
 
-#Pact
-mvn test-compile surefire:test@pact -Dtest.env=local
+mvn liquibase:diff -DdiffChangeLogFile=src/main/resources/liquibase.changelog-master.xml
+
+

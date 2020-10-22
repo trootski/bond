@@ -1,12 +1,11 @@
-package org.troot.bondmoviesapispringpostgresql.service;
+package org.troot.bondmovieapi.service;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
-import org.troot.bondmoviesapispringpostgresql.repository.BondMovieRepository;
+import org.troot.bondmovieapi.domain.BondMovie;
+import org.troot.bondmovieapi.repository.BondMovieRepository;
 
 import java.util.ArrayList;
 import java.util.List;

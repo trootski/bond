@@ -1,11 +1,9 @@
-package org.troot.bondmoviesapispringpostgresql.domain;
+package org.troot.bondmovieapi.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.Date;
 
 @Entity
-@Table(name = "bond_movies", schema = "public", uniqueConstraints = "title")
+@Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
   @Id
@@ -19,7 +17,7 @@ public class BondMovie {
   }
 
   private String title;
-  @Column(name = "bla2")
+  @Column
   public String getTitle() {
     return title;
   }
@@ -43,15 +41,6 @@ public class BondMovie {
   }
   public void setReview(String review) {
     this.review = review;
-  }
-
-  private String i;
-  @Column
-  public String getI() {
-    return i;
-  }
-  public void setI(String i) {
-    this.i = i;
   }
 
   private String imdbid;

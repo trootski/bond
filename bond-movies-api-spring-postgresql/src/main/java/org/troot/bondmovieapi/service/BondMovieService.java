@@ -1,9 +1,9 @@
-package org.troot.bondmoviesapispringpostgresql.service;
+package org.troot.bondmovieapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
-import org.troot.bondmoviesapispringpostgresql.repository.BondMovieRepository;
+import org.troot.bondmovieapi.domain.BondMovie;
+import org.troot.bondmovieapi.repository.BondMovieRepository;
 
 import java.util.List;
 

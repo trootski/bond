@@ -93,6 +93,7 @@ services:
       - ./mount/config:/opt/cache_sync/config
 
   postgresql:
+    command: ["postgres", "-c", "log_statement=all"]
     environment:
       POSTGRES_DB: bond_movies
       POSTGRES_PASSWORD: mysecretpassword

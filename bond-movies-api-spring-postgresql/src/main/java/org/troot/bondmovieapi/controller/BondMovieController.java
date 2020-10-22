@@ -1,7 +1,4 @@
-package org.troot.bondmoviesapispringpostgresql.controller;
-
-
-//import io.swagger.annotations.ApiOperation;
+package org.troot.bondmovieapi.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -10,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
-import org.troot.bondmoviesapispringpostgresql.service.BondMovieService;
+import org.troot.bondmovieapi.domain.BondMovie;
+import org.troot.bondmovieapi.service.BondMovieService;
 
 import javax.validation.Valid;
 import java.util.List;

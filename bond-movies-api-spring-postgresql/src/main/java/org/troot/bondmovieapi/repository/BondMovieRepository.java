@@ -1,8 +1,8 @@
-package org.troot.bondmoviesapispringpostgresql.repository;
+package org.troot.bondmovieapi.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.troot.bondmoviesapispringpostgresql.domain.BondMovie;
+import org.troot.bondmovieapi.domain.BondMovie;
 
 import java.util.List;
 

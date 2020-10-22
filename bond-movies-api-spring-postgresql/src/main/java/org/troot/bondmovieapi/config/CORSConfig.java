@@ -1,4 +1,4 @@
-package org.troot.bondmoviesapispringpostgresql.config;
+package org.troot.bondmovieapi.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
