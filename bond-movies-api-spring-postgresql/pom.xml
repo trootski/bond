@@ -18,10 +18,13 @@
 		<java.version>1.8</java.version>
 		<javassist.version>3.24.0-GA</javassist.version>
 		<javax.persistence-api.version>2.2</javax.persistence-api.version>
+		<junit-platform-launcher.version>1.5.2</junit-platform-launcher.version>
 		<liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
 		<liquibase-maven-plugin.version>3.5.5</liquibase-maven-plugin.version>
 		<spring-boot.version>2.2.4.RELEASE</spring-boot.version>
 		<swagger.version>3.0.0-SNAPSHOT</swagger.version>
+		<testcontainers-junit.version>1.12.3</testcontainers-junit.version>
+		<testcontainer-postgresql.version>1.15.0-rc2</testcontainer-postgresql.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 	</properties>
 
@@ -41,10 +44,17 @@
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
 
+		<!-- test dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -52,7 +62,7 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-    <!-- DB Packages -->
+		<!-- DB Packages -->
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
@@ -62,6 +72,44 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- test container -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.4.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>1.15.0-rc2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>1.15.0-rc2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.15.0-rc2</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- OpenAPI Docs -->
@@ -136,4 +184,21 @@
 		</testResources>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<spring.profiles.active>test</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 </project>
