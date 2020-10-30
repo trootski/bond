@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.troot.bondmovieapi.common.BondMovieBaseTest;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -58,13 +57,13 @@ public class BondMovieControllerTest extends BondMovieBaseTest {
                     .content("{\n" +
                             "  \"title\": \"test_123\",\n" +
                             "  \"runtime\": \"110 min\",\n" +
-                            "  \"review\": null,\n" +
+                            "  \"review\": \"test_review\",\n" +
                             "  \"imdbid\": \"tt0055928\",\n" +
-                            "  \"synopsis\": null,\n" +
+                            "  \"synopsis\": \"test_synopsis\",\n" +
                             "  \"type\": \"movie\",\n" +
                             "  \"year\": \"1962\",\n" +
                             "  \"poster\": \"https://m.media-amazon.com/images/M/MV5BMWRkZTI4NzktYjA4Yi00ZjE0LTgzOWQtYzJlMTkyOTU1ODRmXkEyXkFqcGdeQXVyNDY2MTk1ODk@._V1_SX300.jpg\",\n" +
-                            "  \"catalog_order\": null\n" +
+                            "  \"catalog_order\": 1\n" +
                             "}"))
                 .andDo(print())
                 .andExpect(status().isCreated());

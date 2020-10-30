@@ -59,3 +59,7 @@ mvn liquibase:diff -DdiffChangeLogFile=src/main/resources/liquibase.changelog-ma
 watch -n 1 'psql -c "SELECT * FROM bond_movies;" -h localhost -U bond_movies -p 5432 -d bond_movies;'
 ```
 
+# Swagger Page
+
+http://localhost:8080/swagger-ui/index.html?url=/v3/api-docs&validatorUrl=
+
