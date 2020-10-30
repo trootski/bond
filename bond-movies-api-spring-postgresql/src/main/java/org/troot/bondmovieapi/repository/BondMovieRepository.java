@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.troot.bondmovieapi.domain.BondMovie;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository

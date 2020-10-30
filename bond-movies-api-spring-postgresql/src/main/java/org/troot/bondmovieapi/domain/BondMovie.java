@@ -1,13 +1,30 @@
 package org.troot.bondmovieapi.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
+  // https://ntsim.uk/posts/how-to-use-hibernate-identifier-sequence-generators-properly
+  // using hibernate 'pooled hi/lo' sequence generation strategy for the Id
+  // hibernate will grab the next 50 id numbers and use them for inserts
+  // restarting the app will mean you will get gaps in id column values
+  // as the ids the app is holding are discarded and the next 50 are taken on restart
+  // Alternative is to use Sp to create new share - prob a lot simplier and less weirdness
+  // requires sql to align seq interval on db -> ALTER SEQUENCE share_id_seq INCREMENT 50;
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @SequenceGenerator(
+          name = "bond_movie_seq",
+          sequenceName = "bond_movie_seq",
+          allocationSize = 50
+  )
+  @GeneratedValue(generator = "bond_movie_seq", strategy = GenerationType.SEQUENCE)
+  @Column(name="id", updatable = false, nullable = false)
   private Long id;
   public Long getId() {
     return id;
@@ -17,7 +34,8 @@ public class BondMovie {
   }
 
   private String title;
-  @Column
+  @Column(name = "title", unique = true)
+  @NotBlank(message = "Title is mandatory")
   public String getTitle() {
     return title;
   }
@@ -27,6 +45,7 @@ public class BondMovie {
 
   private String runtime;
   @Column
+  @NotBlank(message = "Runtime is mandatory")
   public String getRuntime() {
     return runtime;
   }
@@ -36,6 +55,7 @@ public class BondMovie {
 
   private String review;
   @Column
+  @NotBlank(message = "Review is mandatory")
   public String getReview() {
     return review;
   }
@@ -45,6 +65,7 @@ public class BondMovie {
 
   private String imdbid;
   @Column
+  @NotBlank(message = "IMDB ID is mandatory")
   public String getImdbid() {
     return imdbid;
   }
@@ -54,6 +75,7 @@ public class BondMovie {
 
   private String synopsis;
   @Column(length = 10000)
+  @NotBlank(message = "Synopsis is mandatory")
   public String getSynopsis() {
     return synopsis;
   }
@@ -63,6 +85,7 @@ public class BondMovie {
 
   private String type;
   @Column
+  @NotBlank(message = "Type is mandatory")
   public String getType() {
     return type;
   }
@@ -72,6 +95,7 @@ public class BondMovie {
 
   private String year;
   @Column
+  @NotBlank(message = "Year is mandatory")
   public String getYear() {
     return year;
   }
@@ -81,6 +105,7 @@ public class BondMovie {
 
   private String poster;
   @Column
+  @NotBlank(message = "Poster is mandatory")
   public String getPoster() {
     return poster;
   }
@@ -90,6 +115,7 @@ public class BondMovie {
 
   private Integer catalog_order;
   @Column
+  @NotNull(message = "Category Order is mandatory")
   public Integer getCatalog_order() {
     return catalog_order;
   }

@@ -11,6 +11,7 @@ import org.troot.bondmovieapi.domain.BondMovie;
 import org.troot.bondmovieapi.service.BondMovieService;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class BondMovieController {
       return bondMovieService.getAllMovies();
   }
 
-  @RequestMapping(value = "/v1/bond-movies/{title}", method = RequestMethod.GET)
+  @RequestMapping(value = "/v1/bond-movies/{title:.+}", method = RequestMethod.GET)
   @ApiOperation(value = "Get a bond movie by title", notes = "Search for a particular bond movie" )
   public BondMovie getBondMovie(@PathVariable(value = "title", required = true) String title) {
     logger.info("GET /v1/bond-movies/{}", title);
@@ -47,10 +48,13 @@ public class BondMovieController {
   }
 
    @RequestMapping(value = "/v1/bond-movies/{title:.+}", method = RequestMethod.PUT)
+   @ResponseStatus(HttpStatus.CREATED)
    @ApiOperation(value = "Put a new bond movie entry", notes = "Create a new record in the database for the given bond movie" )
    public BondMovie putBondMovie(@PathVariable("title") String title, @Valid @RequestBody BondMovie bondMovie) {
      logger.info("PUT /v1/bond-movies/{}", title);
      bondMovie.setTitle(title);
+
      return bondMovieService.createBondMovie(bondMovie);
    }
+
 }

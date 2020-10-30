@@ -1,0 +1,1 @@
+DELETE FROM bond_movies WHERE title LIKE '%test_%';
