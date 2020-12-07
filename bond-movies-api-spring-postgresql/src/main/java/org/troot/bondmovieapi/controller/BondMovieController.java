@@ -50,11 +50,9 @@ public class BondMovieController {
    @RequestMapping(value = "/v1/bond-movies/{title:.+}", method = RequestMethod.PUT)
    @ResponseStatus(HttpStatus.CREATED)
    @ApiOperation(value = "Put a new bond movie entry", notes = "Create a new record in the database for the given bond movie" )
-   public BondMovie putBondMovie(@PathVariable("title") String title, @Valid @RequestBody BondMovie bondMovie) {
+   public void putBondMovie(@PathVariable("title") String title, @Valid @RequestBody BondMovie bondMovie) {
      logger.info("PUT /v1/bond-movies/{}", title);
      bondMovie.setTitle(title);
-
-     return bondMovieService.createBondMovie(bondMovie);
    }
 
 }
