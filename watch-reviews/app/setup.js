@@ -37,14 +37,18 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
     if (!review) return null;
     const dataToSend = { order, review, title };
     logger.info({ type: 'SEND_DATA', data: JSON.stringify(dataToSend), url });
-    const rslt = await fetch(url, {
-      body: JSON.stringify(dataToSend),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-    });
-    logger.info({ type: 'SEND_DATA_RESPONSE', body: (await rslt.text()), status: rslt.status });
+    try {
+      const rslt = await fetch(url, {
+        body: JSON.stringify(dataToSend),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+      });
+      logger.info({ type: 'SEND_DATA_RESPONSE', body: (await rslt.text()), status: rslt.status });
+    } catch(err) {
+      logger.error({ msg: 'SEND_REVIEW_UPDATE_ERR', err });
+    }
   };
 
     watcher.on('change', path => {

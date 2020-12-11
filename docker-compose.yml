@@ -35,9 +35,8 @@ services:
     working_dir: /
 
   dynamodb:
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
+    entrypoint: ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
     container_name: dynamodb
-    entrypoint: java
     image: amazon/dynamodb-local
     ports:
       - 8000:8000
@@ -73,7 +72,7 @@ services:
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
       KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
     hostname: kafka1
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.4.3
     ports:
       - "9092:9092"
     volumes:

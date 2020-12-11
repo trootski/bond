@@ -21,6 +21,7 @@ const getAllMovies = async (ctx, next) => {
     ctx.response.status = 200;
     ctx.response.body = Items;
   } catch (err) {
+      logger.error({ code: "FETCHING_ALL_MOVIES", err });
   }
 
   await next();

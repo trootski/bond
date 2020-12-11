@@ -17,7 +17,14 @@ const getMovie = async (ctx, next) => {
     }).promise();
     ctx.response.status = 200;
     const { Item } = results;
-    ctx.response.body = Item;
+    if (Object.keys(results).length === 0 && results.constructor === Object) {
+        logger.info({ msg: `Bond movie not found ${movieTitle}`, results });
+        ctx.response.body = '';
+        ctx.response.status = 404;
+    } else {
+        ctx.response.body = Item;
+        ctx.response.status = 200;
+    }
   } catch (err) {
     logger.error({ err });
     ctx.response.status = 500;
