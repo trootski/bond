@@ -42,6 +42,7 @@ services:
       - 8000:8000
     volumes:
       - ./storage/dynamodb-data:/data
+    working_dir: /home/dynamodblocal
 
   zoo:
     container_name: zoo1
