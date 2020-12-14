@@ -17,9 +17,14 @@ const getAllMovies = async (ctx, next) => {
     logger.info({ msg: 'GET /v1/bond-movies' });
 
     const { Items } = res;
+    logger.info({ Items });
+    const strippedOfMovieType = Items.map(v => {
+      const { movieType, ...allElse } = v;
+      return allElse;
+    });
 
     ctx.response.status = 200;
-    ctx.response.body = Items;
+    ctx.response.body = strippedOfMovieType;
   } catch (err) {
       logger.error({ code: "FETCHING_ALL_MOVIES", err });
   }

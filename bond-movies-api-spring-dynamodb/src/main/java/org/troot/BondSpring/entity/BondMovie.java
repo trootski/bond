@@ -1,9 +1,6 @@
-package org.troot.BondSpring.domain;
+package org.troot.BondSpring.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
@@ -55,14 +52,14 @@ public class BondMovie {
     this.synopsis = synopsis;
   }
 
-  private String type;
-  @DynamoDBAttribute(attributeName = "type")
+  private String movieType;
+  @DynamoDBAttribute(attributeName = "movieType")
   @DynamoDBIndexHashKey(globalSecondaryIndexName = "SortByOrder")
-  public String getType() {
-    return type;
+  public String getMovieType() {
+    return movieType;
   }
-  public void setType(String type) {
-    this.type = type;
+  public void setMovieType(String movieType) {
+    this.movieType = movieType;
   }
 
   private String year;

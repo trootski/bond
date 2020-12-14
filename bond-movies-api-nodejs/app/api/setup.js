@@ -21,7 +21,7 @@ const setup = async (ctx, next) => {
           AttributeType: 'S',
         },
         {
-          AttributeName: 'type',
+          AttributeName: 'movieType',
           AttributeType: 'S',
         },
       ],
@@ -30,7 +30,7 @@ const setup = async (ctx, next) => {
           IndexName: 'SortByOrder',
           KeySchema: [
             {
-              AttributeName: 'type',
+              AttributeName: 'movieType',
               KeyType: 'HASH'
             },
             {

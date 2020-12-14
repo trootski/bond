@@ -12,8 +12,9 @@ const putMovie = async (ctx, next) => {
 
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
 
+  const finalPayload = { ...setPayload, movieType: 'bond' };
   const results = await dynamodb.put({
-    Item: setPayload,
+    Item: finalPayload,
     ReturnConsumedCapacity: 'TOTAL',
     TableName: config.get('dynamodb:tableName'),
   }).promise();
