@@ -17,6 +17,9 @@ const getReviewHTML = async (fname) => {
 
 config.file(`./config/config.json`);
 
+if (process.env.REVIEW_UPDATES_API_PORT) {
+  config.set('app:review_updates_api_port', process.env.REVIEW_UPDATES_API_PORT);
+}
 logger.info({
   type: 'START',
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
@@ -29,14 +32,17 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
   const watcher = watch(['./storage/reviews/**/*'], { ignoreInitial: false });
 
   const postMovieToProcess = async reviewFileName => {
-    const url = `${config.get('app:queue_service_url')}/v1/bond-movie-events/review-updates/enqueue`;
+    const domain = config.get('app:review_updates_api_domain');
+    const port = config.get('app:review_updates_api_port');
+    const url = `${domain}:${port}/v1/bond-movie-events/review-updates/enqueue`;
+    logger.info({ url });
     const fName = reviewFileName.split('/').slice(-1).pop();
     const metaData = filmMeta.data.find(v => v.review === fName);
     const { order, title }  = metaData;
     const review = await getReviewHTML(fName);
     if (!review) return null;
     const dataToSend = { order, review, title };
-    logger.info({ type: 'SEND_DATA', data: JSON.stringify(dataToSend), url });
+    // logger.info({ type: 'SEND_DATA', data: JSON.stringify(dataToSend), url });
     try {
       const rslt = await fetch(url, {
         body: JSON.stringify(dataToSend),

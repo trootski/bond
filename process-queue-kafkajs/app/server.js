@@ -43,6 +43,6 @@ router.post('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate
 app.use(router.routes());
 
 logger.info({ msg: 'Listening on 3002', routes: router.stack.map(i => i.path)  });
-app.listen(3002);
+app.listen(3006);
 
 

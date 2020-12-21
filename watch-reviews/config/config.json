@@ -3,7 +3,8 @@
     "base_fs_path": "/opt/watch_reviews",
     "film_meta_path": "storage/film-meta.json",
     "omdb_key": "78ab6537",
-    "queue_service_url": "http://process_queue:3002",
+    "review_updates_api_domain": "http://process_queue",
+    "review_updates_api_port": "3002",
     "storage_path": "storage/reviews/"
   }
 }

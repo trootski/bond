@@ -5,7 +5,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "bond_movies", schema = "public")
+@Table(name = "bond_movies", schema = "public", uniqueConstraints={
+  @UniqueConstraint(columnNames = {"title", "movieType", "releaseYear"})
+})
 public class BondMovie {
 
   // https://ntsim.uk/posts/how-to-use-hibernate-identifier-sequence-generators-properly
@@ -81,14 +83,14 @@ public class BondMovie {
     this.synopsis = synopsis;
   }
 
-  private String type;
+  private String movieType;
   @Column
   @NotBlank(message = "Type is mandatory")
-  public String getType() {
-    return type;
+  public String getMovieType() {
+    return movieType;
   }
-  public void setType(String type) {
-    this.type = type;
+  public void setMovieType(String movieType) {
+    this.movieType = movieType;
   }
 
   private String year;

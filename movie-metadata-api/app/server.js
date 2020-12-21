@@ -35,5 +35,5 @@ const router = new KoaRouter();
 router.get('/api/v1/movies/:title', getMovie);
 app.use(router.routes());
 
-app.listen(3001);
+app.listen(3000);
 

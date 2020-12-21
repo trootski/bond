@@ -5,33 +5,30 @@ services:
     build:
       context: ./bond-movies-api-nodejs
       dockerfile: ./Dockerfile
-    container_name: "bond-movies-api"
     depends_on:
       - dynamodb
     ports:
-      - 3000:3000
+      - 3001:3000
     working_dir: /opt/bond-movies-api
 
   bond-movies-api-spring-dynamodb:
     build:
       context: ./bond-movies-api-spring-dynamodb
       dockerfile: ./src/main/resources/docker/Dockerfile
-    container_name: "bond-movies-api"
     depends_on:
       - dynamodb
     ports:
-      - 3000:3000
+      - 3002:8080
     working_dir: /
 
   bond-movies-api-spring-postgresql:
     build:
       context: ./bond-movies-api-spring-postgresql
       dockerfile: ./src/main/resources/docker/Dockerfile
-    container_name: "bond-movies-api"
     depends_on:
       - postgresql
     ports:
-      - 3000:3000
+      - 3003:8080
     working_dir: /
 
   dynamodb:
@@ -86,7 +83,7 @@ services:
     depends_on:
       - redis
     ports:
-      - 3001:3001
+      - 3004:3001
     volumes:
       - ./storage:/opt/cache_sync/storage
       - ./mount/app/utils:/opt/cache_sync/app/utils
@@ -118,16 +115,6 @@ services:
     volumes:
     - ./data/postgres:/var/lib/postgresql/data
 
-  postgresql-test:
-    command: ["postgres", "-c", "log_statement=all"]
-    environment:
-      POSTGRES_DB: bond_movies_integration_tests
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_USER: bond_movies
-    image: postgres:11
-    ports:
-      - 5433:5432
-
   process-queue-kafka-node:
     build:
       context: ./process-queue-kafka-node
@@ -138,7 +125,7 @@ services:
     environment:
       ADV_HOST: kafka1
     ports:
-      - 3002:3002
+      - 3005:3002
 
   process-queue-kafkajs:
     build:
@@ -150,7 +137,7 @@ services:
     environment:
       ADV_HOST: kafka1
     ports:
-      - 3002:3002
+      - 3006:3002
       - 56745:56745
       - 9229:9229
 
@@ -164,7 +151,7 @@ services:
   vanilla:
     image: nginx
     ports:
-      - 9090:80
+      - 3007:80
     volumes:
       - ./fe/vanilla/public:/usr/share/nginx/html:ro
 
