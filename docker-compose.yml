@@ -124,6 +124,8 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      METADATA_API_URL: http://movie-metadata-api:3004
+      BOND_MOVIE_API_URL: http://bond-movies-api-nodejs:3001
     ports:
       - 3005:3002
 
@@ -136,6 +138,8 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      METADATA_API_URL: http://movie-metadata-api:3004
+      BOND_MOVIE_API_URL: http://bond-movies-api-nodejs:3001
     ports:
       - 3006:3002
       - 56745:56745
@@ -160,6 +164,8 @@ services:
       context: ./watch-reviews
       dockerfile: Dockerfile
     container_name: "watch_reviews"
+    environment:
+      REVIEW_UPDATE_QUEUE_API_URL: http://process-queue-kafkajs:3006
     volumes:
       - ./watch-reviews/storage:/opt/watch_reviews/storage
 

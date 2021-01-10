@@ -25,18 +25,24 @@ Command Application that monitors local markdown files for changes. The primary 
   * Java (Port: 3002) + Spring Boot + Hibernate + DynamoDB (Shared) (Port: 8000)
   * Java (Port: 3003) + Spring Boot + Hibernate + PostgreSQL (Port: 5432)
 
+Environment Variable: BOND_MOVIE_API_URL
+
 ## Metadata API
 
 Metadata API which caches metadata taken from an external API. The primary focus of this service is to test cache infrastructure and caching libraries. There are two supported metadata stores; a) [The Movie Database](https://www.themoviedb.org) b) [The Open Movie Database](http://www.omdbapi.com).
 
  * Node.js (Port: 3004) + node redis + Redis (Port: 6375)
 
-## Review Updates API
+Environment Variable: METADATA_API_URL
+
+## Review Updates Queue API
 
 Queue API which processess updated Bond movie reviews
 
  * Node.js (Port: 3005) + kafka-node + Kafka (Shared) (Port: 9092) + Zookeeper (Shared) (Port: 2181)
  * Node.js (Port: 3006) + kafkajs + Kafka (Shared) (Port: 9092) + Zookeeper (Shared) (Port: 2181)
+
+Environment Variable: REVIEW_UPDATE_QUEUE_API_URL
 
 ## Watch Reviews
 

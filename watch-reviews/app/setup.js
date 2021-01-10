@@ -17,8 +17,8 @@ const getReviewHTML = async (fname) => {
 
 config.file(`./config/config.json`);
 
-if (process.env.REVIEW_UPDATES_API_PORT) {
-  config.set('app:review_updates_api_port', process.env.REVIEW_UPDATES_API_PORT);
+if (process.env.REVIEW_UPDATES_API_URL) {
+  config.set('app:review_updates_api_url', process.env.REVIEW_UPDATES_API_URL);
 }
 logger.info({
   type: 'START',
@@ -32,9 +32,8 @@ const filmMeta = require(`${config.get('app:base_fs_path')}/${config.get('app:fi
   const watcher = watch(['./storage/reviews/**/*'], { ignoreInitial: false });
 
   const postMovieToProcess = async reviewFileName => {
-    const domain = config.get('app:review_updates_api_domain');
-    const port = config.get('app:review_updates_api_port');
-    const url = `${domain}:${port}/v1/bond-movie-events/review-updates/enqueue`;
+    const baseURL = config.get('app:review_updates_api_url');
+    const url = `${baseURL}/v1/bond-movie-events/review-updates/enqueue`;
     logger.info({ url });
     const fName = reviewFileName.split('/').slice(-1).pop();
     const metaData = filmMeta.data.find(v => v.review === fName);
