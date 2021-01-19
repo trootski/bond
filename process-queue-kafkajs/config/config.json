@@ -1,7 +1,7 @@
 {
   "app": {
-    "movie_metadata_api_url": "http://movie-metadata-api:3001",
-    "bond_movies_api_url": "http://bond-movies-api:3000"
+    "movie_metadata_api_url": "http://movie-metadata-api:3004",
+    "bond_movies_api_url": "http://bond-movies-api-nodejs:3001"
   },
   "kafka": {
     "bond_topic": "BondMoviesToBeProcessed",

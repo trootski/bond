@@ -11,3 +11,4 @@ storage/*
 !storage/dynamodb-data/.keep
 !storage/rest-requests
 
+/data/*
