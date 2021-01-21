@@ -12,7 +12,14 @@ mvn clean install -Dmaven.test.skip=true
 #RUN:
 
 ```shell script
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8080 -Dspring.profiles.active=local"
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=3003 -Dspring.profiles.active=local"
+```
+
+# RUN in DOCKER:
+
+```shell
+mvn clean package -Dmaven.test.skip=true
+docker-compose -f ../docker-compose.yml --env-file=../.env up bond-movies-api-spring-postgresql
 ```
 
 #UNIT TEST
@@ -24,7 +31,7 @@ mvn test-compile surefire:test@unit -Plocal
 #DEBUG:
 
 ```shell script
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dserver.port=8080 -Dspring.profiles.active=local"
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dserver.port=3003 -Dspring.profiles.active=local"
 ```
 
 #PACKAGE
@@ -61,5 +68,5 @@ watch -n 1 'psql -c "SELECT * FROM bond_movies;" -h localhost -U bond_movies -p 
 
 # Swagger Page
 
-http://localhost:8080/swagger-ui/index.html?url=/v3/api-docs&validatorUrl=
+http://localhost:3003/swagger-ui/index.html?url=/v3/api-docs&validatorUrl=
 

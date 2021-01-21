@@ -14,6 +14,14 @@ const {
 const docRoot = __dirname.split(path.sep).slice(0, -1).join(path.sep);
 config.file(`${docRoot}/config/config.json`);
 
+if (!!process.env.BOND_MOVIES_API_URL) {
+  config.set('app:bond_movies_api_url', process.env.BOND_MOVIES_API_URL);
+}
+
+if (!!process.env.MOVIE_METADATA_API_URL) {
+  config.set('app:movie_metadata_api_url', process.env.MOVIE_METADATA_API_URL);
+}
+
 logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,
 })
@@ -37,7 +45,7 @@ router.post('/v1/bond-movie-events/review-updates/enqueue', addMovieReviewUpdate
 router.get('/v1/setup', setup);
 app.use(router.routes());
 
-logger.info({ msg: 'Listening on 3002', routes: router.stack.map(i => i.path)  });
+logger.info({ msg: 'Listening on 3005', routes: router.stack.map(i => i.path)  });
 app.listen(3005);
 
 // Hacky setup method...

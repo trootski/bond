@@ -4,11 +4,11 @@
   "description": "Watch queue for updates to movie reviews which need to be merged with other metadata",
   "main": "./app/setup.js",
   "scripts": {
-    "clean": "docker-compose -f ../docker-compose.yml stop process-queue-kafkajs kafka zoo && rm -rf ../storage/kafka ../storage/zookeeper",
+    "clean": "docker-compose -f ../docker-compose.yml stop review-updates-api-nodejs-kafkajs-kafka kafka zoo && rm -rf ../storage/kafka ../storage/zookeeper",
     "quicktest": "autocannon -d 4 -c 2 -b '{\"order\":10,\"review\":\"<p>THis is the HTML content</p>\",\"title\":\"Skyfall\"}' -H 'Content-Type=application/json' -m POST http://localhost:3002/v1/bond-movie-events/review-updates/enqueue\n",
-    "rebuild:docker": "docker-compose -f ../docker-compose.yml up --build -d process-queue-kafkajs && docker-compose logs -f process-queue-kafkajs",
+    "rebuild:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --build -d review-updates-api-nodejs-kafkajs-kafka && docker-compose logs -f review-updates-api-nodejs-kafkajs-kafka",
     "start": "nodemon app/server.js",
-    "start:docker": "docker-compose -f ../docker-compose.yml up --remove-orphans --build -d process-queue-kafkajs && docker-compose logs -f process-queue-kafkajs",
+    "start:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --remove-orphans --build -d review-updates-api-nodejs-kafkajs-kafka && docker-compose logs -f review-updates-api-nodejs-kafkajs-kafka",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

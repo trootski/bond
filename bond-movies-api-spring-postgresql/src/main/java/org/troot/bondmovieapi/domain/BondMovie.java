@@ -5,9 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "bond_movies", schema = "public", uniqueConstraints={
-  @UniqueConstraint(columnNames = {"title", "movieType", "releaseYear"})
-})
+// @Table(name = "bond_movies", schema = "public", uniqueConstraints={
+//   @UniqueConstraint(columnNames = {"title", "movie_type", "year"})
+// })
+@Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
   // https://ntsim.uk/posts/how-to-use-hibernate-identifier-sequence-generators-properly

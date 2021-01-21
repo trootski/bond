@@ -19,6 +19,6 @@ COPY ./config /opt/process_queue/config/
 # EXPOSE 9229
 # CMD ["node", "--inspect-brk=0.0.0.0", "/opt/process_queue/app/setup.js"]
 
-EXPOSE 3002
+EXPOSE 3005
 
 CMD ["node", "/opt/process_queue/app/server.js"]

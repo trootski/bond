@@ -15,11 +15,17 @@ const setup = require('./runner/setup.js');
 const docRoot = __dirname.split(path.sep).slice(0, -1).join(path.sep);
 config.file(`${docRoot}/config/config.json`);
 
-if (process.env.BOND_MOVIES_API_URL) {
+logger.info({
+  msg: 'env vars',
+  BOND_MOVIES_API_URL: process.env.BOND_MOVIES_API_URL,
+  MOVIE_METADATA_API_URL: process.env.MOVIE_METADATA_API_URL,
+});
+
+if (!!process.env.BOND_MOVIES_API_URL) {
   config.set('app:bond_movies_api_url', process.env.BOND_MOVIES_API_URL);
 }
 
-if (process.env.MOVIE_METADATA_API_URL) {
+if (!!process.env.MOVIE_METADATA_API_URL) {
   config.set('app:movie_metadata_api_url', process.env.MOVIE_METADATA_API_URL);
 }
 

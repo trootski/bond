@@ -18,7 +18,7 @@ services:
     depends_on:
       - dynamodb
     ports:
-      - 3002:8080
+      - 3002:3002
     working_dir: /
 
   bond-movies-api-spring-postgresql:
@@ -28,7 +28,7 @@ services:
     depends_on:
       - postgresql
     ports:
-      - 3003:8080
+      - 3003:3003
     working_dir: /
 
   dynamodb:
@@ -113,7 +113,7 @@ services:
     volumes:
     - ./data/postgres:/var/lib/postgresql/data
 
-  process-queue-kafka-node:
+  review-updates-api-nodejs-kafka-node-kafka:
     build:
       context: ./process-queue-kafka-node
       dockerfile: Dockerfile
@@ -121,10 +121,11 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
     ports:
-      - 3005:3002
+      - 3005:3005
 
-  process-queue-kafkajs:
+  review-updates-api-nodejs-kafkajs-kafka:
     build:
       context: ./process-queue-kafkajs
       dockerfile: Dockerfile
@@ -132,6 +133,8 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
       - 3006:3002
       - 56745:56745
@@ -155,6 +158,9 @@ services:
     build:
       context: ./watch-reviews
       dockerfile: Dockerfile
+    environment:
+      ADV_HOST: kafka1
+      REVIEW_UPDATES_API_URL: ${REVIEW_UPDATES_API_URL}
     volumes:
       - ./watch-reviews/storage:/opt/watch_reviews/storage
 
