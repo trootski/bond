@@ -57,7 +57,7 @@ mvn resources:resources liquibase:update -Plocal
 #Liquibase Diff Hibernate and Local DB
 
 ```shell script
-mvn liquibase:diff -DdiffChangeLogFile=src/main/resources/liquibase.changelog-master.sql
+mvn clean compile -Dmaven.test.skip=true resources:resources liquibase:diff -Plocal
 ```
 
 # Watch The Local database

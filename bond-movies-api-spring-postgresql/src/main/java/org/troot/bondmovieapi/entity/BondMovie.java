@@ -1,13 +1,10 @@
-package org.troot.bondmovieapi.domain;
+package org.troot.bondmovieapi.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-// @Table(name = "bond_movies", schema = "public", uniqueConstraints={
-//   @UniqueConstraint(columnNames = {"title", "movie_type", "year"})
-// })
 @Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
@@ -86,7 +83,7 @@ public class BondMovie {
 
   private String movieType;
   @Column
-  @NotBlank(message = "Type is mandatory")
+  @NotBlank(message = "Type is mandatory in entity")
   public String getMovieType() {
     return movieType;
   }

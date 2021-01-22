@@ -2,10 +2,9 @@ package org.troot.bondmovieapi.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.troot.bondmovieapi.controller.BondMovieController;
-import org.troot.bondmovieapi.domain.BondMovie;
+import org.troot.bondmovieapi.entity.BondMovie;
 import org.troot.bondmovieapi.repository.BondMovieRepository;
 
 import java.util.List;
@@ -17,8 +16,7 @@ public class BondMovieService {
 
   private BondMovieRepository bondMovieRepository;
 
-  @Autowired
-  void BondMovieService(BondMovieRepository bondMovieRepository) {
+  public BondMovieService(BondMovieRepository bondMovieRepository) {
     this.bondMovieRepository = bondMovieRepository;
   }
 
