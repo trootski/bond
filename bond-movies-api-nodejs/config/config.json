@@ -6,7 +6,7 @@
     "accessKeyId": "2012-08-10",
     "apiVersion": "somevalue",
     "secretAccessKey": "somevalue",
-    "dynamoDBEndpoint": "http://dynamodb:8000",
+    "dynamoDBEndpoint": "http://localhost:8000",
     "region": "eu-west-1",
     "tableName": "BondMovies"
   }

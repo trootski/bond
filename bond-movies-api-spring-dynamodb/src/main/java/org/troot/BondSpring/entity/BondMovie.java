@@ -53,7 +53,7 @@ public class BondMovie {
   }
 
   private String movieType;
-  @DynamoDBAttribute(attributeName = "movieType")
+  @DynamoDBAttribute(attributeName = "movie_type")
   @DynamoDBIndexHashKey(globalSecondaryIndexName = "SortByOrder")
   public String getMovieType() {
     return movieType;
