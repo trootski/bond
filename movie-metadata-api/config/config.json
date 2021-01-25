@@ -8,7 +8,7 @@
   },
   "redis": {
     "port": "6375",
-    "url": "redis"
+    "url": "localhost"
   },
   "tmdb": {
     "base_url": "https://api.themoviedb.org/3",

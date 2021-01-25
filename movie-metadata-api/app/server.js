@@ -10,8 +10,10 @@ const {
   getMovie,
 } = require('./api/index.js');
 
-const docRoot = __dirname.split(path.sep).slice(0, -1).join(path.sep);
-config.file(`${docRoot}/config/config.json`);
+if (!!process.env.BOND_ENV && process.env.BOND_ENV === 'docker') {
+  config.file('docker', { file: `${process.cwd()}/config/config-docker.json` });
+}
+config.file(`${process.cwd()}/config/config.json`);
 
 logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,

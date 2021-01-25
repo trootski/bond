@@ -50,4 +50,13 @@ UI for the end user to consume the RESTful API
 
  * Node.js (Port: 3007) + Vanilla js
 
+# Environment Variables
+
+In the .env file there is the current configuration for the interconnection of the services. Changing the URLs here to point at other services will reconfigure dependent services. For example, change `REVIEW_UPDATES_API_URL` to test another queue implementation.
+
+Name | Default | Description
+--- | ---| ---
+BOND_ENV | local | The current operating environment. `local` (default) and `docker` are supported.
+REVIEW_UPDATES_API_URL | http://movie-metadata-api:3004 | The internal docker URL for the review updates service
+BOND_MOVIES_API_URL | http://bond-movies-api-nodejs:3001 | The internal docker URL for the bond movies api service
 

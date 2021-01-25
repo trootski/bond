@@ -7,6 +7,8 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - dynamodb
+    environment:
+      BOND_ENV: docker
     ports:
       - 3001:3001
     working_dir: /opt/bond-movies-api
@@ -14,9 +16,11 @@ services:
   bond-movies-api-spring-dynamodb:
     build:
       context: ./bond-movies-api-spring-dynamodb
-      dockerfile: ./src/main/resources/docker/Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - dynamodb
+    environment:
+      BOND_ENV: docker
     ports:
       - 3002:3002
     working_dir: /
@@ -24,9 +28,11 @@ services:
   bond-movies-api-spring-postgresql:
     build:
       context: ./bond-movies-api-spring-postgresql
-      dockerfile: ./src/main/resources/docker/Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - postgresql
+    environment:
+      BOND_ENV: docker
     ports:
       - 3003:3003
     working_dir: /
@@ -81,6 +87,9 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      BOND_ENV: docker
     ports:
       - 3004:3004
     volumes:
@@ -111,7 +120,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-    - ./data/postgres:/var/lib/postgresql/data
+    - ./storage/postgres:/var/lib/postgresql/data
 
   review-updates-api-nodejs-kafka-node-kafka:
     build:
@@ -121,6 +130,7 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      BOND_ENV: docker
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
     ports:
       - 3005:3005
@@ -133,6 +143,7 @@ services:
       - kafka
     environment:
       ADV_HOST: kafka1
+      BOND_ENV: docker
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
       MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
@@ -159,7 +170,7 @@ services:
       context: ./watch-reviews
       dockerfile: Dockerfile
     environment:
-      ADV_HOST: kafka1
+      BOND_ENV: docker
       REVIEW_UPDATES_API_URL: ${REVIEW_UPDATES_API_URL}
     volumes:
       - ./watch-reviews/storage:/opt/watch_reviews/storage

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.troot.BondSpring.boundary.BondMovieRequest;
 import org.troot.BondSpring.entity.BondMovie;
 import org.troot.BondSpring.service.BondMovieService;
 
@@ -41,16 +42,25 @@ public class BondMovieController {
   }
 
   @RequestMapping(value = "/v1/bond-movies/{title:.+}", method = RequestMethod.PUT)
-  public BondMovie putBondMovie(@PathVariable("title") String title, @RequestBody BondMovie bondMovie) {
+  public BondMovie putBondMovie(@PathVariable("title") String title, @RequestBody BondMovieRequest bondMovieRequest) {
     logger.info("PUT /v1/bond-movies/{}", title);
     try {
       ObjectMapper objectMapper = new ObjectMapper();
-      String json = objectMapper.writeValueAsString(bondMovie);
+      String json = objectMapper.writeValueAsString(bondMovieRequest);
       logger.info("PAYLOAD: {}", json);
     } catch (JsonProcessingException jpe) {
       logger.error("Error parsing input");
     }
+    BondMovie bondMovie = new BondMovie();
     bondMovie.setTitle(title);
+    bondMovie.setRuntime(bondMovieRequest.getRuntime());
+    bondMovie.setReview(bondMovieRequest.getReview());
+    bondMovie.setImdbid(bondMovieRequest.getImdbid());
+    bondMovie.setSynopsis(bondMovieRequest.getSynopsis());
+    bondMovie.setMovieType(bondMovieRequest.getMovie_type());
+    bondMovie.setYear(bondMovieRequest.getYear());
+    bondMovie.setPoster(bondMovieRequest.getPoster());
+    bondMovie.setCatalogOrder(bondMovieRequest.getCatalog_order());
     return bondMovieService.createBondMovie(bondMovie);
   }
 }

@@ -47,6 +47,15 @@ body {
   width: 100%;
   background-color: rgba(0, 128, 128, 0.8);
 }
+.loaded>div#movies #api-selector {
+  position: fixed;
+  top: 0px;
+  height: 40px;
+  line-height: normal;
+  z-index: 999;
+  width: 100%;
+  background-color: rgba(0, 128, 128, 0.8);
+}
 .loaded>div#movies #next, .loaded>div#movies #back {
   width: 40px;
   height: 100%;

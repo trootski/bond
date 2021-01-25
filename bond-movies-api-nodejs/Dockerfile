@@ -11,6 +11,6 @@ RUN npm ci
 COPY ./app/ /opt/bond-movies-api/app/
 COPY ./config/ /opt/bond-movies-api/config/
 
-EXPOSE 3000
+EXPOSE 3001
 CMD [ "node", "app/server.js" ]
 

@@ -13,7 +13,7 @@ const setup = async (ctx, next) => {
       TableName: config.get('dynamodb:tableName'),
       AttributeDefinitions: [
         {
-          AttributeName: 'order',
+          AttributeName: 'catalog_order',
           AttributeType: 'N',
         },
         {
@@ -21,7 +21,7 @@ const setup = async (ctx, next) => {
           AttributeType: 'S',
         },
         {
-          AttributeName: 'movieType',
+          AttributeName: 'movie_type',
           AttributeType: 'S',
         },
       ],
@@ -30,11 +30,11 @@ const setup = async (ctx, next) => {
           IndexName: 'SortByOrder',
           KeySchema: [
             {
-              AttributeName: 'movieType',
+              AttributeName: 'movie_type',
               KeyType: 'HASH'
             },
             {
-              AttributeName: 'order',
+              AttributeName: 'catalog_order',
               KeyType: 'RANGE'
             }
           ],

@@ -11,12 +11,18 @@
   <body>
     <div id="loading">loading...</div>
     <div id="movies">
+      <div id="api-selector">
+          <input type="radio" id="nodejs" value="nodejs" name="api_type" checked /><label for="nodejs">Node.JS + DynamoDB</label>
+          <input type="radio" id="spring-dynamodb" value="spring-dynamodb" name="api_type" /><label for="spring-dynamodb">Spring Boot + DynamoDB</label>
+          <input type="radio" id="spring-postgresql" value="spring-postgresql" name="api_type" /><label for="spring-postgresql">Spring Boot + PostgreSQL</label>
+      </div>
       <div id="filmCardHolder">
         <div id="filmCard">
           <div class="meta">
             <h1></h1>
             <em></em>
             <p></p>
+            <aside></aside>
           </div>
           <div class="loader">
               <div class="ball-clip-rotate">

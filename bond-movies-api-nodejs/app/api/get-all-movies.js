@@ -9,17 +9,11 @@ const getAllMovies = async (ctx, next) => {
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
 
   try {
-    // const res = await dynamodb.scan({
-    //   IndexName: 'SortByOrder',
-    //   TableName: 'BondMovies',
-    // }).promise();
-
-    const res = await dynamodb.query({
-      TableName: 'BondMovies',
+    const res = await dynamodb.scan({
       IndexName: 'SortByOrder',
-      KeyConditionExpression: 'movie_type = :val',
-      ExpressionAttributeValues: { ':val': 'movie'}
-    })
+      TableName: 'BondMovies',
+    }).promise();
+
     logger.info({ msg: 'GET /v1/bond-movies' });
     logger.info({ res });
 

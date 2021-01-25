@@ -1,10 +1,16 @@
 document.addEventListener("DOMContentLoaded", async function(e) {
+  const apiURLs = {
+    'nodejs': '//localhost:3001/v1/bond-movies',
+    'spring-dynamodb':  '//localhost:3002/v1/bond-movies',
+    'spring-postgresql':  '//localhost:3003/v1/bond-movies',
+  };
   const loader = document.querySelector('#loading');
   const mainHolder = document.querySelector('#filmCard');
   const renderFilm = (data) => {
     renderTitle(data.title, mainHolder)
     renderYear(data.year, mainHolder)
-    renderPlot(data.plot, mainHolder)
+    renderPlot(data.synopsis, mainHolder)
+    renderReview(data.review, mainHolder)
     renderPoster(data.poster, mainHolder)
     return 1;
   };
@@ -36,6 +42,11 @@ document.addEventListener("DOMContentLoaded", async function(e) {
     plotEl.innerHTML = `<h4>Synopsis</h4>${plot}`;
     return plotEl;
   };
+  const renderReview = (review, el) => {
+    const plotEl = el.querySelector('aside');
+    plotEl.innerHTML = `<h4>Review</h4>${review}`;
+    return plotEl;
+  };
   const m = function() {
     this.data = {};
     this.set = (prop, val) => {
@@ -64,10 +75,23 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   nextBtn.addEventListener('click', (e) => {
     m.set('currentIndex', m.get('currentIndex') + 1);
   });
+  const handleAPIChange = evt => {
+    const ele = evt.target;
+    if (ele.checked) {
+      m.set('currentAPI', ele.value);
+      render();
+    }
+  };
+  const apiBtns = Object.keys(apiURLs).forEach(v => {
+    const ele = document.querySelector(`#${v}`);
+    ele.addEventListener('change', handleAPIChange);
+    console.log(v);
+  });
+  m.set('currentAPI', 'nodejs');
   const render = async () => {
     document.body.classList.remove('loaded');
     try {
-      const op = await fetch(`//localhost:3000/v1/bond-movies`, {
+      const op = await fetch(apiURLs[m.get('currentAPI')], {
         headers: {
           'Access-Control-Allow-Origin': '*',
         }
