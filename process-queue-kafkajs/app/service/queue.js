@@ -63,7 +63,7 @@ const startQueueListener = async ({ config, logger }) => {
         const messageValue = getMessageValue();
         const movieMetadata = await getMovieMetadataCtx(messageValue.title);
 
-        const movieData = { ...messageValue, ...movieMetadata };
+        const movieData = { ...messageValue, movie_type: 'movie', ...movieMetadata };
 
         logger.info({ type: 'CONSUMER_RECEIVE', msg: `Setting bond movie '${movieData.title}'` });
         try {
