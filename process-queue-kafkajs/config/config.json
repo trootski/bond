@@ -1,6 +1,6 @@
 {
   "app": {
-    "movie_metadata_api_url": "http://movie-metadata-api:3004",
+    "movie_metadata_api_url": "http://movie-metadata-api-nodejs:3004",
     "bond_movies_api_url": "http://bond-movies-api-nodejs:3001"
   },
   "kafka": {

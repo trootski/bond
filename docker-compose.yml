@@ -81,9 +81,9 @@ services:
     volumes:
       - ./storage/kafka/data:/var/lib/kafka/data
 
-  movie-metadata-api:
+  movie-metadata-api-nodejs:
     build:
-      context: ./movie-metadata-api
+      context: ./movie-metadata-api-nodejs/
       dockerfile: Dockerfile
     depends_on:
       - redis

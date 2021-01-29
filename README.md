@@ -57,6 +57,6 @@ In the .env file there is the current configuration for the interconnection of t
 Name | Default | Description
 --- | ---| ---
 BOND_ENV | local | The current operating environment. `local` (default) and `docker` are supported.
-REVIEW_UPDATES_API_URL | http://movie-metadata-api:3004 | The internal docker URL for the review updates service
+REVIEW_UPDATES_API_URL | http://movie-metadata-api-nodejs:3004 | The internal docker URL for the review updates service
 BOND_MOVIES_API_URL | http://bond-movies-api-nodejs:3001 | The internal docker URL for the bond movies api service
 
