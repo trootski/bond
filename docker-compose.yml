@@ -93,7 +93,7 @@ services:
     ports:
       - 3004:3004
     volumes:
-      - ./storage:/opt/cache_sync/storage
+      - ./storage/redis:/opt/cache_sync/storage
       - ./mount/app/utils:/opt/cache_sync/app/utils
       - ./mount/config:/opt/cache_sync/config
 

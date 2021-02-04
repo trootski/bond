@@ -4,7 +4,7 @@
   "description": "Sync movie metadata to redis",
   "main": "./app/setup.js",
   "scripts": {
-    "clean": "docker-compose -f ../docker-compose.yml --env-file=../.env stop movie-metadata-api-nodejs redis",
+    "clean": "docker-compose -f ../docker-compose.yml --env-file=../.env stop movie-metadata-api-nodejs redis && rm -rf ../storage/redis",
     "start": "nodemon app/server.js",
     "start:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --build -d movie-metadata-api-nodejs && docker-compose logs -f movie-metadata-api-nodejs",
     "test": "echo \"Error: no test specified\" && exit 1"
