@@ -92,10 +92,17 @@ services:
       BOND_ENV: docker
     ports:
       - 3004:3004
-    volumes:
-      - ./storage/redis:/opt/cache_sync/storage
-      - ./mount/app/utils:/opt/cache_sync/app/utils
-      - ./mount/config:/opt/cache_sync/config
+
+  movie-metadata-api-spring:
+    build:
+      context: ./movie-metadata-api-spring/
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      BOND_ENV: docker
+    ports:
+      - 3008:3008
 
   pgadmin:
     image: dpage/pgadmin4
@@ -157,6 +164,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 6375:6375
+    volumes:
+      - ./storage/redis:/data
 
   vanilla:
     image: nginx

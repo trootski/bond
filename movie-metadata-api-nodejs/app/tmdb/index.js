@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 const getMovieMetadata = ({ config, logger }) => async movieTitle => {
-  logger.info({ msg: `Getting live data for ${movieTitle}.` })
+  logger.info({ msg: `Getting live data for ${movieTitle}. (TMDB)` })
   const apiKey = config.get('tmdb:key');
   const tmdbSearchURL = `${config.get('tmdb:base_url')}/search/movie?api_key=${apiKey}&query=${movieTitle}`;
   const results = await fetch(tmdbSearchURL);

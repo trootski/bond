@@ -9,6 +9,7 @@ import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.troot.moviemetadataapispring.boundary.TMDBMovieMetadataResponse;
 import org.troot.moviemetadataapispring.boundary.TMDBSearchResultsResponse;
@@ -51,6 +52,7 @@ public class TMDBService {
         return Optional.ofNullable(tmdb.search(queryParams));
     }
 
+    @Cacheable(cacheNames = "MovieMetadataCache")
     public Optional<TMDBMovieMetadataResponse> findByTMDBId(String movieId) {
         log.info("Getting movie metadata with id: {}", movieId);
         Map<String, String> queryParams = new HashMap<>();

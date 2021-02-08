@@ -3,9 +3,11 @@ package org.troot.moviemetadataapispring.boundary;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class TMDBMovieMetadataResponse {
+public class TMDBMovieMetadataResponse implements Serializable {
     private String id;
     private String imdb_id;
     private String overview;
