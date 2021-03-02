@@ -38,7 +38,7 @@ public class BondMovieReq {
 
     @NotNull
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 10000)
     private String synopsis;
     public String getSynopsis() {
         return synopsis;
@@ -49,7 +49,7 @@ public class BondMovieReq {
 
     @NotNull
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 10000)
     private String review;
     public String getReview() {
         return review;
