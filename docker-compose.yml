@@ -142,6 +142,19 @@ services:
     ports:
       - 3005:3005
 
+  review-updates-api-nodejs-redis:
+    build:
+      context: ./process-queue-nodejs-redis
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
+    ports:
+      - 3009:3009
+
   review-updates-api-nodejs-kafkajs-kafka:
     build:
       context: ./process-queue-kafkajs
