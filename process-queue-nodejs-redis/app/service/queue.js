@@ -1,13 +1,13 @@
 const { getConsumer, getProducer } = require('../redis');
-const { rpush } = require('redis');
 const { promisify } = require("util");
 const { getMovieMetadataDBData } = require('./movie-metadata.js');
 const { setBondMovieAPI } = require('./bond-movie-api.js');
 
 const pushBondMovieUpdate = async ({ body, config, logger }) => {
     const producer = getProducer({ config, logger });
-    logger.info({ msg: "here", val: producer });
+    logger.info({ msg: "here", val: producer.rpush });
     const rpushAsync = promisify(producer.rpush).bind(producer);
+    logger.info({ msg: "about to write" });
     try {
         await rpushAsync(
             config.get('redis:bond_list'),
@@ -19,6 +19,7 @@ const pushBondMovieUpdate = async ({ body, config, logger }) => {
         logger.error({ type: 'PUSH_MESSAGE_ERROR', err });
         throw err;
     } finally {
+        logger.info({ msg: `All done, wrapping up` });
         await producer.disconnect();
     }
 };

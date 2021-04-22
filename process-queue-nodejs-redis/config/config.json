@@ -7,6 +7,6 @@
     "bond_list": "BondMoviesToBeProcessed",
     "client_id": "BondMovie",
     "consumer_group_name": "BondProcessingConsumerGroup",
-    "url": "redis:6375"
+    "url": "http://redis:6375"
   }
 }
