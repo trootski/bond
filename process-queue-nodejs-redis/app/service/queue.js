@@ -31,7 +31,6 @@ const setupQueueListener = ({ config, logger }) => {
       logger.info({ msg: 'got result: ', bondMovie });
 
       if (bondMovie) {
-        debugger;
         const [listName, listMovie] = bondMovie;
         const getMovieMetadataCtx = getMovieMetadataDBData({ config, logger });
         const setBondMovieAPICtx = setBondMovieAPI({ config, logger });
@@ -58,7 +57,7 @@ const setupQueueListener = ({ config, logger }) => {
     } catch (err) {
       logger.error({ type: 'PULL_MESSAGE_ERROR', err });
     } finally {
-      logger.info({ msg: 'Çhecking queue' });
+      logger.info({ msg: 'Checking queue' });
       setTimeout(checkQueue, 100);
     }
   };
