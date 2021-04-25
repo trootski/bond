@@ -1,0 +1,9 @@
+{
+  "app": {
+    "movie_metadata_api_url": "http://localhost:3004",
+    "bond_movies_api_url": "http://localhost:3001"
+  },
+  "redis": {
+    "url": "redis://localhost:6375"
+  }
+}

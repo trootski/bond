@@ -6,12 +6,23 @@ const cors = require('@koa/cors');
 const logger = require('pino')().child({ app: 'PROCESS-QUEUE' });
 const path = require('path');
 const process = require('process');
+const { setupQueueListener } = require('./service/queue');
 
 const {
   addMovieReviewUpdate,
 } = require('./api/index.js');
 
 const docRoot = __dirname.split(path.sep).slice(0, -1).join(path.sep);
+if (
+  !!process.env.BOND_ENV && 
+  (
+    process.env.BOND_ENV === 'docker' ||
+    process.env.BOND_ENV === 'local'
+  )) {
+  config.file(process.env.BOND_ENV, { 
+    file: `${process.cwd()}/config/config-${process.env.BOND_ENV}.json`,
+  });
+}
 config.file(`${docRoot}/config/config.json`);
 
 logger.info({
@@ -55,4 +66,9 @@ logger.info({
   routes: router.stack.map(i => i.path)  });
 app.listen(3009);
 
+
+// Hacky setup method...
+setTimeout(() => {
+  setupQueueListener({ config, logger }, () => Promise.resolve(true));
+}, 1000);
 
