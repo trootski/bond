@@ -3,7 +3,6 @@ FROM node:12-alpine
 RUN mkdir -p /opt/watch_reviews
 WORKDIR /opt/watch_reviews
 
-RUN apk add --update python && rm -rf /var/cache/apk/*
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
 COPY ./package.json /opt/watch_reviews

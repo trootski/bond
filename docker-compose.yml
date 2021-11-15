@@ -167,9 +167,21 @@ services:
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
       MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
-      - 3006:3002
-      - 56745:56745
-      - 9229:9229
+      - 3006:3006
+
+  review-updates-api-spring-camel-kafka:
+    build:
+      context: ./process-queue-spring-camel-kafka
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    environment:
+      ADV_HOST: kafka1
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
+    ports:
+      - 3010:3010
 
   redis:
     build:
@@ -177,8 +189,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 6375:6375
-    volumes:
-      - ./storage/redis:/data
 
   vanilla:
     image: nginx

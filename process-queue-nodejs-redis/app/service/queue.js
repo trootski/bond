@@ -28,7 +28,6 @@ const setupQueueListener = ({ config, logger }) => {
   const checkQueue = async () => {
     try {
       const bondMovie = await blpopAsync(config.get('redis:bond_list'), 1);
-      logger.info({ msg: 'got result: ', bondMovie });
 
       if (bondMovie) {
         const [listName, listMovie] = bondMovie;
@@ -57,7 +56,6 @@ const setupQueueListener = ({ config, logger }) => {
     } catch (err) {
       logger.error({ type: 'PULL_MESSAGE_ERROR', err });
     } finally {
-      logger.info({ msg: 'Checking queue' });
       setTimeout(checkQueue, 100);
     }
   };

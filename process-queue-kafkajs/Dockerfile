@@ -1,6 +1,5 @@
 FROM node:12-alpine
 
-RUN apk add --update python && rm -rf /var/cache/apk/*
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
 RUN mkdir -p /opt/process_queue/app

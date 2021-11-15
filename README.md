@@ -60,3 +60,36 @@ BOND_ENV | local | The current operating environment. `local` (default) and `doc
 REVIEW_UPDATES_API_URL | http://movie-metadata-api-nodejs:3004 | The internal docker URL for the review updates service
 BOND_MOVIES_API_URL | http://bond-movies-api-nodejs:3001 | The internal docker URL for the bond movies api service
 
+# Kafka
+
+It is sometimes desirable to interact with Kafka directly. The following commands can be used to perform some standard tasks;
+
+## List Topics
+
+```sh
+docker exec -it $(docker ps -aqf "name=kafka1") kafka-topics --list --bootstrap-server localhost:9092
+```
+
+## Create the Bond Movie topic
+
+```sh
+docker exec -it $(docker ps -aqf "name=kafka1") kafka-topics --create --topic BondMoviesToBeProcessed --bootstrap-server localhost:9092
+```
+
+## Describe Bond Movie topic
+
+```sh
+docker exec -it $(docker ps -aqf "name=kafka1") kafka-topics --describe --topic BondMoviesToBeProcessed --bootstrap-server localhost:9092
+```
+
+## List all queued items and listen for new items
+
+```sh
+docker exec -it $(docker ps -aqf "name=kafka1") kafka-console-consumer --topic BondMoviesToBeProcessed --from-beginning --bootstrap-server localhost:9092
+```
+
+## Interactive prompt to directly inject new items
+
+```sh
+docker exec -it $(docker ps -aqf "name=kafka1") kafka-console-producer --topic BondMoviesToBeProcessed --broker-list localhost:9092
+```
