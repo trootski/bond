@@ -15,7 +15,7 @@
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "autocannon": "^5.0.1",
-    "aws-sdk": "^2.694.0",
+    "aws-sdk": "^2.814.0",
     "fast-glob": "^3.2.2",
     "glob-watcher": "^5.0.3",
     "kafka-node": "^4.1.3",
