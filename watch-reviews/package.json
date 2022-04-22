@@ -14,7 +14,7 @@
   "dependencies": {
     "fast-glob": "^3.2.2",
     "glob-watcher": "^5.0.3",
-    "nconf": "^0.10.0",
+    "nconf": "^0.11.4",
     "node-fetch": "^2.6.0",
     "pino": "^6.3.2",
     "showdown": "^1.9.1"
