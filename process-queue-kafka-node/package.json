@@ -24,7 +24,7 @@
     "koa-router": "^9.0.1",
     "koa-static": "^5.0.0",
     "nconf": "^0.10.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "nodemon": "^2.0.4",
     "pino": "^6.3.2",
     "redis": "^3.1.1",
