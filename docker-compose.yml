@@ -10,7 +10,7 @@ services:
     environment:
       BOND_ENV: docker
     ports:
-      - 3001:3001
+      - "3001:3001"
     working_dir: /opt/bond-movies-api
 
   bond-movies-api-spring-dynamodb:
@@ -22,7 +22,7 @@ services:
     environment:
       BOND_ENV: docker
     ports:
-      - 3002:3002
+      - "3002:3002"
     working_dir: /
 
   bond-movies-api-spring-postgresql:
@@ -34,14 +34,14 @@ services:
     environment:
       BOND_ENV: docker
     ports:
-      - 3003:3003
+      - "3003:3003"
     working_dir: /
 
   dynamodb:
     entrypoint: ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
     image: amazon/dynamodb-local
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
       - ./storage/dynamodb-data:/data
     working_dir: /home/dynamodblocal
@@ -91,7 +91,7 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
       BOND_ENV: docker
     ports:
-      - 3004:3004
+      - "3004:3004"
 
   movie-metadata-api-spring:
     build:
@@ -102,7 +102,7 @@ services:
     environment:
       BOND_ENV: docker
     ports:
-      - 3008:3008
+      - "3008:3008"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -125,7 +125,7 @@ services:
       POSTGRES_USER: bond_movies
     image: postgres:11
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
     - ./storage/postgres:/var/lib/postgresql/data
 
@@ -140,7 +140,7 @@ services:
       BOND_ENV: docker
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
     ports:
-      - 3005:3005
+      - "3005:3005"
 
   review-updates-api-nodejs-redis:
     build:
@@ -153,7 +153,7 @@ services:
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
       MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
-      - 3009:3009
+      - "3009:3009"
 
   review-updates-api-nodejs-kafkajs-kafka:
     build:
@@ -167,7 +167,7 @@ services:
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
       MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
-      - 3006:3006
+      - "3006:3006"
 
   review-updates-api-spring-camel-kafka:
     build:
@@ -181,19 +181,19 @@ services:
       BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
       MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
     ports:
-      - 3010:3010
+      - "3010:3010"
 
   redis:
     build:
       context: ./redis
       dockerfile: Dockerfile
     ports:
-      - 6375:6375
+      - "6375:6375"
 
   vanilla:
     image: nginx
     ports:
-      - 3007:80
+      - "3007:80"
     volumes:
       - ./fe/vanilla/public:/usr/share/nginx/html:ro
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.troot.bondmovieapi.route.BondMovieRouteBuilder;
 import org.troot.bondmovieapi.boundary.BondMovieRequest;
 
-import javax.validation.Valid;
+//import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -23,7 +23,7 @@ public class BondMovieController {
 
     @PostMapping("/v1/bond-movie-events/review-updates/enqueue")
     @ResponseStatus(NO_CONTENT)
-    public String enqueueBondMovie(@Valid @RequestBody BondMovieRequest bondMovieRequest) {
+    public String enqueueBondMovie(@RequestBody BondMovieRequest bondMovieRequest) {
 
         producerTemplate.requestBodyAndHeaders(BondMovieRouteBuilder.QUEUE_BOND_MOVIE_ROUTE, bondMovieRequest, null, String.class);
         return "";

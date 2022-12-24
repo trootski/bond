@@ -3,38 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.12.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.troot</groupId>
+        <artifactId>bond-movie-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>org.troot</groupId>
-	<artifactId>bond-movies-api-spring-dynamodb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>BondSpring</name>
+    <groupId>org.troot</groupId>
+    <artifactId>bond-movies-api-spring-dynamodb</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 	<description>Movies endpoints for bond REST service</description>
 
-	<properties>
-		<java.version>1.8</java.version>
-        <swagger.version>2.9.2</swagger.version>
-	</properties>
-
     <dependencies>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-test</artifactId>
-          <scope>test</scope>
-        </dependency>
-
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
 
         <dependency>
           <groupId>com.github.derjust</groupId>
@@ -42,22 +21,6 @@
           <version>5.1.0</version>
         </dependency>
 
-        <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-core</artifactId>
-          <version>1.2.3</version>
-        </dependency>
-
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-          <version>1.2.3</version>
-        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -76,13 +39,9 @@
           </properties>
         </profile>
     </profiles>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+
+    <build>
+        <finalName>app</finalName>
+    </build>
 
 </project>

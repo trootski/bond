@@ -1,5 +1,5 @@
-FROM java:8
+FROM amazoncorretto:19
 WORKDIR /opt/app
-COPY target/movie-metadata-api-spring-0.0.1-SNAPSHOT.jar /opt/app
+COPY target/app.jar /opt/app
 EXPOSE 3008
-ENTRYPOINT [ "java", "-jar", "-Dspring.profiles.active=docker", "/opt/app/movie-metadata-api-spring-0.0.1-SNAPSHOT.jar" ]
+ENTRYPOINT [ "java", "-jar", "-Dspring.profiles.active=docker", "/opt/app/app.jar" ]
