@@ -8,7 +8,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>org.troot</groupId>
 	<artifactId>bond-movies-api-spring-postgresql</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Project to practice with spring and Postgresql</description>
