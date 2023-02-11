@@ -18,7 +18,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.0.1",
     "nconf": "^0.10.0",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.20",
     "pino": "^6.3.2",
     "request": "^2.88.2"
   }
