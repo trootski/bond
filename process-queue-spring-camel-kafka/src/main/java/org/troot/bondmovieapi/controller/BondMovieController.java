@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class BondMovieController {
 
     @Autowired
-    @EndpointInject(uri = BondMovieRouteBuilder.QUEUE_BOND_MOVIE_ROUTE)
+    @EndpointInject(BondMovieRouteBuilder.QUEUE_BOND_MOVIE_ROUTE)
     private ProducerTemplate producerTemplate;
 
     @PostMapping("/v1/bond-movie-events/review-updates/enqueue")

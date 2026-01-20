@@ -12,8 +12,8 @@ import org.troot.bondmovieapi.boundary.BondMovieRequest;
 
 import static org.apache.camel.Exchange.*;
 import static org.apache.camel.LoggingLevel.INFO;
-import static org.apache.camel.component.http4.HttpMethods.GET;
-import static org.apache.camel.component.http4.HttpMethods.PUT;
+import static org.apache.camel.component.http.HttpMethods.GET;
+import static org.apache.camel.component.http.HttpMethods.PUT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -30,6 +30,9 @@ public class BondMovieRouteBuilder extends RouteBuilder {
     @Value("${kafka.groupId}")
     private String groupId;
 
+    @Value("${kafka.partitionAssignor}")
+    private String partitionAssignor;
+
     @Value("${app.bondMoviesApiUrl}")
     private String bondMoviesApiUrl;
 
@@ -37,7 +40,7 @@ public class BondMovieRouteBuilder extends RouteBuilder {
     private String movieMetadataApiUrl;
 
     public static final String QUEUE_BOND_MOVIE_ROUTE = "direct://queueBondMovieRoute";
-    public static final String QUEUE_BOND_MOVIE_LISTENER = "kafka://%s?brokers=%s&groupId=%s";
+    public static final String QUEUE_BOND_MOVIE_LISTENER = "kafka://%s?brokers=%s&groupId=%s&partitionAssignor=%s";
 
     public static final String PERSIST_AGGREGATE_MOVIE_DETAIL_ROUTE = "direct://persistAggregatedMovieDetails";
     public static final String GET_MOVIE_DETAILS_ROUTE = "direct://getMovieDetails";
@@ -52,7 +55,7 @@ public class BondMovieRouteBuilder extends RouteBuilder {
                 .json(JsonLibrary.Jackson)
                 .to(String.format("kafka:%s?brokers=%s&groupId=%s", topic, brokers, groupId));
 
-        from(String.format(QUEUE_BOND_MOVIE_LISTENER, topic, brokers, groupId))
+        from(String.format(QUEUE_BOND_MOVIE_LISTENER, topic, brokers, groupId, partitionAssignor))
                 .log(INFO, "Message received from Kafka : ${body}")
                 .log(INFO, "    on the topic ${headers[kafka.TOPIC]}")
                 .log(INFO, "    on the partition ${headers[kafka.PARTITION]}")
@@ -70,13 +73,13 @@ public class BondMovieRouteBuilder extends RouteBuilder {
                 .setHeader(HTTP_PATH, simple("${body.title}"))
                 .marshal()
                 .json(JsonLibrary.Jackson)
-                .to(bondMoviesApiUrl.replace("http://", "http4://") + "/v1/bond-movies/");
+                .to(bondMoviesApiUrl + "/v1/bond-movies/");
 
         from(GET_MOVIE_DETAILS_ROUTE)
                 .setHeader(HTTP_METHOD, GET)
                 .setHeader(CONTENT_TYPE, constant(APPLICATION_JSON))
                 .setHeader(HTTP_PATH, simple("${body.title}"))
-                .to(movieMetadataApiUrl.replace("http://", "http4://") + "/api/v1/movies/")
+                .to(movieMetadataApiUrl + "/api/v1/movies/")
                 .unmarshal()
                 .json(JsonLibrary.Jackson, BondMovieMetadataResponse.class);
     }
