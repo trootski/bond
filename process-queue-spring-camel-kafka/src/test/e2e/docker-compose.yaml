@@ -37,6 +37,24 @@ services:
       timeout: 10s
       retries: 10
 
+  # Mock service for movie metadata API - responds slowly to simulate long-running task
+  mock-metadata-api:
+    build:
+      context: ./mock-services
+    container_name: e2e-mock-metadata
+    environment:
+      RESPONSE_DELAY_SECONDS: ${MOCK_DELAY_SECONDS:-15}
+      PORT: 8080
+
+  # Mock service for bond movies API
+  mock-movies-api:
+    build:
+      context: ./mock-services
+    container_name: e2e-mock-movies
+    environment:
+      RESPONSE_DELAY_SECONDS: 0
+      PORT: 8080
+
   app:
     build:
       context: ../../..
@@ -45,10 +63,44 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+      mock-metadata-api:
+        condition: service_started
+      mock-movies-api:
+        condition: service_started
     ports:
       - "3010:3010"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      BOND_MOVIES_API_URL: http://mock-movies-api:8080
+      MOVIE_METADATA_API_URL: http://mock-metadata-api:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3010/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # Second consumer instance for rebalance testing (not started by default)
+  app2:
+    build:
+      context: ../../..
+      dockerfile: Dockerfile
+    container_name: e2e-app2
+    profiles:
+      - rebalance-test
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mock-metadata-api:
+        condition: service_started
+      mock-movies-api:
+        condition: service_started
+    ports:
+      - "3011:3010"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      BOND_MOVIES_API_URL: http://mock-movies-api:8080
+      MOVIE_METADATA_API_URL: http://mock-metadata-api:8080
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3010/actuator/health"]
       interval: 5s
