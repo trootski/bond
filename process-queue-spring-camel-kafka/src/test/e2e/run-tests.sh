@@ -8,6 +8,7 @@ COMPOSE_FILE="${SCRIPT_DIR}/docker-compose.yaml"
 # Configuration
 KAFKA_TOPIC="BondMoviesToBeProcessed"
 KAFKA_CONTAINER="e2e-kafka"
+APP_CONTAINER="e2e-app"
 APP_URL="http://localhost:3010"
 TIMEOUT_SECONDS=30
 
@@ -64,40 +65,34 @@ test_enqueue_message() {
     local test_title="Goldfinger-$(date +%s)"
     local test_order=1
     local test_review="A classic Bond film"
+    local payload="{\"order\": ${test_order}, \"review\": \"${test_review}\", \"title\": \"${test_title}\"}"
 
-    log_info "Test: Enqueue message and verify in Kafka"
+    log_info "Test: Push message to Kafka and verify consumer receives it"
 
-    # Send message to enqueue endpoint
-    log_info "Sending POST request to enqueue endpoint..."
-    local http_status
-    http_status=$(curl -s -o /dev/null -w "%{http_code}" \
-        -X POST "${APP_URL}/v1/bond-movie-events/review-updates/enqueue" \
-        -H "Content-Type: application/json" \
-        -d "{\"order\": ${test_order}, \"review\": \"${test_review}\", \"title\": \"${test_title}\"}")
+    # Push message directly to Kafka topic using kafka-console-producer
+    log_info "Publishing message to Kafka topic '${KAFKA_TOPIC}'..."
+    echo "${payload}" | docker exec -i "${KAFKA_CONTAINER}" \
+        kafka-console-producer \
+        --bootstrap-server localhost:9092 \
+        --topic "${KAFKA_TOPIC}"
 
-    if [ "$http_status" != "204" ]; then
-        log_error "Expected HTTP 204, got ${http_status}"
+    if [ $? -ne 0 ]; then
+        log_error "Failed to publish message to Kafka"
         return 1
     fi
-    log_info "Received HTTP 204 No Content (expected)"
+    log_info "Message published to Kafka"
 
-    # Verify message appears in Kafka
-    log_info "Verifying message in Kafka topic '${KAFKA_TOPIC}'..."
+    # Verify consumer received the message by checking app logs
+    log_info "Verifying consumer received message (checking app logs)..."
     local start_time=$(date +%s)
-    local message_found=false
+    local message_received=false
 
     while true; do
-        # Consume messages from the beginning of the topic
-        local messages
-        messages=$(docker exec "${KAFKA_CONTAINER}" \
-            kafka-console-consumer \
-            --bootstrap-server localhost:9092 \
-            --topic "${KAFKA_TOPIC}" \
-            --from-beginning \
-            --timeout-ms 5000 2>/dev/null || true)
+        local app_logs
+        app_logs=$(docker logs "${APP_CONTAINER}" 2>&1 || true)
 
-        if echo "$messages" | grep -q "${test_title}"; then
-            message_found=true
+        if echo "$app_logs" | grep -q "Message received from Kafka.*${test_title}"; then
+            message_received=true
             break
         fi
 
@@ -108,11 +103,13 @@ test_enqueue_message() {
         sleep 2
     done
 
-    if [ "$message_found" = true ]; then
-        log_info "Message found in Kafka topic"
+    if [ "$message_received" = true ]; then
+        log_info "Consumer received message from Kafka"
         return 0
     else
-        log_error "Message not found in Kafka topic within ${TIMEOUT_SECONDS}s"
+        log_error "Consumer did not receive message within ${TIMEOUT_SECONDS}s"
+        log_info "App logs:"
+        docker logs "${APP_CONTAINER}" 2>&1 | tail -50
         return 1
     fi
 }
