@@ -1,0 +1,8 @@
+kafka:
+  brokers: ${KAFKA_BROKERS:kafka:19092}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
