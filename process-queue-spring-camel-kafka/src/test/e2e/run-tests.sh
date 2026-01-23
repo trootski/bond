@@ -6,7 +6,6 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 COMPOSE_FILE="${SCRIPT_DIR}/docker-compose.yaml"
 
 # Configuration
-KAFKA_TOPIC="BondMoviesToBeProcessed"
 KAFKA_CONTAINER="e2e-kafka"
 APP_CONTAINER="e2e-app"
 CONSUMER_GROUP="BondProcessingConsumerGroup"
@@ -50,12 +49,11 @@ get_consumer_count() {
     fi
 }
 
-publish_to_kafka() {
+enqueue_message() {
     local payload=$1
-    echo "${payload}" | docker exec -i "${KAFKA_CONTAINER}" \
-        kafka-console-producer \
-        --bootstrap-server localhost:9092 \
-        --topic "${KAFKA_TOPIC}"
+    curl -sf -X POST "${APP_URL}/v1/bond-movie-events/review-updates/enqueue" \
+        -H "Content-Type: application/json" \
+        -d "${payload}"
 }
 
 wait_for_consumer_count() {
@@ -137,10 +135,10 @@ test_rebalance_blocking() {
     get_consumer_group_state
 
     # Step 2: Send a message that will take a long time to process
-    log_step "2. Publishing message (will take ${SLOW_PROCESSING_DELAY}s to process)"
+    log_step "2. Enqueuing message via REST API (will take ${SLOW_PROCESSING_DELAY}s to process)"
     local send_time=$(date +%s)
-    if ! publish_to_kafka "${payload}"; then
-        log_error "Failed to publish message"
+    if ! enqueue_message "${payload}"; then
+        log_error "Failed to enqueue message"
         return 1
     fi
 
