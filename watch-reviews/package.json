@@ -1,22 +1,20 @@
 {
   "name": "watch_reviews",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Watch for updates to the review files and add to the queue to be processed later",
   "main": "./app/setup.js",
   "scripts": {
     "clean": "docker-compose -f ../docker-compose.yml --env-file=../.env stop watch-reviews",
-    "start": "app/setup.js",
+    "start": "node app/setup.js",
     "start:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --build -d watch-reviews && docker-compose logs -f watch-reviews",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fast-glob": "^3.2.2",
-    "glob-watcher": "^5.0.3",
-    "nconf": "^0.10.0",
-    "node-fetch": "^2.6.0",
-    "pino": "^6.3.2",
-    "showdown": "^1.9.1"
+    "glob-watcher": "^6.0.0",
+    "nconf": "^0.12.1",
+    "pino": "^9.6.0",
+    "showdown": "^2.1.0"
   }
 }

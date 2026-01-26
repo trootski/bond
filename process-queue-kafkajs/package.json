@@ -1,12 +1,10 @@
 {
-  "name": "process_queue_kafka_node",
-  "version": "0.0.1",
+  "name": "process_queue_kafkajs",
+  "version": "0.1.0",
   "description": "Watch queue for updates to movie reviews which need to be merged with other metadata",
   "main": "./app/setup.js",
   "scripts": {
     "clean": "docker-compose -f ../docker-compose.yml stop review-updates-api-nodejs-kafkajs-kafka kafka zoo && rm -rf ../storage/kafka ../storage/zookeeper",
-    "quicktest": "autocannon -d 4 -c 2 -b '{\"order\":10,\"review\":\"<p>THis is the HTML content</p>\",\"title\":\"Skyfall\"}' -H 'Content-Type=application/json' -m POST http://localhost:3002/v1/bond-movie-events/review-updates/enqueue\n",
-    "rebuild:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --build -d review-updates-api-nodejs-kafkajs-kafka && docker-compose logs -f review-updates-api-nodejs-kafkajs-kafka",
     "start": "nodemon app/server.js",
     "start:docker": "docker-compose -f ../docker-compose.yml --env-file=../.env up --remove-orphans --build -d review-updates-api-nodejs-kafkajs-kafka && docker-compose logs -f review-updates-api-nodejs-kafkajs-kafka",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,21 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "^3.1.0",
-    "autocannon": "^5.0.1",
-    "aws-sdk": "^2.694.0",
-    "fast-glob": "^3.2.2",
-    "glob-watcher": "^5.0.5",
-    "kafkajs": "^1.12.0",
-    "koa": "^2.12.0",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^9.0.1",
-    "koa-static": "^5.0.0",
-    "nconf": "^0.10.0",
-    "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.4",
-    "pino": "^6.3.2",
-    "redis": "^3.1.1",
-    "showdown": "^1.9.1"
+    "@koa/cors": "^5.0.0",
+    "kafkajs": "^2.2.4",
+    "koa": "^2.15.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^13.0.1",
+    "nconf": "^0.12.1",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

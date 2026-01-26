@@ -1,35 +1,39 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient, DescribeTableCommand, ListTablesCommand, CreateTableCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
 const { promisify } = require('util');
 
 const setTimeoutAsync = promisify(setTimeout);
 
 const checkDescribeTable = async ({ dynamodb, logger }) => {
-  const movieTable = await dynamodb.describeTable({ TableName: 'BondMovies' }).promise();
+  const command = new DescribeTableCommand({ TableName: 'BondMovies' });
+  const movieTable = await dynamodb.send(command);
   return movieTable;
 };
 
 const checkListTables = async ({ dynamodb, logger }) => {
-  await dynamodb.listTables().promise();
+  const command = new ListTablesCommand({});
+  await dynamodb.send(command);
 };
 
 const getDocumentClient = async ({ config, logger, waitForTable = true }) => {
   do {
     try {
-      const dynamoDbParams = {
-        apiVersion: config.get('dynamodb:apiVersion'),
-        convertEmptyValues: true,
-        accessKeyId: config.get('dynamodb:accessKeyId'),
-        secretAccessKey: config.get('dynamodb:secretAccessKey'),
+      const dynamodb = new DynamoDBClient({
         endpoint: config.get('dynamodb:dynamoDBEndpoint'),
-        logger,
         region: config.get('dynamodb:region'),
-      };
-      const dynamodb = await new AWS.DynamoDB(dynamoDbParams);
-      const documentClient = await new AWS.DynamoDB.DocumentClient({
-        params: dynamoDbParams,
-        service: dynamodb,
-        convertEmptyValues: true,
+        credentials: {
+          accessKeyId: config.get('dynamodb:accessKeyId'),
+          secretAccessKey: config.get('dynamodb:secretAccessKey'),
+        },
       });
+
+      const documentClient = DynamoDBDocumentClient.from(dynamodb, {
+        marshallOptions: {
+          convertEmptyValues: true,
+          removeUndefinedValues: true,
+        },
+      });
+
       if (waitForTable) {
         await checkDescribeTable({ dynamodb, logger });
       } else {
@@ -46,16 +50,15 @@ const getDocumentClient = async ({ config, logger, waitForTable = true }) => {
 const getDynamoDBClient = async ({ config, logger, waitForTable = true }) => {
   do {
     try {
-      const dynamoDbParams = {
-        apiVersion: config.get('dynamodb:apiVersion'),
-        convertEmptyValues: true,
-        accessKeyId: config.get('dynamodb:accessKeyId'),
-        secretAccessKey: config.get('dynamodb:secretAccessKey'),
+      const dynamodb = new DynamoDBClient({
         endpoint: config.get('dynamodb:dynamoDBEndpoint'),
-        logger,
         region: config.get('dynamodb:region'),
-      };
-      const dynamodb = await new AWS.DynamoDB(dynamoDbParams);
+        credentials: {
+          accessKeyId: config.get('dynamodb:accessKeyId'),
+          secretAccessKey: config.get('dynamodb:secretAccessKey'),
+        },
+      });
+
       if (waitForTable) {
         await checkDescribeTable({ dynamodb, logger });
       } else {
@@ -72,4 +75,4 @@ const getDynamoDBClient = async ({ config, logger, waitForTable = true }) => {
 module.exports = {
   getDynamoDBClient,
   getDocumentClient,
-}
+};

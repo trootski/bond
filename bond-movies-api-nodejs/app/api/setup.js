@@ -1,3 +1,4 @@
+const { ListTablesCommand, CreateTableCommand } = require('@aws-sdk/client-dynamodb');
 const { getDynamoDBClient } = require('../db/dynamo.js');
 
 const setup = async (ctx, next) => {
@@ -5,11 +6,11 @@ const setup = async (ctx, next) => {
   logger.info({ msg: 'Setting up dynamoDB table' });
   const dynamodb = await getDynamoDBClient({ config, logger, waitForTable: false });
 
-  const { TableNames: allTables  } = await dynamodb.listTables({}).promise();
+  const { TableNames: allTables } = await dynamodb.send(new ListTablesCommand({}));
 
   if (!allTables.includes(config.get('dynamodb:tableName'))) {
     logger.info({ msg: 'Creating table' });
-    await dynamodb.createTable({
+    await dynamodb.send(new CreateTableCommand({
       TableName: config.get('dynamodb:tableName'),
       AttributeDefinitions: [
         {
@@ -57,7 +58,7 @@ const setup = async (ctx, next) => {
         ReadCapacityUnits: 1,
         WriteCapacityUnits: 1,
       },
-    }).promise();
+    }));
     logger.info({ msg: 'Table created' });
   } else {
     logger.info({ msg: 'Table exists, skipping' });
@@ -70,4 +71,3 @@ const setup = async (ctx, next) => {
 };
 
 module.exports = setup;
-

@@ -1,6 +1,6 @@
 {
   "name": "bond-movies-api",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "This is a bond movie service",
   "main": "server.js",
   "scripts": {
@@ -12,14 +12,16 @@
   "author": "John Byrne",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "^3.1.0",
-    "aws-sdk": "^2.694.0",
-    "koa": "^2.12.0",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^9.0.1",
-    "nconf": "^0.10.0",
-    "nodemon": "^2.0.4",
-    "pino": "^6.3.2",
-    "request": "^2.88.2"
+    "@aws-sdk/client-dynamodb": "^3.700.0",
+    "@aws-sdk/lib-dynamodb": "^3.700.0",
+    "@koa/cors": "^5.0.0",
+    "koa": "^2.15.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^13.0.1",
+    "nconf": "^0.12.1",
+    "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

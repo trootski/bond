@@ -1,3 +1,4 @@
+const { PutCommand } = require('@aws-sdk/lib-dynamodb');
 const { getDocumentClient } = require('../db/dynamo.js');
 
 const putMovie = async (ctx, next) => {
@@ -13,11 +14,11 @@ const putMovie = async (ctx, next) => {
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
 
   const finalPayload = { ...setPayload, movieType: 'bond' };
-  await dynamodb.put({
+  await dynamodb.send(new PutCommand({
     Item: finalPayload,
     ReturnConsumedCapacity: 'TOTAL',
     TableName: config.get('dynamodb:tableName'),
-  }).promise();
+  }));
   ctx.response.status = 204;
   ctx.response.body = '';
 
@@ -25,4 +26,3 @@ const putMovie = async (ctx, next) => {
 };
 
 module.exports = putMovie;
-

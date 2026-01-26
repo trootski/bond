@@ -1,3 +1,4 @@
+const { GetCommand } = require('@aws-sdk/lib-dynamodb');
 const { getDocumentClient } = require('../db/dynamo.js');
 
 const getMovie = async (ctx, next) => {
@@ -9,12 +10,12 @@ const getMovie = async (ctx, next) => {
   logger.info({ msg: 'GET /v1/bond-movies/:title', movieTitle });
 
   try {
-    const results = await dynamodb.get({
+    const results = await dynamodb.send(new GetCommand({
       TableName: config.get('dynamodb:tableName'),
       Key: {
         'title': movieTitle,
       },
-    }).promise();
+    }));
     ctx.response.status = 200;
     const { Item } = results;
     if (Object.keys(results).length === 0 && results.constructor === Object) {
@@ -34,4 +35,3 @@ const getMovie = async (ctx, next) => {
 };
 
 module.exports = getMovie;
-

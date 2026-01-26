@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:24-alpine
 
 RUN apk add --update bash && rm -rf /var/cache/apk/*
 
@@ -14,4 +14,4 @@ RUN npm ci
 COPY ./app/ /opt/movie-metadata-api/app
 COPY ./config/ /opt/movie-metadata-api/config/
 
-CMD [ "node", "app/server.js" ];
+CMD [ "node", "app/server.js" ]
