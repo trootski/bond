@@ -1,0 +1,50 @@
+meta {
+  name: Verify Movie Created
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/bond-movies/{{testMovieTitle}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  testMovieTitle: Bruno Test Movie
+}
+
+assert {
+  res.status: eq 200
+  res.body.title: eq Bruno Test Movie
+  res.body.catalog_order: eq 99
+  res.body.year: eq 2024
+  res.body.actor: eq Test Actor
+  res.body.director: eq Test Director
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return movie with correct title", function() {
+    expect(res.body.title).to.equal("Bruno Test Movie");
+  });
+
+  test("should return movie with correct catalog_order", function() {
+    expect(res.body.catalog_order).to.equal(99);
+  });
+
+  test("should return movie with correct year", function() {
+    expect(res.body.year).to.equal(2024);
+  });
+
+  test("should have movieType set to bond", function() {
+    expect(res.body.movieType).to.equal("bond");
+  });
+
+  test("should return movie with review HTML", function() {
+    expect(res.body.review).to.contain("<p>");
+  });
+}

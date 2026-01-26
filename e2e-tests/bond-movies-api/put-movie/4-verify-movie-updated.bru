@@ -1,0 +1,44 @@
+meta {
+  name: Verify Movie Updated
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/bond-movies/{{testMovieTitle}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  testMovieTitle: Bruno Test Movie
+}
+
+assert {
+  res.status: eq 200
+  res.body.year: eq 2025
+  res.body.actor: eq Updated Actor
+  res.body.director: eq Updated Director
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have updated year", function() {
+    expect(res.body.year).to.equal(2025);
+  });
+
+  test("should have updated actor", function() {
+    expect(res.body.actor).to.equal("Updated Actor");
+  });
+
+  test("should have updated director", function() {
+    expect(res.body.director).to.equal("Updated Director");
+  });
+
+  test("should have updated review", function() {
+    expect(res.body.review).to.contain("updated review");
+  });
+}

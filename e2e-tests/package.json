@@ -1,0 +1,14 @@
+{
+  "name": "bond-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end API tests for Bond services using Bruno",
+  "scripts": {
+    "test:bond-movies:nodejs": "cd bond-movies-api && bru run --env nodejs",
+    "test:bond-movies:spring-dynamodb": "cd bond-movies-api && bru run --env spring-dynamodb",
+    "test:bond-movies:spring-postgresql": "cd bond-movies-api && bru run --env spring-postgresql",
+    "test:bond-movies": "cd bond-movies-api && bru run --env nodejs"
+  },
+  "devDependencies": {
+    "@usebruno/cli": "^1.36.0"
+  }
+}

@@ -1,0 +1,17 @@
+headers {
+  Accept: application/json
+}
+
+script:pre-request {
+  // Collection-level pre-request script
+  // Runs before every request in this collection
+  console.log(`Running test against ${bru.getEnvVar('implementation')} implementation`);
+}
+
+script:post-response {
+  // Collection-level post-response script
+  // Runs after every request in this collection
+  if (res.status >= 400) {
+    console.log(`Request failed with status ${res.status}`);
+  }
+}
