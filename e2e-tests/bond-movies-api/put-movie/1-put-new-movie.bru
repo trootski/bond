@@ -1,0 +1,44 @@
+meta {
+  name: PUT New Movie
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/v1/bond-movies/{{testMovieTitle}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "{{testMovieTitle}}",
+    "catalog_order": 99,
+    "year": 2024,
+    "actor": "Test Actor",
+    "director": "Test Director",
+    "review": "<p>This is a test review for the movie.</p>"
+  }
+}
+
+vars:pre-request {
+  testMovieTitle: Bruno Test Movie
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("should return 204 No Content", function() {
+    expect(res.status).to.equal(204);
+  });
+
+  test("should have empty body", function() {
+    expect(res.body).to.be.empty;
+  });
+}

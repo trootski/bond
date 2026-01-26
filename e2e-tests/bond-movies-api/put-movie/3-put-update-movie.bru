@@ -1,0 +1,40 @@
+meta {
+  name: PUT Update Existing Movie
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/v1/bond-movies/{{testMovieTitle}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "{{testMovieTitle}}",
+    "catalog_order": 99,
+    "year": 2025,
+    "actor": "Updated Actor",
+    "director": "Updated Director",
+    "review": "<p>This is an updated review.</p>"
+  }
+}
+
+vars:pre-request {
+  testMovieTitle: Bruno Test Movie
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("should return 204 No Content for update", function() {
+    expect(res.status).to.equal(204);
+  });
+}
