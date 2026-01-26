@@ -22,15 +22,22 @@ docker compose up
 
 ### Run Tests
 
+**Bond Movies API:**
 ```bash
-# Test Node.js implementation (port 3001)
-npm run test:bond-movies:nodejs
+npm run test:bond-movies:nodejs           # Node.js (port 3001)
+npm run test:bond-movies:spring-dynamodb  # Spring + DynamoDB (port 3002)
+npm run test:bond-movies:spring-postgresql # Spring + PostgreSQL (port 3003)
+```
 
-# Test Spring + DynamoDB implementation (port 3002)
-npm run test:bond-movies:spring-dynamodb
+**Movie Metadata API:**
+```bash
+npm run test:metadata:nodejs   # Node.js (port 3004)
+npm run test:metadata:spring   # Spring (port 3008)
+```
 
-# Test Spring + PostgreSQL implementation (port 3003)
-npm run test:bond-movies:spring-postgresql
+**All Tests:**
+```bash
+npm run test:all:nodejs        # Run all Node.js implementation tests
 ```
 
 ### Run with Bruno CLI directly
@@ -38,6 +45,7 @@ npm run test:bond-movies:spring-postgresql
 ```bash
 # Run all tests in a collection with specific environment
 npx bru run bond-movies-api --env nodejs
+npx bru run movie-metadata-api --env nodejs
 
 # Run specific folder
 npx bru run bond-movies-api/put-movie --env nodejs
@@ -58,6 +66,15 @@ e2e-tests/
       2-verify-movie-created.bru # Verify creation
       3-put-update-movie.bru    # Update movie
       4-verify-movie-updated.bru # Verify update
+  movie-metadata-api/
+    bruno.json              # Collection config
+    environments/
+      nodejs.bru            # Node.js impl (port 3004)
+      spring.bru            # Spring impl (port 3008)
+    get-movie/
+      1-get-movie-metadata.bru  # Get movie metadata
+      2-get-cached-movie.bru    # Verify caching works
+      3-get-different-movie.bru # Get another movie
 ```
 
 ## Adding New Tests
