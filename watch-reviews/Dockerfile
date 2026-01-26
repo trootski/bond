@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:24-alpine
 
 RUN mkdir -p /opt/watch_reviews
 WORKDIR /opt/watch_reviews

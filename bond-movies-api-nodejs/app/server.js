@@ -19,7 +19,7 @@ const {
 if (!!process.env.BOND_ENV && process.env.BOND_ENV === 'docker') {
   config.file('docker', { file: `${process.cwd()}/config/config-docker.json` });
 }
-config.file(`${process.cwd()}/config/config.json`);
+config.file('default', { file: `${process.cwd()}/config/config.json` });
 
 logger.info({
   msg: `Starting up...\n\nSettings: ${JSON.stringify(config.get())}`,

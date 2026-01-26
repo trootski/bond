@@ -1,6 +1,4 @@
-const AWS = require('aws-sdk');
-const request = require('request');
-const fs = require('fs');
+const { ScanCommand } = require('@aws-sdk/lib-dynamodb');
 const { getDocumentClient } = require('../db/dynamo.js');
 
 const getAllMovies = async (ctx, next) => {
@@ -9,10 +7,10 @@ const getAllMovies = async (ctx, next) => {
   const dynamodb = await getDocumentClient({ config, logger, waitForTable: false });
 
   try {
-    const res = await dynamodb.scan({
+    const res = await dynamodb.send(new ScanCommand({
       IndexName: 'SortByOrder',
       TableName: 'BondMovies',
-    }).promise();
+    }));
 
     logger.info({ msg: 'GET /v1/bond-movies' });
     logger.info({ res });
@@ -34,4 +32,3 @@ const getAllMovies = async (ctx, next) => {
 };
 
 module.exports = getAllMovies;
-

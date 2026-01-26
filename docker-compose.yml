@@ -1,7 +1,12 @@
-version: '3.1'
+version: '3.8'
 
 services:
+  # =============================================================================
+  # BOND MOVIES API
+  # =============================================================================
+
   bond-movies-api-nodejs:
+    profiles: [bond-nodejs]
     build:
       context: ./bond-movies-api-nodejs
       dockerfile: ./Dockerfile
@@ -14,6 +19,7 @@ services:
     working_dir: /opt/bond-movies-api
 
   bond-movies-api-spring-dynamodb:
+    profiles: [bond-spring-dynamodb]
     build:
       context: ./bond-movies-api-spring-dynamodb
       dockerfile: ./Dockerfile
@@ -26,6 +32,7 @@ services:
     working_dir: /
 
   bond-movies-api-spring-postgresql:
+    profiles: [bond-spring-postgresql]
     build:
       context: ./bond-movies-api-spring-postgresql
       dockerfile: ./Dockerfile
@@ -37,6 +44,128 @@ services:
       - "3003:3003"
     working_dir: /
 
+  # =============================================================================
+  # METADATA API
+  # =============================================================================
+
+  movie-metadata-api-nodejs:
+    profiles: [metadata-nodejs]
+    build:
+      context: ./movie-metadata-api-nodejs/
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      BOND_ENV: docker
+    ports:
+      - "3004:3004"
+
+  movie-metadata-api-spring:
+    profiles: [metadata-spring]
+    build:
+      context: ./movie-metadata-api-spring/
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      BOND_ENV: docker
+    ports:
+      - "3008:3008"
+
+  # =============================================================================
+  # PROCESS QUEUE API
+  # =============================================================================
+
+  review-updates-api-nodejs-kafka-node-kafka:
+    profiles: [queue-kafka-node]
+    build:
+      context: ./process-queue-kafka-node
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    environment:
+      ADV_HOST: kafka1
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+    ports:
+      - "3005:3005"
+
+  review-updates-api-nodejs-kafkajs-kafka:
+    profiles: [queue-kafkajs]
+    build:
+      context: ./process-queue-kafkajs
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    environment:
+      ADV_HOST: kafka1
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
+    ports:
+      - "3006:3006"
+
+  review-updates-api-nodejs-redis:
+    profiles: [queue-redis]
+    build:
+      context: ./process-queue-nodejs-redis
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
+    ports:
+      - "3009:3009"
+
+  review-updates-api-spring-camel-kafka:
+    profiles: [queue-spring-camel]
+    build:
+      context: ./process-queue-spring-camel-kafka
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    environment:
+      ADV_HOST: kafka1
+      BOND_ENV: docker
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
+      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
+    ports:
+      - "3010:3010"
+
+  # =============================================================================
+  # UI
+  # =============================================================================
+
+  vanilla:
+    profiles: [ui]
+    image: nginx
+    ports:
+      - "3007:80"
+    volumes:
+      - ./fe/vanilla/public:/usr/share/nginx/html:ro
+
+  # =============================================================================
+  # WATCH REVIEWS
+  # =============================================================================
+
+  watch-reviews:
+    profiles: [watch]
+    build:
+      context: ./watch-reviews
+      dockerfile: Dockerfile
+    environment:
+      BOND_ENV: docker
+      REVIEW_UPDATES_API_URL: ${REVIEW_UPDATES_API_URL}
+    volumes:
+      - ./watch-reviews/storage:/opt/watch_reviews/storage
+
+  # =============================================================================
+  # INFRASTRUCTURE (no profiles - started via depends_on)
+  # =============================================================================
+
   dynamodb:
     entrypoint: ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
     image: amazon/dynamodb-local
@@ -46,12 +175,45 @@ services:
       - ./storage/dynamodb-data:/data
     working_dir: /home/dynamodblocal
 
+  postgresql:
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_DB: bond_movies
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: bond_movies
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./storage/postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    profiles: [pgadmin]
+    image: dpage/pgadmin4
+    depends_on:
+      - postgresql
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - ./pgadmin:/root/.pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: unless-stopped
+
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    ports:
+      - "6375:6375"
+
   zoo:
     container_name: zoo1
     environment:
-        ZOO_MY_ID: 1
-        ZOO_PORT: 2181
-        ZOO_SERVERS: server.1=0.0.0.0:2888:3888
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
     hostname: zoo1
     image: zookeeper:3.4.9
     ports:
@@ -80,130 +242,3 @@ services:
       - "9092:9092"
     volumes:
       - ./storage/kafka/data:/var/lib/kafka/data
-
-  movie-metadata-api-nodejs:
-    build:
-      context: ./movie-metadata-api-nodejs/
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-    environment:
-      NODE_TLS_REJECT_UNAUTHORIZED: "0"
-      BOND_ENV: docker
-    ports:
-      - "3004:3004"
-
-  movie-metadata-api-spring:
-    build:
-      context: ./movie-metadata-api-spring/
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-    environment:
-      BOND_ENV: docker
-    ports:
-      - "3008:3008"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    depends_on:
-      - postgresql
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-      - ./pgadmin:/root/.pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    restart: unless-stopped
-
-  postgresql:
-    command: ["postgres", "-c", "log_statement=all"]
-    environment:
-      POSTGRES_DB: bond_movies
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_USER: bond_movies
-    image: postgres:11
-    ports:
-      - "5432:5432"
-    volumes:
-    - ./storage/postgres:/var/lib/postgresql/data
-
-  review-updates-api-nodejs-kafka-node-kafka:
-    build:
-      context: ./process-queue-kafka-node
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    environment:
-      ADV_HOST: kafka1
-      BOND_ENV: docker
-      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
-    ports:
-      - "3005:3005"
-
-  review-updates-api-nodejs-redis:
-    build:
-      context: ./process-queue-nodejs-redis
-      dockerfile: Dockerfile
-    depends_on:
-      - redis
-    environment:
-      BOND_ENV: docker
-      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
-      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
-    ports:
-      - "3009:3009"
-
-  review-updates-api-nodejs-kafkajs-kafka:
-    build:
-      context: ./process-queue-kafkajs
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    environment:
-      ADV_HOST: kafka1
-      BOND_ENV: docker
-      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
-      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
-    ports:
-      - "3006:3006"
-
-  review-updates-api-spring-camel-kafka:
-    build:
-      context: ./process-queue-spring-camel-kafka
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    environment:
-      ADV_HOST: kafka1
-      BOND_ENV: docker
-      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
-      MOVIE_METADATA_API_URL: ${MOVIE_METADATA_API_URL}
-    ports:
-      - "3010:3010"
-
-  redis:
-    build:
-      context: ./redis
-      dockerfile: Dockerfile
-    ports:
-      - "6375:6375"
-
-  vanilla:
-    image: nginx
-    ports:
-      - "3007:80"
-    volumes:
-      - ./fe/vanilla/public:/usr/share/nginx/html:ro
-
-  watch-reviews:
-    build:
-      context: ./watch-reviews
-      dockerfile: Dockerfile
-    environment:
-      BOND_ENV: docker
-      REVIEW_UPDATES_API_URL: ${REVIEW_UPDATES_API_URL}
-    volumes:
-      - ./watch-reviews/storage:/opt/watch_reviews/storage
-
