@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 const getMovieMetadata = ({ config, logger }) => async movieTitle => {
   logger.info({ msg: `Getting live data for ${movieTitle}. (OMDB)` })
   const apiKey = config.get('omdb:key');

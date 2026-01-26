@@ -1,0 +1,40 @@
+meta {
+  name: GET Cached Movie (Second Request)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/movies/{{movieTitle}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  movieTitle: Skyfall
+}
+
+assert {
+  res.status: eq 200
+  res.body.title: isString
+}
+
+tests {
+  test("should return 200 OK from cache", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return same movie data from cache", function() {
+    expect(res.body.title).to.be.a('string');
+    expect(res.body.type).to.equal("movie");
+  });
+
+  test("cached response should have all required fields", function() {
+    expect(res.body).to.have.property('title');
+    expect(res.body).to.have.property('year');
+    expect(res.body).to.have.property('synopsis');
+    expect(res.body).to.have.property('poster');
+    expect(res.body).to.have.property('runtime');
+    expect(res.body).to.have.property('imdb_id');
+  });
+}

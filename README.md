@@ -105,6 +105,39 @@ Note: Spring services require Maven builds first:
 cd bond-movies-api-spring-dynamodb && ./mvnw package -DskipTests && cd ..
 ```
 
+# E2E Testing
+
+End-to-end API tests using [Bruno](https://www.usebruno.com/) ensure all implementations conform to the same API contract.
+
+## Setup
+
+```sh
+cd e2e-tests
+npm install
+```
+
+## Run Tests
+
+```sh
+# Test Bond Movies API against Node.js implementation
+npm run test:bond-movies:nodejs
+
+# Test against Spring + DynamoDB implementation
+npm run test:bond-movies:spring-dynamodb
+
+# Test against Spring + PostgreSQL implementation
+npm run test:bond-movies:spring-postgresql
+```
+
+## Using Bruno GUI
+
+1. Download Bruno from https://www.usebruno.com/
+2. Open Collection → select `e2e-tests/bond-movies-api`
+3. Select environment from dropdown
+4. Run tests
+
+Tests are reusable across implementations - the same test suite validates that Node.js and Spring implementations behave identically.
+
 # Environment Variables
 
 In the .env file there is the current configuration for the interconnection of the services. Changing the URLs here to point at other services will reconfigure dependent services. For example, change `REVIEW_UPDATES_API_URL` to test another queue implementation.

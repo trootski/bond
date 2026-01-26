@@ -61,9 +61,15 @@ This project is a playground for testing various components of a web application
 ## Development Philosophy
 
 ### Experimentation First
-- This is a playground - tests are not required
+- This is a playground - unit tests are not required
 - Prioritise learning and experimentation over production readiness
 - New technologies should be easy to introduce and compare
+
+### End-to-End Testing
+- E2E tests validate API contracts across all implementations
+- Tests are implementation-agnostic - same tests run against Node.js and Spring
+- Bruno is used for API testing (Git-friendly, no vendor lock-in)
+- Tests live in `e2e-tests/` directory
 
 ### Implementation Swapping
 - Multiple implementations of the same service type are encouraged
@@ -146,3 +152,41 @@ REVIEW_UPDATES_API_URL=http://review-updates-api-nodejs-kafkajs-kafka:3006
 - End-user interface for consuming the RESTful API. Two implementations
     - Vanilla JavaScript implementation
     - React implementation
+
+## E2E Testing
+
+End-to-end API tests ensure all implementations conform to the same API contract.
+
+### Technology
+
+- **Bruno** - Open-source API client with Git-friendly `.bru` files
+- Tests stored in `e2e-tests/` directory
+- Environment files for each implementation (nodejs, spring-dynamodb, spring-postgresql)
+
+### Structure
+
+```
+e2e-tests/
+  package.json              # Bruno CLI dependency
+  bond-movies-api/          # Bond Movies API tests
+    bruno.json              # Collection config
+    environments/           # Environment configs per implementation
+    put-movie/              # PUT endpoint tests
+```
+
+### Running Tests
+
+```sh
+cd e2e-tests
+npm install
+npm run test:bond-movies:nodejs          # Test Node.js implementation
+npm run test:bond-movies:spring-dynamodb # Test Spring DynamoDB implementation
+```
+
+### Adding Tests for New APIs
+
+1. Create collection folder under `e2e-tests/`
+2. Add `bruno.json` collection config
+3. Add environment files for each implementation
+4. Create test `.bru` files with assertions
+5. Add npm scripts to `package.json`

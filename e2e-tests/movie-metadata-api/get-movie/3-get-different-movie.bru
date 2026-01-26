@@ -1,0 +1,45 @@
+meta {
+  name: GET Different Movie
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/movies/{{movieTitle}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  movieTitle: Casino Royale
+}
+
+assert {
+  res.status: eq 200
+  res.body.title: isString
+  res.body.type: eq movie
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return different movie", function() {
+    expect(res.body.title).to.be.a('string');
+  });
+
+  test("should have all metadata fields", function() {
+    expect(res.body).to.have.property('title');
+    expect(res.body).to.have.property('year');
+    expect(res.body).to.have.property('synopsis');
+    expect(res.body).to.have.property('poster');
+    expect(res.body).to.have.property('runtime');
+    expect(res.body).to.have.property('imdb_id');
+    expect(res.body).to.have.property('type');
+  });
+
+  test("should return valid IMDB ID format", function() {
+    expect(res.body.imdb_id).to.match(/^tt\d+$/);
+  });
+}

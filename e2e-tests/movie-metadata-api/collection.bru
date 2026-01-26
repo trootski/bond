@@ -1,0 +1,13 @@
+headers {
+  Accept: application/json
+}
+
+script:pre-request {
+  console.log(`Running test against ${bru.getEnvVar('implementation')} implementation`);
+}
+
+script:post-response {
+  if (res.status >= 400) {
+    console.log(`Request failed with status ${res.status}`);
+  }
+}

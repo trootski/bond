@@ -25,7 +25,7 @@ const getMovie = async (ctx, next) => {
   if (cachedData) {
     logger.info({ msg: `Cache data receieved for ${movieTitle}.`, data: cachedData })
     ctx.response.status = 200;
-    ctx.response.body = cachedData;
+    ctx.response.body = { ...cachedData, type: 'movie' };
   } else {
     logger.info({ msg: (config.get('app:movie_meta_store') === 'tmdb' ? 'tmdb' : 'omdb') });
     const getMovieMetadata = (config.get('app:movie_meta_store') === 'tmdb' ?

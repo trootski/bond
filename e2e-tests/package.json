@@ -6,7 +6,11 @@
     "test:bond-movies:nodejs": "cd bond-movies-api && bru run --env nodejs",
     "test:bond-movies:spring-dynamodb": "cd bond-movies-api && bru run --env spring-dynamodb",
     "test:bond-movies:spring-postgresql": "cd bond-movies-api && bru run --env spring-postgresql",
-    "test:bond-movies": "cd bond-movies-api && bru run --env nodejs"
+    "test:bond-movies": "cd bond-movies-api && bru run --env nodejs",
+    "test:metadata:nodejs": "cd movie-metadata-api && bru run --env nodejs",
+    "test:metadata:spring": "cd movie-metadata-api && bru run --env spring",
+    "test:metadata": "cd movie-metadata-api && bru run --env nodejs",
+    "test:all:nodejs": "npm run test:bond-movies:nodejs && npm run test:metadata:nodejs"
   },
   "devDependencies": {
     "@usebruno/cli": "^1.36.0"

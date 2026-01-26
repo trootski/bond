@@ -1,0 +1,59 @@
+meta {
+  name: GET Movie Metadata
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/movies/{{movieTitle}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  movieTitle: Skyfall
+}
+
+assert {
+  res.status: eq 200
+  res.body.title: isString
+  res.body.type: eq movie
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return movie title", function() {
+    expect(res.body.title).to.be.a('string');
+    expect(res.body.title.length).to.be.greaterThan(0);
+  });
+
+  test("should return type as movie", function() {
+    expect(res.body.type).to.equal("movie");
+  });
+
+  test("should return year", function() {
+    expect(res.body.year).to.be.a('string');
+  });
+
+  test("should return synopsis", function() {
+    expect(res.body.synopsis).to.be.a('string');
+  });
+
+  test("should return poster URL", function() {
+    expect(res.body.poster).to.be.a('string');
+    expect(res.body.poster).to.include('http');
+  });
+
+  test("should return runtime", function() {
+    expect(res.body.runtime).to.be.a('string');
+    expect(res.body.runtime).to.include('mins');
+  });
+
+  test("should return imdb_id", function() {
+    expect(res.body.imdb_id).to.be.a('string');
+    expect(res.body.imdb_id).to.match(/^tt\d+$/);
+  });
+}
