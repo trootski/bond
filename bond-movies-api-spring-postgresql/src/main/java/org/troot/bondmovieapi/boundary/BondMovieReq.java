@@ -1,11 +1,9 @@
 package org.troot.bondmovieapi.boundary;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 public class BondMovieReq {
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 255)
+    @Size(max = 255)
     private String title;
     public String getTitle() {
         return title;
@@ -14,9 +12,7 @@ public class BondMovieReq {
         this.title = title;
     }
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 3, max = 60)
+    @Size(max = 60)
     private String runtime;
     public String getRuntime() {
         return runtime;
@@ -25,8 +21,6 @@ public class BondMovieReq {
         this.runtime = runtime;
     }
 
-    @NotNull
-    @NotEmpty
     @Size(max = 60)
     private String imdbid;
     public String getImdbid() {
@@ -36,8 +30,6 @@ public class BondMovieReq {
         this.imdbid = imdbid;
     }
 
-    @NotNull
-    @NotEmpty
     @Size(max = 10000)
     private String synopsis;
     public String getSynopsis() {
@@ -47,8 +39,6 @@ public class BondMovieReq {
         this.synopsis = synopsis;
     }
 
-    @NotNull
-    @NotEmpty
     @Size(max = 10000)
     private String review;
     public String getReview() {
@@ -58,29 +48,23 @@ public class BondMovieReq {
         this.review = review;
     }
 
-    @Pattern(regexp = "^(movie)$")
-    @Size(min = 5, max = 5)
+    @Size(max = 20)
     private String movie_type;
     public String getMovie_type() {
         return movie_type;
     }
-
     public void setMovie_type(String movie_type) {
         this.movie_type = movie_type;
     }
 
-    @Pattern(regexp = "^[0-9]{4}$", message = "A valid year in the format YYYY is required")
-    @Size(min = 4, max = 4)
-    private String year;
-    public String getYear() {
+    private Integer year;
+    public Integer getYear() {
         return year;
     }
-    public void setYear(String year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    @NotNull
-    @NotEmpty
     @Size(max = 255)
     private String poster;
     public String getPoster() {
@@ -90,12 +74,27 @@ public class BondMovieReq {
         this.poster = poster;
     }
 
-    @Min(1)
     private Integer catalog_order;
     public Integer getCatalog_order() {
         return catalog_order;
     }
     public void setCatalog_order(Integer catalog_order) {
         this.catalog_order = catalog_order;
+    }
+
+    private String actor;
+    public String getActor() {
+        return actor;
+    }
+    public void setActor(String actor) {
+        this.actor = actor;
+    }
+
+    private String director;
+    public String getDirector() {
+        return director;
+    }
+    public void setDirector(String director) {
+        this.director = director;
     }
 }

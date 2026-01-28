@@ -1,20 +1,11 @@
 package org.troot.bondmovieapi.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "bond_movies", schema = "public")
 public class BondMovie {
 
-  // https://ntsim.uk/posts/how-to-use-hibernate-identifier-sequence-generators-properly
-  // using hibernate 'pooled hi/lo' sequence generation strategy for the Id
-  // hibernate will grab the next 50 id numbers and use them for inserts
-  // restarting the app will mean you will get gaps in id column values
-  // as the ids the app is holding are discarded and the next 50 are taken on restart
-  // Alternative is to use Sp to create new share - prob a lot simplier and less weirdness
-  // requires sql to align seq interval on db -> ALTER SEQUENCE share_id_seq INCREMENT 50;
   @Id
   @SequenceGenerator(
           name = "bond_movie_seq",
@@ -31,9 +22,8 @@ public class BondMovie {
     this.id = id;
   }
 
-  private String title;
   @Column(name = "title", unique = true)
-  @NotBlank(message = "Title is mandatory")
+  private String title;
   public String getTitle() {
     return title;
   }
@@ -41,9 +31,8 @@ public class BondMovie {
     this.title = title;
   }
 
-  private String runtime;
   @Column
-  @NotBlank(message = "Runtime is mandatory")
+  private String runtime;
   public String getRuntime() {
     return runtime;
   }
@@ -51,9 +40,8 @@ public class BondMovie {
     this.runtime = runtime;
   }
 
-  private String review;
   @Column
-  @NotBlank(message = "Review is mandatory")
+  private String review;
   public String getReview() {
     return review;
   }
@@ -61,9 +49,8 @@ public class BondMovie {
     this.review = review;
   }
 
-  private String imdbid;
   @Column
-  @NotBlank(message = "IMDB ID is mandatory")
+  private String imdbid;
   public String getImdbid() {
     return imdbid;
   }
@@ -71,9 +58,8 @@ public class BondMovie {
     this.imdbid = imdbid;
   }
 
-  private String synopsis;
   @Column(length = 10000)
-  @NotBlank(message = "Synopsis is mandatory")
+  private String synopsis;
   public String getSynopsis() {
     return synopsis;
   }
@@ -81,9 +67,8 @@ public class BondMovie {
     this.synopsis = synopsis;
   }
 
+  @Column(name = "movie_type")
   private String movieType;
-  @Column
-  @NotBlank(message = "Type is mandatory in entity")
   public String getMovieType() {
     return movieType;
   }
@@ -91,19 +76,17 @@ public class BondMovie {
     this.movieType = movieType;
   }
 
-  private String year;
   @Column
-  @NotBlank(message = "Year is mandatory")
-  public String getYear() {
+  private Integer year;
+  public Integer getYear() {
     return year;
   }
-  public void setYear(String year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  private String poster;
   @Column
-  @NotBlank(message = "Poster is mandatory")
+  private String poster;
   public String getPoster() {
     return poster;
   }
@@ -111,14 +94,31 @@ public class BondMovie {
     this.poster = poster;
   }
 
-  private Integer catalog_order;
   @Column
-  @NotNull(message = "Category Order is mandatory")
+  private Integer catalog_order;
   public Integer getCatalog_order() {
     return catalog_order;
   }
   public void setCatalog_order(Integer catalog_order) {
     this.catalog_order = catalog_order;
+  }
+
+  @Column
+  private String actor;
+  public String getActor() {
+    return actor;
+  }
+  public void setActor(String actor) {
+    this.actor = actor;
+  }
+
+  @Column
+  private String director;
+  public String getDirector() {
+    return director;
+  }
+  public void setDirector(String director) {
+    this.director = director;
   }
 
   public BondMovie() { }
