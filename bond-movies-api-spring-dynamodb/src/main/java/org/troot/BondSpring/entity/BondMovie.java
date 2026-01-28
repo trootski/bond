@@ -1,114 +1,126 @@
 package org.troot.BondSpring.entity;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
-@DynamoDBTable(tableName = "BondMovies")
+@DynamoDbBean
 public class BondMovie {
 
   private String title;
-  @DynamoDBHashKey(attributeName = "title")
+  private String runtime;
+  private String review;
+  private String imdbid;
+  private String synopsis;
+  private String movieType;
+  private Integer year;
+  private String poster;
+  private Integer catalogOrder;
+  private String actor;
+  private String director;
+
+  @DynamoDbPartitionKey
+  @DynamoDbAttribute("title")
   public String getTitle() {
     return title;
   }
+
   public void setTitle(String title) {
     this.title = title;
   }
 
-  private String Runtime;
-  @DynamoDBAttribute(attributeName = "runtime")
+  @DynamoDbAttribute("runtime")
   public String getRuntime() {
-    return Runtime;
-  }
-  public void setRuntime(String Runtime) {
-    this.Runtime = Runtime;
+    return runtime;
   }
 
-  private String review;
-  @DynamoDBAttribute(attributeName = "review")
+  public void setRuntime(String runtime) {
+    this.runtime = runtime;
+  }
+
+  @DynamoDbAttribute("review")
   public String getReview() {
     return review;
   }
+
   public void setReview(String review) {
     this.review = review;
   }
 
-  private String imdbid;
-  @DynamoDBAttribute(attributeName = "imdbid")
+  @DynamoDbAttribute("imdbid")
   public String getImdbid() {
     return imdbid;
   }
+
   public void setImdbid(String imdbid) {
     this.imdbid = imdbid;
   }
 
-  private String synopsis;
-  @DynamoDBAttribute(attributeName = "synopsis")
+  @DynamoDbAttribute("synopsis")
   public String getSynopsis() {
     return synopsis;
   }
+
   public void setSynopsis(String synopsis) {
     this.synopsis = synopsis;
   }
 
-  private String movieType;
-  @DynamoDBAttribute(attributeName = "movie_type")
-  @DynamoDBIndexHashKey(globalSecondaryIndexName = "SortByOrder")
+  @DynamoDbAttribute("movie_type")
+  @DynamoDbSecondaryPartitionKey(indexNames = "SortByOrder")
   public String getMovieType() {
     return movieType;
   }
+
   public void setMovieType(String movieType) {
     this.movieType = movieType;
   }
 
-  private Integer year;
-  @DynamoDBAttribute(attributeName = "year")
+  @DynamoDbAttribute("year")
   public Integer getYear() {
     return year;
   }
+
   public void setYear(Integer year) {
     this.year = year;
   }
 
-  private String poster;
-  @DynamoDBAttribute(attributeName = "poster")
+  @DynamoDbAttribute("poster")
   public String getPoster() {
     return poster;
   }
+
   public void setPoster(String poster) {
     this.poster = poster;
   }
 
-  private Integer catalogOrder;
-  @DynamoDBIndexRangeKey(globalSecondaryIndexName = "SortByOrder")
-  @DynamoDBAttribute(attributeName = "catalog_order")
+  @DynamoDbAttribute("catalog_order")
+  @DynamoDbSecondarySortKey(indexNames = "SortByOrder")
   @JsonProperty("catalog_order")
   public Integer getCatalogOrder() {
     return catalogOrder;
   }
+
   public void setCatalogOrder(Integer catalogOrder) {
     this.catalogOrder = catalogOrder;
   }
 
-  private String actor;
-  @DynamoDBAttribute(attributeName = "actor")
+  @DynamoDbAttribute("actor")
   public String getActor() {
     return actor;
   }
+
   public void setActor(String actor) {
     this.actor = actor;
   }
 
-  private String director;
-  @DynamoDBAttribute(attributeName = "director")
+  @DynamoDbAttribute("director")
   public String getDirector() {
     return director;
   }
+
   public void setDirector(String director) {
     this.director = director;
   }
 
   public BondMovie() {
-
   }
 }
