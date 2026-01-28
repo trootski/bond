@@ -1,6 +1,7 @@
 package org.troot.BondSpring.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @DynamoDBTable(tableName = "BondMovies")
 public class BondMovie {
@@ -60,12 +61,12 @@ public class BondMovie {
     this.movieType = movieType;
   }
 
-  private String year;
+  private Integer year;
   @DynamoDBAttribute(attributeName = "year")
-  public String getYear() {
+  public Integer getYear() {
     return year;
   }
-  public void setYear(String year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
@@ -81,11 +82,30 @@ public class BondMovie {
   private Integer catalogOrder;
   @DynamoDBIndexRangeKey(globalSecondaryIndexName = "SortByOrder")
   @DynamoDBAttribute(attributeName = "catalog_order")
+  @JsonProperty("catalog_order")
   public Integer getCatalogOrder() {
     return catalogOrder;
   }
   public void setCatalogOrder(Integer catalogOrder) {
     this.catalogOrder = catalogOrder;
+  }
+
+  private String actor;
+  @DynamoDBAttribute(attributeName = "actor")
+  public String getActor() {
+    return actor;
+  }
+  public void setActor(String actor) {
+    this.actor = actor;
+  }
+
+  private String director;
+  @DynamoDBAttribute(attributeName = "director")
+  public String getDirector() {
+    return director;
+  }
+  public void setDirector(String director) {
+    this.director = director;
   }
 
   public BondMovie() {
