@@ -181,7 +181,7 @@ services:
       POSTGRES_DB: bond_movies
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_USER: bond_movies
-    image: postgres:11
+    image: postgres:17
     ports:
       - "5432:5432"
     volumes:
