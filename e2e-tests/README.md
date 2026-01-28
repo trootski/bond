@@ -35,9 +35,15 @@ npm run test:metadata:nodejs   # Node.js (port 3004)
 npm run test:metadata:spring   # Spring (port 3008)
 ```
 
+**Process Queue API:**
+```bash
+npm run test:process-queue:kafkajs  # KafkaJS (port 3006)
+```
+
 **All Tests:**
 ```bash
 npm run test:all:nodejs        # Run all Node.js implementation tests
+npm run test:all               # Run all tests across all implementations
 ```
 
 ### Run with Bruno CLI directly
@@ -46,6 +52,7 @@ npm run test:all:nodejs        # Run all Node.js implementation tests
 # Run all tests in a collection with specific environment
 npx bru run bond-movies-api --env nodejs
 npx bru run movie-metadata-api --env nodejs
+npx bru run process-queue-api --env kafkajs
 
 # Run specific folder
 npx bru run bond-movies-api/put-movie --env nodejs
@@ -75,7 +82,19 @@ e2e-tests/
       1-get-movie-metadata.bru  # Get movie metadata
       2-get-cached-movie.bru    # Verify caching works
       3-get-different-movie.bru # Get another movie
+  process-queue-api/
+    bruno.json              # Collection config
+    environments/
+      kafkajs.bru           # KafkaJS impl (port 3006)
+    enqueue-review/
+      1-enqueue-review-update.bru  # Enqueue a review update
+      2-enqueue-another-review.bru # Enqueue second review
+      3-enqueue-minimal-review.bru # Enqueue minimal review
 ```
+
+## Services Not Covered
+
+**watch-reviews**: This is a file watcher service, not an HTTP API. It monitors markdown files in `storage/reviews/` and automatically POSTs updates to the process-queue-api when files change.
 
 ## Adding New Tests
 

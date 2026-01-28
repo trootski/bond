@@ -50,11 +50,11 @@ public class BondMovieRequest {
     this.movie_type = movie_type;
   }
 
-  private String year;
-  public String getYear() {
+  private Integer year;
+  public Integer getYear() {
     return year;
   }
-  public void setYear(String year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
@@ -72,6 +72,22 @@ public class BondMovieRequest {
   }
   public void setCatalog_order(Integer catalog_order) {
     this.catalog_order = catalog_order;
+  }
+
+  private String actor;
+  public String getActor() {
+    return actor;
+  }
+  public void setActor(String actor) {
+    this.actor = actor;
+  }
+
+  private String director;
+  public String getDirector() {
+    return director;
+  }
+  public void setDirector(String director) {
+    this.director = director;
   }
 
   public BondMovieRequest() {

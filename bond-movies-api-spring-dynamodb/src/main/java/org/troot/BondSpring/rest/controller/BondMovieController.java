@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.troot.BondSpring.boundary.BondMovieRequest;
@@ -42,7 +43,7 @@ public class BondMovieController {
   }
 
   @RequestMapping(value = "/v1/bond-movies/{title:.+}", method = RequestMethod.PUT)
-  public BondMovie putBondMovie(@PathVariable("title") String title, @RequestBody BondMovieRequest bondMovieRequest) {
+  public ResponseEntity<Void> putBondMovie(@PathVariable("title") String title, @RequestBody BondMovieRequest bondMovieRequest) {
     logger.info("PUT /v1/bond-movies/{}", title);
     try {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -57,10 +58,13 @@ public class BondMovieController {
     bondMovie.setReview(bondMovieRequest.getReview());
     bondMovie.setImdbid(bondMovieRequest.getImdbid());
     bondMovie.setSynopsis(bondMovieRequest.getSynopsis());
-    bondMovie.setMovieType(bondMovieRequest.getMovie_type());
+    bondMovie.setMovieType(bondMovieRequest.getMovie_type() != null ? bondMovieRequest.getMovie_type() : "bond");
     bondMovie.setYear(bondMovieRequest.getYear());
     bondMovie.setPoster(bondMovieRequest.getPoster());
     bondMovie.setCatalogOrder(bondMovieRequest.getCatalog_order());
-    return bondMovieService.createBondMovie(bondMovie);
+    bondMovie.setActor(bondMovieRequest.getActor());
+    bondMovie.setDirector(bondMovieRequest.getDirector());
+    bondMovieService.createBondMovie(bondMovie);
+    return ResponseEntity.noContent().build();
   }
 }
