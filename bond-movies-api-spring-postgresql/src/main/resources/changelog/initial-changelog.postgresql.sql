@@ -5,3 +5,11 @@ CREATE TABLE bond_movies (id BIGINT NOT NULL, catalog_order INTEGER NOT NULL, im
 
 --changeset byrnej:1611353282165-1
 CREATE SEQUENCE  IF NOT EXISTS bond_movie_seq START WITH 1 INCREMENT BY 50;
+
+--changeset byrnej:1611353282165-3
+ALTER TABLE bond_movies ADD COLUMN IF NOT EXISTS actor VARCHAR(255);
+ALTER TABLE bond_movies ADD COLUMN IF NOT EXISTS director VARCHAR(255);
+ALTER TABLE bond_movies ALTER COLUMN catalog_order DROP NOT NULL;
+
+--changeset byrnej:1611353282165-4
+ALTER TABLE bond_movies ALTER COLUMN year TYPE INTEGER USING year::integer;
