@@ -29,6 +29,7 @@ const app = new Koa();
 
 app.use(cors({
   origin: '*',
+  credentials: true,
 }));
 
 app.use(KoaBodyParser());

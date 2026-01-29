@@ -1,0 +1,40 @@
+meta {
+  name: CORS Preflight
+  type: http
+  seq: 1
+}
+
+options {
+  url: {{baseUrl}}/v1/bond-movies
+  body: none
+  auth: none
+}
+
+headers {
+  Origin: http://localhost:3007
+  Access-Control-Request-Method: GET
+  Access-Control-Request-Headers: Content-Type
+}
+
+assert {
+  res.status: in [200, 204]
+  res.headers.access-control-allow-origin: isDefined
+  res.headers.access-control-allow-methods: isDefined
+}
+
+tests {
+  test("should return successful status for preflight", function() {
+    expect(res.status).to.be.oneOf([200, 204]);
+  });
+
+  test("should have Access-Control-Allow-Origin header", function() {
+    const header = res.headers['access-control-allow-origin'];
+    expect(header).to.exist;
+    expect(header === '*' || header === 'http://localhost:3007').to.be.true;
+  });
+
+  test("should have Access-Control-Allow-Methods header", function() {
+    const header = res.headers['access-control-allow-methods'];
+    expect(header).to.exist;
+  });
+}
