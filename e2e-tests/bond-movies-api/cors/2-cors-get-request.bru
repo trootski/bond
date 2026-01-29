@@ -1,0 +1,40 @@
+meta {
+  name: CORS GET Request
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/bond-movies
+  body: none
+  auth: none
+}
+
+headers {
+  Origin: http://localhost:3007
+}
+
+assert {
+  res.status: eq 200
+  res.headers.access-control-allow-origin: isDefined
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have Access-Control-Allow-Origin header on response", function() {
+    const header = res.headers['access-control-allow-origin'];
+    expect(header).to.exist;
+    expect(header === '*' || header === 'http://localhost:3007').to.be.true;
+  });
+
+  test("should have Access-Control-Allow-Credentials header (if credentials enabled)", function() {
+    // This is optional - not all implementations enable credentials
+    const header = res.headers['access-control-allow-credentials'];
+    if (header) {
+      expect(header).to.equal('true');
+    }
+  });
+}

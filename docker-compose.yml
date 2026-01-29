@@ -141,11 +141,13 @@ services:
 
   vanilla:
     profiles: [ui]
-    image: nginx
+    build:
+      context: ./fe/vanilla
+      dockerfile: Dockerfile
+    environment:
+      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL:-http://bond-movies-api-nodejs:3001}
     ports:
       - "3007:80"
-    volumes:
-      - ./fe/vanilla/public:/usr/share/nginx/html:ro
 
   # =============================================================================
   # WATCH REVIEWS

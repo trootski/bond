@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function(e) {
-  const apiURLs = {
-    'nodejs': '//localhost:3001/v1/bond-movies',
-    'spring-dynamodb':  '//localhost:3002/v1/bond-movies',
-    'spring-postgresql':  '//localhost:3003/v1/bond-movies',
-  };
+  const apiURL = '/api/v1/bond-movies';
   const loader = document.querySelector('#loading');
   const mainHolder = document.querySelector('#filmCard');
   const renderFilm = (data) => {
@@ -75,27 +71,10 @@ document.addEventListener("DOMContentLoaded", async function(e) {
   nextBtn.addEventListener('click', (e) => {
     m.set('currentIndex', m.get('currentIndex') + 1);
   });
-  const handleAPIChange = evt => {
-    const ele = evt.target;
-    if (ele.checked) {
-      m.set('currentAPI', ele.value);
-      render();
-    }
-  };
-  const apiBtns = Object.keys(apiURLs).forEach(v => {
-    const ele = document.querySelector(`#${v}`);
-    ele.addEventListener('change', handleAPIChange);
-    console.log(v);
-  });
-  m.set('currentAPI', 'nodejs');
   const render = async () => {
     document.body.classList.remove('loaded');
     try {
-      const op = await fetch(apiURLs[m.get('currentAPI')], {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        }
-      });
+      const op = await fetch(apiURL);
       if (op.status !== 200) {
         loader.innerText = 'error loading film data';
       } else {
@@ -106,8 +85,8 @@ document.addEventListener("DOMContentLoaded", async function(e) {
       }
     } catch (e) {
         console.error(e);
+        loader.innerText = 'error loading film data';
     }
   };
   render();
 });
-
