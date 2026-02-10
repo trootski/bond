@@ -36,8 +36,7 @@ Metadata API which caches metadata taken from an external API. The primary focus
 
 Queue API which processes updated Bond movie reviews.
 
- * Node.js (Port: 3005) + kafka-node + Kafka (Shared) (Port: 9092) + Zookeeper (Shared) (Port: 2181)
- * Node.js (Port: 3006) + kafkajs + Kafka (Shared) (Port: 9092) + Zookeeper (Shared) (Port: 2181)
+ * Node.js (Port: 3006) + kafkajs + Kafka (Shared) (Port: 9092)
  * Node.js (Port: 3009) + Redis (Port: 6375)
  * Java (Port: 3010) + Spring Boot + Camel + Kafka (Shared) (Port: 9092)
 
@@ -81,8 +80,7 @@ COMPOSE_PROFILES=bond-nodejs,metadata-nodejs,queue-kafkajs,ui,watch
 | | `bond-spring-postgresql` | Spring + PostgreSQL (port 3003) |
 | Metadata | `metadata-nodejs` | Node.js + Redis (port 3004) |
 | | `metadata-spring` | Spring + Redis (port 3008) |
-| Process Queue | `queue-kafka-node` | Node.js + kafka-node (port 3005) |
-| | `queue-kafkajs` | Node.js + kafkajs (port 3006) |
+| Process Queue | `queue-kafkajs` | Node.js + kafkajs (port 3006) |
 | | `queue-redis` | Node.js + Redis (port 3009) |
 | | `queue-spring-camel` | Spring + Camel + Kafka (port 3010) |
 | UI | `ui` | Vanilla JS (port 3007) |

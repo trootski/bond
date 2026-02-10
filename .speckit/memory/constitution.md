@@ -21,15 +21,15 @@ This project is a playground for testing various components of a web application
 ### Port Allocation
 - Bond Movie API: 3001-3003 range
 - Metadata API: 3004, 3008
-- Process Queue API: 3005-3006, 3009-3010 range
+- Process Queue API: 3006, 3009-3010 range
 - UI: 3007
-- Infrastructure: DynamoDB (8000), PostgreSQL (5432), Redis (6375), Kafka (9092), Zookeeper (2181)
+- Infrastructure: DynamoDB (8000), PostgreSQL (5432), Redis (6375), Kafka (9092)
 
 ## Infrastructure Patterns
 
 ### Shared Infrastructure
 - DynamoDB instances are shared across Java and Node.js Bond Movie API implementations
-- Kafka and Zookeeper are shared across all queue implementations
+- Kafka is shared across all queue implementations
 - This enables direct comparison of different technology implementations
 
 ### Environment Configuration
@@ -56,7 +56,7 @@ This project is a playground for testing various components of a web application
 - DynamoDB for NoSQL document storage
 - PostgreSQL for relational data
 - Redis for caching
-- Kafka with Zookeeper for message queuing
+- Kafka (KRaft mode) for message queuing
 
 ## Development Philosophy
 
@@ -115,8 +115,7 @@ REVIEW_UPDATES_API_URL=http://review-updates-api-nodejs-kafkajs-kafka:3006
 | | `bond-spring-postgresql` | Spring + PostgreSQL (port 3003) |
 | Metadata | `metadata-nodejs` | Node.js + Redis (port 3004) |
 | | `metadata-spring` | Spring + Redis (port 3008) |
-| Process Queue | `queue-kafka-node` | Node.js + kafka-node (port 3005) |
-| | `queue-kafkajs` | Node.js + kafkajs (port 3006) |
+| Process Queue | `queue-kafkajs` | Node.js + kafkajs (port 3006) |
 | | `queue-redis` | Node.js + Redis (port 3009) |
 | | `queue-spring-camel` | Spring + Camel + Kafka (port 3010) |
 | UI | `ui` | Vanilla JS (port 3007) |
@@ -142,7 +141,7 @@ REVIEW_UPDATES_API_URL=http://review-updates-api-nodejs-kafkajs-kafka:3006
 
 ### Review Updates API
 - Processes updated Bond movie reviews via message queue
-- Focus: testing queue implementations (kafka-node, kafkajs)
+- Focus: testing queue implementations (kafkajs, Camel)
 
 ### Watch Reviews
 - File watcher for markdown review files

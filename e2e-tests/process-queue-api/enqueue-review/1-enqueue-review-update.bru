@@ -1,0 +1,37 @@
+meta {
+  name: POST Enqueue Review Update
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/bond-movie-events/review-updates/enqueue
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "catalog_order": 23,
+    "title": "Skyfall",
+    "review": "<h1>Skyfall Review</h1><p>An excellent Bond film featuring Daniel Craig.</p>"
+  }
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("should return 204 No Content", function() {
+    expect(res.status).to.equal(204);
+  });
+
+  test("should have empty response body", function() {
+    expect(res.body).to.equal('');
+  });
+}

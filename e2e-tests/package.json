@@ -11,9 +11,10 @@
     "test:metadata:spring": "cd movie-metadata-api && bru run --env spring",
     "test:metadata": "cd movie-metadata-api && bru run --env nodejs",
     "test:process-queue:kafkajs": "cd process-queue-api && bru run --env kafkajs",
+    "test:process-queue:spring-camel": "cd process-queue-api && bru run --env spring-camel",
     "test:process-queue": "cd process-queue-api && bru run --env kafkajs",
     "test:all:nodejs": "npm run test:bond-movies:nodejs && npm run test:metadata:nodejs && npm run test:process-queue:kafkajs",
-    "test:all": "npm run test:bond-movies:nodejs && npm run test:bond-movies:spring-dynamodb && npm run test:bond-movies:spring-postgresql && npm run test:metadata:nodejs && npm run test:metadata:spring && npm run test:process-queue:kafkajs"
+    "test:all": "npm run test:bond-movies:nodejs && npm run test:bond-movies:spring-dynamodb && npm run test:bond-movies:spring-postgresql && npm run test:metadata:nodejs && npm run test:metadata:spring && npm run test:process-queue:kafkajs && npm run test:process-queue:spring-camel"
   },
   "devDependencies": {
     "@usebruno/cli": "^1.36.0"

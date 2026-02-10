@@ -1,5 +1,5 @@
 kafka:
-  brokers: ${KAFKA_BROKERS:kafka:19092}
+  brokers: ${KAFKA_BROKERS:kafka1:19092}
 
 management:
   endpoints:

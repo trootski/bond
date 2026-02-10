@@ -77,20 +77,6 @@ services:
   # PROCESS QUEUE API
   # =============================================================================
 
-  review-updates-api-nodejs-kafka-node-kafka:
-    profiles: [queue-kafka-node]
-    build:
-      context: ./process-queue-kafka-node
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    environment:
-      ADV_HOST: kafka1
-      BOND_ENV: docker
-      BOND_MOVIES_API_URL: ${BOND_MOVIES_API_URL}
-    ports:
-      - "3005:3005"
-
   review-updates-api-nodejs-kafkajs-kafka:
     profiles: [queue-kafkajs]
     build:
@@ -123,8 +109,8 @@ services:
   review-updates-api-spring-camel-kafka:
     profiles: [queue-spring-camel]
     build:
-      context: ./process-queue-spring-camel-kafka
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: process-queue-spring-camel-kafka/Dockerfile
     depends_on:
       - kafka
     environment:
@@ -210,36 +196,24 @@ services:
     ports:
       - "6375:6375"
 
-  zoo:
-    container_name: zoo1
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_PORT: 2181
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
-    hostname: zoo1
-    image: zookeeper:3.4.9
-    ports:
-      - "2181:2181"
-    volumes:
-      - ./storage/zookeeper/data:/data
-      - ./storage/zookeeper/datalog:/datalog
-
   kafka:
     container_name: kafka1
-    depends_on:
-      - zoo
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER://kafka1:19092,LISTENER_LOCAL://localhost:9092
-      KAFKA_BROKER_ID: 1
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER:PLAINTEXT,LISTENER_LOCAL:PLAINTEXT
-      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_LOG4J_ROOT_LOGLEVEL: ERROR
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
     hostname: kafka1
-    image: confluentinc/cp-kafka:5.4.3
+    image: confluentinc/cp-kafka:7.7.1
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:19092,CONTROLLER://kafka1:9093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:19092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
     ports:
       - "9092:9092"
     volumes:

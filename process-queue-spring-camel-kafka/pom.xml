@@ -16,7 +16,7 @@
 
 
     <properties>
-        <camel.version>4.3.0</camel.version>
+        <camel.version>4.9.0</camel.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
