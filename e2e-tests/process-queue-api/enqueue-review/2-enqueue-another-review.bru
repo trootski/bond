@@ -1,0 +1,37 @@
+meta {
+  name: POST Enqueue Another Review
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/bond-movie-events/review-updates/enqueue
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "catalog_order": 21,
+    "title": "Casino Royale",
+    "review": "<h1>Casino Royale Review</h1><p>The reboot that redefined Bond for a new generation.</p>"
+  }
+}
+
+assert {
+  res.status: eq 204
+}
+
+tests {
+  test("should return 204 No Content", function() {
+    expect(res.status).to.equal(204);
+  });
+
+  test("should successfully enqueue second review", function() {
+    expect(res.body).to.equal('');
+  });
+}

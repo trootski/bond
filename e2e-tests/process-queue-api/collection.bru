@@ -1,0 +1,9 @@
+headers {
+  Content-Type: application/json
+}
+
+script:post-response {
+  if (res.status >= 400) {
+    console.log(`Request failed with status ${res.status}`);
+  }
+}
