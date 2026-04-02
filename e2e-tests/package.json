@@ -17,6 +17,6 @@
     "test:all": "npm run test:bond-movies:nodejs && npm run test:bond-movies:spring-dynamodb && npm run test:bond-movies:spring-postgresql && npm run test:metadata:nodejs && npm run test:metadata:spring && npm run test:process-queue:kafkajs && npm run test:process-queue:spring-camel"
   },
   "devDependencies": {
-    "@usebruno/cli": "^1.36.0"
+    "@usebruno/cli": "^3.2.0"
   }
 }
